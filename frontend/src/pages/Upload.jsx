@@ -19,6 +19,11 @@ function Upload() {
             const response = await uploadDocument(file);
 
             console.log(response);
+            console.log("AI Summary:");
+            console.log(response.summary);
+
+            console.log("Extracted Text:");
+            console.log(response.text);
 
             alert("Upload Successful ✅");
 

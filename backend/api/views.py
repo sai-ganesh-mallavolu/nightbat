@@ -5,6 +5,11 @@ from rest_framework import status
 from .serializers import UploadSerializer
 
 from .models import UploadedDocument
+from .services import (
+    extract_text,
+    clean_text,
+    summarize_text,
+)
 
 
 @api_view(["GET"])
@@ -25,17 +30,19 @@ def upload_document(request):
         uploaded_file = serializer.validated_data["file"]
 
         document = UploadedDocument.objects.create(
-    file=uploaded_file
-)
+            file=uploaded_file
+        )
 
-    return Response({
-        "success": True,
-        "id": document.id,
-        "filename": document.file.name,
-        "url": document.file.url,
-        "size": uploaded_file.size,
-        "content_type": uploaded_file.content_type,
-    })
+        text = extract_text(document.file.path)
+        text = clean_text(text)
+        summary = summarize_text(text)
+        return Response({
+            "success": True,
+            "id": document.id,
+            "filename": document.file.name,
+            "url": document.file.url,
+            "summary": summary,
+        })
 
     return Response(
         serializer.errors,
