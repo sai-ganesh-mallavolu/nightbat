@@ -34,7 +34,16 @@ function Hero() {
                         Upload Document
                     </Link>
 
-                    <button className="rounded-xl border border-white/20 px-8 py-4 transition-all duration-300 hover:scale-105 hover:bg-white/10">
+                    <button
+                        onClick={() =>
+                            document
+                                .getElementById("features")
+                                ?.scrollIntoView({
+                                    behavior: "smooth",
+                                })
+                        }
+                        className="rounded-xl border border-cyan-500 px-8 py-3 font-semibold text-cyan-400 transition duration-300 hover:bg-cyan-500 hover:text-black"
+                    >
                         Learn More
                     </button>
 
