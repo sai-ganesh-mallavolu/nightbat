@@ -1,0 +1,23 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Database
+db.sqlite3
+
+# Environment
+.env
+
+# Media
+media/
+
+# Node
+node_modules/
+
+# Build
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
