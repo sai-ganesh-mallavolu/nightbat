@@ -140,23 +140,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-CORS_ALLOW_ALL_ORIGINS = True
+# ======================================
+# CORS Configuration
+# ======================================
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.vercel\.app$",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:5175",
+]
 
 CORS_ALLOW_CREDENTIALS = False
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",
-#     "http://localhost:5174",
-#     "http://localhost:5175",
-
-#     "https://nightbat.vercel.app",
-#     "https://nightbat-gd6ro3kfv-sai384372-6942s-projects.vercel.app",
-# ]
-
-# CSRF_TRUSTED_ORIGINS = [
-#     "https://nightbat.vercel.app",
-#     "https://nightbat-gd6ro3kfv-sai384372-6942s-projects.vercel.app",
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app",
+]
 
 
 REST_FRAMEWORK = {
