@@ -1,48 +1,78 @@
 import os
-from dotenv import load_dotenv
-import google.generativeai as genai
 import re
-from pathlib import Path
-import fitz
-from docx import Document
 import json
+from pathlib import Path
+
+import fitz
+import google.generativeai as genai
+from docx import Document
+from dotenv import load_dotenv
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+genai.configure(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
-model = genai.GenerativeModel("gemini-2.5-flash")
-
+model = genai.GenerativeModel(
+    "gemini-2.5-flash"
+)
 
 def extract_pdf(file_path):
-    text = ""
+    """
+    Extract text from PDF.
 
-    pdf = fitz.open(file_path)
-
-    for page in pdf:
-        text += page.get_text()
-
-    pdf.close()
-
-    return text
-
-
-def extract_docx(file_path):
-    document = Document(file_path)
+    Limits the number of pages to reduce
+    memory usage on Render Free.
+    """
 
     text = []
 
-    for paragraph in document.paragraphs:
-        text.append(paragraph.text)
+    with fitz.open(file_path) as pdf:
+
+        MAX_PAGES = 25
+
+        for index, page in enumerate(pdf):
+
+            if index >= MAX_PAGES:
+                break
+
+            try:
+                page_text = page.get_text("text")
+
+                if page_text.strip():
+                    text.append(page_text)
+
+            except Exception:
+                continue
 
     return "\n".join(text)
 
+def extract_docx(file_path):
+
+    document = Document(file_path)
+
+    paragraphs = []
+
+    for paragraph in document.paragraphs:
+
+        if paragraph.text.strip():
+            paragraphs.append(
+                paragraph.text
+            )
+
+    return "\n".join(paragraphs)
 
 def extract_txt(file_path):
-    with open(file_path, "r", encoding="utf-8") as file:
+
+    with open(
+        file_path,
+        "r",
+        encoding="utf-8"
+    ) as file:
+
         return file.read()
-
-
+    
 def extract_text(file_path):
 
     extension = Path(file_path).suffix.lower()
@@ -57,20 +87,31 @@ def extract_text(file_path):
         return extract_txt(file_path)
 
     else:
-        raise Exception("Unsupported file type")
+        raise Exception(
+            "Unsupported file type."
+        )
     
-
 def clean_text(text):
 
-    text = re.sub(r"\n\s*\n", "\n", text)
+    text = re.sub(
+        r"\n\s*\n",
+        "\n",
+        text
+    )
 
-    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(
+        r"[ \t]+",
+        " ",
+        text
+    )
 
     return text.strip()
 
-
 def summarize_text(text):
 
+    text = clean_text(text)
+
+    # Limit text sent to Gemini
     text = text[:4000]
 
     prompt = f"""
@@ -97,17 +138,34 @@ Document:
 {text}
 """
 
-    response = model.generate_content(prompt)
+    try:
 
-    cleaned = response.text.replace("```json", "").replace("```", "").strip()
+        response = model.generate_content(prompt)
 
-    return json.loads(cleaned)
+        cleaned = (
+            response.text
+            .replace("```json", "")
+            .replace("```", "")
+            .strip()
+        )
 
+        return json.loads(cleaned)
 
+    except Exception as e:
+
+        print("Summary Error:", e)
+
+        return {
+            "summary": "Unable to generate summary.",
+            "key_points": [],
+            "action_items": [],
+        }
+    
 def chat_with_document(document_text, question):
 
-    # Keep within Gemini context window
-    document_text = document_text[:12000]
+    document_text = clean_text(document_text)
+
+    document_text = document_text[:6000]
 
     prompt = f"""
 You are NightBat AI.
@@ -132,69 +190,77 @@ User Question:
 Answer in a clear, professional manner.
 """
 
-    response = model.generate_content(prompt)
+    try:
 
-    return response.text
+        response = model.generate_content(prompt)
 
+        return response.text
 
+    except Exception as e:
 
+        print("Chat Error:", e)
+
+        return "Unable to generate a response at the moment."
+    
 def generate_flashcards(text):
+
+    text = clean_text(text)
+
+    text = text[:6000]
 
     prompt = f"""
 You are an expert study assistant.
 
-Read the document below and Generate between 10 and 15 high-quality flashcards.
+Generate between 10 and 15 high-quality flashcards.
 
-Rules:
-
-- Focus on the most important concepts.
-- Avoid duplicate questions.
-- Keep answers concise (1–3 sentences).
-- Return ONLY valid JSON.
-- No markdown.
-- No explanation.
-- No extra text.
+Return ONLY valid JSON.
 
 Format:
 
 [
     {{
-        "question": "...",
-        "answer": "..."
+        "question":"...",
+        "answer":"..."
     }}
 ]
 
 Document:
 
-{text[:15000]}
+{text}
 """
-
-    response = model.generate_content(prompt)
 
     try:
 
-        flashcards = json.loads(response.text)
+        response = model.generate_content(prompt)
 
-        return flashcards
+        content = (
+            response.text
+            .replace("```json", "")
+            .replace("```", "")
+            .strip()
+        )
 
-    except Exception:
+        return json.loads(content)
+
+    except Exception as e:
+
+        print("Flashcard Error:", e)
 
         return []
     
 
 def generate_quiz(text):
 
+    text = clean_text(text)
+
+    text = text[:6000]
+
     prompt = f"""
 You are an expert teacher.
 
-Generate exactly 10 multiple choice questions from the following document.
+Generate exactly 10 multiple choice questions.
 
-Rules:
-
-- Return ONLY valid JSON.
-- No markdown.
-- No explanation outside JSON.
-- Exactly 10 questions.
+Return ONLY valid JSON.
 
 Format:
 
@@ -212,23 +278,24 @@ Format:
 
 Document:
 
-{text[:12000]}
+{text}
 """
-
-    response = model.generate_content(prompt)
-
-    content = response.text.strip()
-
-    if content.startswith("```json"):
-        content = content.replace("```json", "").replace("```", "").strip()
-
-    elif content.startswith("```"):
-        content = content.replace("```", "").strip()
 
     try:
 
+        response = model.generate_content(prompt)
+
+        content = (
+            response.text
+            .replace("```json", "")
+            .replace("```", "")
+            .strip()
+        )
+
         return json.loads(content)
 
-    except Exception:
+    except Exception as e:
+
+        print("Quiz Error:", e)
 
         return []
