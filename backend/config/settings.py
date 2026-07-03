@@ -32,12 +32,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [
-    ".onrender.com",
-    "localhost",
-    "127.0.0.1",
-]
-
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -145,11 +140,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://localhost:5175",
-]
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = False
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     "http://localhost:5174",
+#     "http://localhost:5175",
+
+#     "https://nightbat.vercel.app",
+#     "https://nightbat-gd6ro3kfv-sai384372-6942s-projects.vercel.app",
+# ]
+
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://nightbat.vercel.app",
+#     "https://nightbat-gd6ro3kfv-sai384372-6942s-projects.vercel.app",
+# ]
 
 
 REST_FRAMEWORK = {
