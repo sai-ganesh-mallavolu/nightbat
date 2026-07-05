@@ -943,3 +943,4 @@ def flashcards_status(request, document_id):
         "completed": total > 0 and total == learned
 
     })
+

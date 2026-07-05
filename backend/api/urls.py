@@ -20,6 +20,8 @@ from .views import (
     quiz_attempts,
     register_user,
     current_user,
+    quiz_status,
+    flashcards_status,
 )
 
 urlpatterns = [
