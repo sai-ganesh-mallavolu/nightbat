@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import {
     getDocument,
     reanalyzeDocument,
+    getQuizStatus,
+    getFlashcardStatus,
 } from "../services/historyService";
 
 import SummaryCard from "../components/results/SummaryCard";
@@ -11,11 +13,11 @@ import KeyPointsCard from "../components/results/KeyPointsCard";
 import ActionItemsCard from "../components/results/ActionItemsCard";
 
 import ChatBox from "../components/chat/ChatBox";
-
-import { toast } from "react-toastify";
-import { downloadReport } from "../pdf/downloadReport.jsx";
 import FlashcardsSection from "../components/flashcards/FlashcardsSection";
 import QuizSection from "../components/quiz/QuizSection";
+
+import { toast } from "react-toastify";
+import { downloadReport } from "../pdf/downloadReport";
 
 function DocumentDetails() {
 
@@ -27,19 +29,37 @@ function DocumentDetails() {
 
     const [analyzing, setAnalyzing] = useState(false);
 
+    const [quizStatus, setQuizStatus] = useState(null);
+
+    const [flashStatus, setFlashStatus] = useState(null);
+
+    const [showQuiz, setShowQuiz] = useState(false);
+
+    const [showFlashcards, setShowFlashcards] = useState(false);
+
     useEffect(() => {
 
         fetchDocument();
 
-    }, []);
+    }, [id]);
 
     const fetchDocument = async () => {
 
         try {
 
+            setLoading(true);
+
             const data = await getDocument(id);
 
             setDocument(data);
+
+            const flash = await getFlashcardStatus(id);
+
+            setFlashStatus(flash);
+
+            const quiz = await getQuizStatus(id);
+
+            setQuizStatus(quiz);
 
         }
 
@@ -174,7 +194,6 @@ function DocumentDetails() {
                 return "📕";
 
             case "doc":
-
             case "docx":
                 return "📘";
 
@@ -193,8 +212,6 @@ function DocumentDetails() {
         <section className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black px-6 py-20">
 
             <div className="mx-auto max-w-7xl">
-
-                {/* Hero */}
 
                 <div className="rounded-3xl border border-cyan-500/20 bg-white/5 p-8 shadow-2xl backdrop-blur">
 
@@ -220,9 +237,7 @@ function DocumentDetails() {
 
                                     {extension.toUpperCase()} •{" "}
 
-                                    {new Date(
-                                        document.uploaded_at
-                                    ).toLocaleString()}
+                                    {new Date(document.uploaded_at).toLocaleString()}
 
                                 </p>
 
@@ -257,14 +272,14 @@ function DocumentDetails() {
                             <div className="flex flex-wrap gap-3">
 
                                 <button
-                                    className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 px-6 py-3 font-semibold text-cyan-400 transition hover:bg-cyan-500/20"
+                                    className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 px-6 py-3 font-semibold text-cyan-400 hover:bg-cyan-500/20"
                                 >
                                     📋 Copy All
                                 </button>
 
                                 <button
                                     onClick={handleDownloadPDF}
-                                    className="rounded-xl border border-violet-500/20 bg-violet-500/10 px-6 py-3 font-semibold text-violet-300 transition duration-300 hover:scale-105 hover:bg-violet-500/20"
+                                    className="rounded-xl border border-violet-500/20 bg-violet-500/10 px-6 py-3 font-semibold text-violet-300 hover:bg-violet-500/20"
                                 >
                                     📥 Download PDF
                                 </button>
@@ -295,15 +310,14 @@ function DocumentDetails() {
 
                         <p className="mt-5 text-lg text-gray-400">
 
-                            This document was uploaded before AI analysis
-                            was available.
+                            This document was uploaded before AI analysis was available.
 
                         </p>
 
                         <button
                             onClick={handleReanalyze}
                             disabled={analyzing}
-                            className="mt-10 rounded-2xl bg-cyan-500 px-10 py-4 text-lg font-bold text-black transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
+                            className="mt-10 rounded-2xl bg-cyan-500 px-10 py-4 text-lg font-bold text-black hover:bg-cyan-400 disabled:opacity-50"
                         >
 
                             {analyzing
@@ -350,22 +364,290 @@ function DocumentDetails() {
 
                                 <p className="mt-2 text-gray-400">
 
-                                    Ask questions about this document and let
-                                    NightBat AI answer using its contents.
+                                    Ask questions about this document.
 
                                 </p>
 
                             </div>
 
-                            <ChatBox documentId={id} />
-
-                            <FlashcardsSection
-                                documentId={document.id}
+                            <ChatBox
+                                documentId={id}
                             />
 
-                            <QuizSection
-                                documentId={document.id}
-                            />
+                        </div>
+
+                        {/* Flashcards */}
+
+                        <div className="mt-14">
+
+                            <h2 className="text-3xl font-bold">
+
+                                📚 Flashcards
+
+                            </h2>
+
+                            <p className="mt-2 text-gray-400">
+
+                                Study using AI generated flashcards.
+
+                            </p>
+
+                            {flashStatus?.generated ? (
+
+                                <div className="mt-6 rounded-3xl border border-green-500/20 bg-green-500/10 p-8">
+
+                                    <h3 className="text-2xl font-bold">
+
+                                        {flashStatus.completed
+                                            ? "✅ Flashcards Completed"
+                                            : "📚 Flashcards Ready"}
+
+                                    </h3>
+
+                                    <div className="mt-6">
+
+                                        <p className="text-lg">
+
+                                            Learned
+
+                                            <strong>
+
+                                                {" "}
+
+                                                {flashStatus.learned}
+
+                                                /
+
+                                                {flashStatus.total}
+
+                                            </strong>
+
+                                        </p>
+
+                                        <div className="mt-4 h-3 rounded-full bg-gray-700">
+
+                                            <div
+
+                                                className="h-3 rounded-full bg-cyan-400 transition-all"
+
+                                                style={{
+
+                                                    width: `${flashStatus.total
+                                                        ? (flashStatus.learned /
+                                                            flashStatus.total) *
+                                                        100
+                                                        : 0
+                                                        }%`
+
+                                                }}
+
+                                            />
+
+                                        </div>
+
+                                    </div>
+
+                                    <button
+
+                                        onClick={() => setShowFlashcards(true)}
+
+                                        className="mt-8 rounded-xl bg-cyan-500 px-8 py-4 font-bold text-black hover:bg-cyan-400"
+
+                                    >
+
+                                        {flashStatus.completed
+                                            ? "📖 Continue Flashcards"
+                                            : "🚀 Open Flashcards"}
+
+                                    </button>
+
+                                </div>
+
+                            ) : (
+
+                                <div className="mt-6 rounded-3xl border border-cyan-500/20 bg-white/5 p-8 text-center">
+
+                                    <h3 className="text-2xl font-bold">
+
+                                        No Flashcards Generated
+
+                                    </h3>
+
+                                    <p className="mt-3 text-gray-400">
+
+                                        Generate AI flashcards from this document.
+
+                                    </p>
+
+                                    <button
+
+                                        onClick={() => setShowFlashcards(true)}
+
+                                        className="mt-8 rounded-xl bg-cyan-500 px-8 py-4 font-bold text-black hover:bg-cyan-400"
+
+                                    >
+
+                                        🚀 Generate Flashcards
+
+                                    </button>
+
+                                </div>
+
+                            )}
+
+                            {showFlashcards && (
+
+                                <div className="mt-8">
+
+                                    <FlashcardsSection
+
+                                        documentId={document.id}
+
+                                    />
+
+                                </div>
+
+                            )}
+
+                        </div>
+
+                        {/* Quiz */}
+
+                        <div className="mt-14">
+
+                            <h2 className="text-3xl font-bold">
+
+                                📝 AI Quiz
+
+                            </h2>
+
+                            <p className="mt-2 text-gray-400">
+
+                                Test your understanding using AI.
+
+                            </p>
+
+                            {quizStatus?.generated ? (
+
+                                <div className="mt-6 rounded-3xl border border-green-500/20 bg-green-500/10 p-8">
+
+                                    <h3 className="text-2xl font-bold">
+
+                                        ✅ Quiz Available
+
+                                    </h3>
+
+                                    <div className="mt-6 grid gap-6 md:grid-cols-3">
+
+                                        <div>
+
+                                            <p className="text-gray-400">
+
+                                                Questions
+
+                                            </p>
+
+                                            <p className="text-3xl font-bold">
+
+                                                {quizStatus.questions}
+
+                                            </p>
+
+                                        </div>
+
+                                        <div>
+
+                                            <p className="text-gray-400">
+
+                                                Attempts
+
+                                            </p>
+
+                                            <p className="text-3xl font-bold">
+
+                                                {quizStatus.attempts}
+
+                                            </p>
+
+                                        </div>
+
+                                        <div>
+
+                                            <p className="text-gray-400">
+
+                                                Best Score
+
+                                            </p>
+
+                                            <p className="text-3xl font-bold">
+
+                                                {quizStatus.best_score}
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                    <button
+
+                                        onClick={() => setShowQuiz(true)}
+
+                                        className="mt-8 rounded-xl bg-cyan-500 px-8 py-4 font-bold text-black hover:bg-cyan-400"
+
+                                    >
+
+                                        📖 Continue Quiz
+
+                                    </button>
+
+                                </div>
+
+                            ) : (
+
+                                <div className="mt-6 rounded-3xl border border-cyan-500/20 bg-white/5 p-8 text-center">
+
+                                    <h3 className="text-2xl font-bold">
+
+                                        No Quiz Generated
+
+                                    </h3>
+
+                                    <p className="mt-3 text-gray-400">
+
+                                        Generate AI questions from this document.
+
+                                    </p>
+
+                                    <button
+
+                                        onClick={() => setShowQuiz(true)}
+
+                                        className="mt-8 rounded-xl bg-cyan-500 px-8 py-4 font-bold text-black hover:bg-cyan-400"
+
+                                    >
+
+                                        🚀 Generate Quiz
+
+                                    </button>
+
+                                </div>
+
+                            )}
+
+                            {showQuiz && (
+
+                                <div className="mt-8">
+
+                                    <QuizSection
+
+                                        documentId={document.id}
+
+                                    />
+
+                                </div>
+
+                            )}
 
                         </div>
 

@@ -132,4 +132,14 @@ urlpatterns = [
         quiz_attempts,
     ),
 
+    path(
+        "history/<int:document_id>/quiz/status/",
+        quiz_status,
+    ),
+
+    path(
+        "history/<int:document_id>/flashcards/status/",
+        flashcards_status,
+    ),
+
 ]

@@ -2,12 +2,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
-from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 
 from .models import (
@@ -854,3 +853,93 @@ def current_user(request):
     serializer = UserSerializer(request.user)
 
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def quiz_status(request, document_id):
+
+    try:
+
+        document = UploadedDocument.objects.get(
+            id=document_id,
+            user=request.user
+        )
+
+    except UploadedDocument.DoesNotExist:
+
+        return Response(
+            {"error": "Document not found"},
+            status=404
+        )
+
+    questions = QuizQuestion.objects.filter(
+        document=document
+    )
+
+    attempts = QuizAttempt.objects.filter(
+        document=document
+    )
+
+    best = 0
+
+    if attempts.exists():
+
+        best = max(
+            attempt.score
+            for attempt in attempts
+        )
+
+    return Response({
+
+        "generated": questions.exists(),
+
+        "questions": questions.count(),
+
+        "attempts": attempts.count(),
+
+        "best_score": best
+
+    })
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def flashcards_status(request, document_id):
+
+    try:
+
+        document = UploadedDocument.objects.get(
+            id=document_id,
+            user=request.user
+        )
+
+    except UploadedDocument.DoesNotExist:
+
+        return Response(
+            {
+                "error": "Document not found."
+            },
+            status=404
+        )
+
+    cards = Flashcard.objects.filter(
+        document=document
+    )
+
+    total = cards.count()
+
+    learned = cards.filter(
+        is_learned=True
+    ).count()
+
+    return Response({
+
+        "generated": total > 0,
+
+        "total": total,
+
+        "learned": learned,
+
+        "completed": total > 0 and total == learned
+
+    })

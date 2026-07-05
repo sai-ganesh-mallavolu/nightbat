@@ -99,3 +99,27 @@ export const chatWithDocument = async (
     return response.data;
 
 };
+
+export const getQuizStatus = async (id) => {
+
+    const res = await api.get(
+
+        `/history/${id}/quiz/status/`
+
+    );
+
+    return res.data;
+
+};
+
+export const getFlashcardStatus = async (id) => {
+
+    const res = await api.get(
+
+        `/history/${id}/flashcards/status/`
+
+    );
+
+    return res.data;
+
+};
