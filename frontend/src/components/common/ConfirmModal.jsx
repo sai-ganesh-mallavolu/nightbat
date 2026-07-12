@@ -26,7 +26,10 @@ function ConfirmModal({
 
         const handleEscape = (event) => {
 
-            if (event.key === "Escape") {
+            if (
+                event.key === "Escape" &&
+                !loading
+            ) {
 
                 onCancel();
 
@@ -48,33 +51,90 @@ function ConfirmModal({
 
         };
 
-    }, [open, onCancel]);
+    }, [open, onCancel, loading]);
+
 
     if (!open) return null;
+
 
     return (
 
         <div
 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md"
+            className="
+                fixed
+                inset-0
+                z-50
+                flex
+                items-center
+                justify-center
+                bg-slate-950/50
+                px-6
+                backdrop-blur-sm
 
-            onClick={onCancel}
+                dark:bg-black/70
+            "
+
+            onClick={() => {
+
+                if (!loading) {
+                    onCancel();
+                }
+
+            }}
 
         >
 
+            {/* Modal */}
+
             <div
 
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) =>
+                    e.stopPropagation()
+                }
 
-                className="w-full max-w-md animate-[fadeIn_.25s_ease] rounded-3xl border border-cyan-500/20 bg-gray-900 p-8 shadow-2xl"
+                className="
+                    w-full
+                    max-w-md
+                    animate-[fadeIn_.25s_ease]
+                    rounded-3xl
+                    border
+                    border-slate-200
+                    bg-white
+                    p-8
+                    shadow-2xl
+                    shadow-slate-950/20
+                    transition-colors
+                    duration-300
+
+                    dark:border-white/10
+                    dark:bg-[#18181b]
+                    dark:shadow-black/50
+                "
 
             >
 
-                {/* Icon */}
+
+                {/* Delete Icon */}
 
                 <div className="flex justify-center">
 
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-red-500/20">
+                    <div
+                        className="
+                            flex
+                            h-20
+                            w-20
+                            items-center
+                            justify-center
+                            rounded-full
+                            border
+                            border-red-200
+                            bg-red-50
+
+                            dark:border-red-500/20
+                            dark:bg-red-500/10
+                        "
+                    >
 
                         <span className="text-5xl">
 
@@ -86,33 +146,85 @@ function ConfirmModal({
 
                 </div>
 
+
                 {/* Title */}
 
-                <h2 className="mt-6 text-center text-3xl font-bold">
+                <h2
+                    className="
+                        mt-6
+                        text-center
+                        text-3xl
+                        font-bold
+                        text-slate-950
+
+                        dark:text-white
+                    "
+                >
 
                     {title}
 
                 </h2>
 
+
                 {/* Message */}
 
-                <p className="mt-5 text-center leading-7 text-gray-400">
+                <p
+                    className="
+                        mt-5
+                        text-center
+                        leading-7
+                        text-slate-600
+
+                        dark:text-zinc-400
+                    "
+                >
 
                     {message}
 
                 </p>
 
+
                 {/* Buttons */}
 
                 <div className="mt-10 flex gap-4">
 
+
+                    {/* Cancel Button */}
+
                     <button
+
+                        type="button"
 
                         onClick={onCancel}
 
                         disabled={loading}
 
-                        className="flex-1 rounded-xl border border-gray-600 py-3 font-semibold transition duration-300 hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="
+                            flex-1
+                            cursor-pointer
+                            rounded-xl
+                            border
+                            border-slate-300
+                            bg-white
+                            py-3
+                            font-semibold
+                            text-slate-700
+                            transition-all
+                            duration-300
+
+                            hover:border-slate-400
+                            hover:bg-slate-100
+
+                            disabled:cursor-not-allowed
+                            disabled:opacity-60
+
+                            dark:border-white/15
+                            dark:bg-white/5
+                            dark:text-zinc-200
+
+                            dark:hover:border-white/25
+                            dark:hover:bg-white/10
+                        "
 
                     >
 
@@ -120,35 +232,79 @@ function ConfirmModal({
 
                     </button>
 
+
+                    {/* Confirm / Delete Button */}
+
                     <button
+
+                        type="button"
 
                         onClick={onConfirm}
 
                         disabled={loading}
 
-                        className="flex-1 rounded-xl bg-red-500 py-3 font-semibold text-white transition duration-300 hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="
+                            flex-1
+                            cursor-pointer
+                            rounded-xl
+                            bg-red-500
+                            py-3
+                            font-semibold
+                            text-white
+                            shadow-lg
+                            shadow-red-500/20
+                            transition-all
+                            duration-300
+
+                            hover:-translate-y-0.5
+                            hover:bg-red-600
+                            hover:shadow-xl
+                            hover:shadow-red-500/25
+
+                            disabled:cursor-not-allowed
+                            disabled:opacity-60
+                            disabled:hover:translate-y-0
+                        "
 
                     >
 
                         {
-
                             loading
-
                                 ? "Deleting..."
-
                                 : confirmText
-
                         }
 
                     </button>
 
                 </div>
 
+
                 {/* ESC Hint */}
 
-                <p className="mt-6 text-center text-xs text-gray-500">
+                <p
+                    className="
+                        mt-6
+                        text-center
+                        text-xs
+                        text-slate-400
 
-                    Press <b>Esc</b> to close
+                        dark:text-zinc-600
+                    "
+                >
+
+                    Press{" "}
+
+                    <b
+                        className="
+                            text-slate-600
+
+                            dark:text-zinc-400
+                        "
+                    >
+                        Esc
+                    </b>
+
+                    {" "}to close
 
                 </p>
 

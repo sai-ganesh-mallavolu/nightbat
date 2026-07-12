@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-
 import Confetti from "react-confetti";
 import { useWindowSize } from "@uidotdev/usehooks";
 
@@ -9,6 +8,7 @@ import BadgeCard from "./BadgeCard";
 import QuizStats from "./QuizStats";
 
 import { downloadQuizReport } from "../../pdf/downloadQuizReport";
+
 
 function QuizResult({
 
@@ -24,7 +24,13 @@ function QuizResult({
 
     const { width, height } = useWindowSize();
 
-    const [animatedPercentage, setAnimatedPercentage] = useState(0);
+    const [animatedPercentage, setAnimatedPercentage] =
+        useState(0);
+
+
+    // ==========================
+    // Score Animation
+    // ==========================
 
     useEffect(() => {
 
@@ -44,33 +50,52 @@ function QuizResult({
 
         }, 15);
 
-        return () => clearInterval(interval);
+
+        return () =>
+            clearInterval(interval);
 
     }, [result.percentage]);
 
+
+    // ==========================
+    // Performance Message
+    // ==========================
+
     const getMessage = () => {
 
-        if (result.percentage >= 90)
+        if (result.percentage >= 90) {
 
             return "Outstanding Performance! 🎉";
 
-        if (result.percentage >= 75)
+        }
+
+        if (result.percentage >= 75) {
 
             return "Excellent Work! 👏";
 
-        if (result.percentage >= 60)
+        }
+
+        if (result.percentage >= 60) {
 
             return "Good Job! 👍";
+
+        }
 
         return "Keep Practicing 💪";
 
     };
 
+
+    // ==========================
+    // Download Quiz Report
+    // ==========================
+
     const handleDownload = () => {
 
         downloadQuizReport({
 
-            documentName: "NightBat AI Quiz",
+            documentName:
+                "NightBat AI Quiz",
 
             questions,
 
@@ -82,41 +107,77 @@ function QuizResult({
 
     };
 
+
     return (
 
-        <div className="mt-12 rounded-3xl border border-cyan-500/20 bg-white/5 p-10 shadow-2xl">
+        <div
+            className="
+                mt-12
+                rounded-3xl
+                border
+                border-slate-200
+                bg-white
+                p-10
+                shadow-2xl
+                shadow-slate-200/50
+                transition-colors
+                duration-300
 
-            {
+                dark:border-white/10
+                dark:bg-[#18181b]
+                dark:shadow-none
+            "
+        >
 
-                result.percentage >= 90 && (
 
-                    <Confetti
+            {/* ==========================
+                Confetti
+            ========================== */}
 
-                        width={width}
+            {result.percentage >= 90 && (
 
-                        height={height}
+                <Confetti
+                    width={width}
+                    height={height}
+                    recycle={false}
+                    numberOfPieces={350}
+                />
 
-                        recycle={false}
+            )}
 
-                        numberOfPieces={350}
 
-                    />
-
-                )
-
-            }
-
-            {/* Heading */}
+            {/* ==========================
+                Heading
+            ========================== */}
 
             <div className="text-center">
 
-                <h1 className="text-5xl font-bold text-white">
+                <h1
+                    className="
+                        text-4xl
+                        font-bold
+                        text-slate-950
+
+                        md:text-5xl
+
+                        dark:text-white
+                    "
+                >
 
                     🎉 Quiz Completed
 
                 </h1>
 
-                <p className="mt-4 text-xl text-gray-400">
+
+                <p
+                    className="
+                        mt-4
+                        text-xl
+                        text-slate-600
+
+                        dark:text-zinc-400
+                    "
+                >
 
                     {getMessage()}
 
@@ -124,17 +185,49 @@ function QuizResult({
 
             </div>
 
-            {/* Score Banner */}
 
-            <div className="mt-10 rounded-3xl bg-cyan-500/10 p-8 text-center">
+            {/* ==========================
+                Score Banner
+            ========================== */}
 
-                <h2 className="text-5xl font-bold text-cyan-300">
+            <div
+                className="
+                    mt-10
+                    rounded-3xl
+                    border
+                    border-cyan-200
+                    bg-cyan-50
+                    p-8
+                    text-center
+
+                    dark:border-cyan-500/20
+                    dark:bg-cyan-500/10
+                "
+            >
+
+                <h2
+                    className="
+                        text-5xl
+                        font-bold
+                        text-cyan-600
+
+                        dark:text-cyan-300
+                    "
+                >
 
                     {result.correct} / {questions.length}
 
                 </h2>
 
-                <p className="mt-3 text-gray-300">
+
+                <p
+                    className="
+                        mt-3
+                        text-slate-600
+
+                        dark:text-zinc-300
+                    "
+                >
 
                     Questions Answered Correctly
 
@@ -142,44 +235,88 @@ function QuizResult({
 
             </div>
 
-            {/* Score Circle */}
 
-            <div className="relative mt-12 flex justify-center">
+            {/* ==========================
+                Score Circle
+            ========================== */}
+
+            <div
+                className="
+                    relative
+                    mt-12
+                    flex
+                    justify-center
+                "
+            >
 
                 <ScoreCircle
-
-                    percentage={animatedPercentage}
-
+                    percentage={
+                        animatedPercentage
+                    }
                 />
 
             </div>
 
-            {/* Badge */}
+
+            {/* ==========================
+                Badge
+            ========================== */}
 
             <div className="mt-10">
 
                 <BadgeCard
-
-                    percentage={result.percentage}
-
+                    percentage={
+                        result.percentage
+                    }
                 />
 
             </div>
 
-            {/* AI Feedback */}
 
-            <div className="mt-10 rounded-3xl bg-cyan-500/10 p-8">
+            {/* ==========================
+                AI Feedback
+            ========================== */}
 
-                <h2 className="text-2xl font-bold text-cyan-300">
+            <div
+                className="
+                    mt-10
+                    rounded-3xl
+                    border
+                    border-cyan-200
+                    bg-cyan-50
+                    p-8
+
+                    dark:border-cyan-500/20
+                    dark:bg-cyan-500/10
+                "
+            >
+
+                <h2
+                    className="
+                        text-2xl
+                        font-bold
+                        text-cyan-700
+
+                        dark:text-cyan-300
+                    "
+                >
 
                     🤖 NightBat AI Feedback
 
                 </h2>
 
-                <p className="mt-5 leading-8 text-gray-300">
+
+                <p
+                    className="
+                        mt-5
+                        leading-8
+                        text-slate-700
+
+                        dark:text-zinc-300
+                    "
+                >
 
                     {
-
                         result.percentage >= 90
 
                             ? "Outstanding! You have mastered this document exceptionally well. Keep maintaining this level of performance."
@@ -193,132 +330,266 @@ function QuizResult({
                                     ? "Good attempt. Spend a little more time reviewing the explanations for incorrect answers."
 
                                     : "You should revise this document once more and attempt the quiz again. Practice will improve your score."
-
                     }
 
                 </p>
 
             </div>
 
-            {/* Statistics */}
+
+            {/* ==========================
+                Statistics
+            ========================== */}
 
             <QuizStats
-
                 result={result}
-
             />
 
-            {/* Review Heading */}
+
+            {/* ==========================
+                Review Heading
+            ========================== */}
 
             <div className="mt-16">
 
-                <h2 className="text-3xl font-bold text-white">
+                <h2
+                    className="
+                        text-3xl
+                        font-bold
+                        text-slate-950
+
+                        dark:text-white
+                    "
+                >
 
                     📖 Review Answers
 
                 </h2>
 
-                <p className="mt-2 text-gray-400">
 
-                    Check every answer along with the explanation.
+                <p
+                    className="
+                        mt-2
+                        text-slate-600
+
+                        dark:text-zinc-400
+                    "
+                >
+
+                    Check every answer along
+                    with the explanation.
 
                 </p>
 
             </div>
 
-            {/* Review Cards */}
+
+            {/* ==========================
+                Review Cards
+            ========================== */}
 
             <div className="mt-10 space-y-8">
 
-                {
-
-                    questions.map((question, index) => {
+                {questions.map(
+                    (question, index) => {
 
                         const correct =
 
                             answers[index] ===
-
                             question.correct_answer;
+
 
                         return (
 
                             <div
+                                key={
+                                    question.id ??
+                                    index
+                                }
+                                className={`
+                                    rounded-2xl
+                                    border
+                                    p-8
+                                    transition-all
+                                    duration-300
 
-                                key={question.id}
+                                    ${correct
 
-                                className={`rounded-2xl border p-8 transition duration-300
+                                        ? `
+                                                border-green-200
+                                                bg-gradient-to-r
+                                                from-green-50
+                                                to-white
 
-                                ${correct
+                                                dark:border-green-500/20
+                                                dark:from-green-500/10
+                                                dark:to-transparent
+                                            `
 
-                                        ? "border-green-500/30 bg-gradient-to-r from-green-500/10 to-transparent"
+                                        : `
+                                                border-red-200
+                                                bg-gradient-to-r
+                                                from-red-50
+                                                to-white
 
-                                        : "border-red-500/30 bg-gradient-to-r from-red-500/10 to-transparent"
-
-                                    }`}
-
+                                                dark:border-red-500/20
+                                                dark:from-red-500/10
+                                                dark:to-transparent
+                                            `
+                                    }
+                                `}
                             >
 
-                                <h3 className="text-xl font-semibold text-white">
+
+                                {/* Question Number */}
+
+                                <h3
+                                    className="
+                                        text-xl
+                                        font-semibold
+                                        text-slate-950
+
+                                        dark:text-white
+                                    "
+                                >
 
                                     Question {index + 1}
 
                                 </h3>
 
-                                <p className="mt-4 text-lg leading-8 text-gray-200">
+
+                                {/* Question */}
+
+                                <p
+                                    className="
+                                        mt-4
+                                        break-words
+                                        text-lg
+                                        leading-8
+                                        text-slate-700
+
+                                        dark:text-zinc-200
+                                    "
+                                >
 
                                     {question.question}
 
                                 </p>
 
-                                <div className="mt-8 grid gap-4 md:grid-cols-2">
 
-                                    <div className="rounded-xl bg-black/20 p-5">
+                                {/* Answer Comparison */}
 
-                                        <p className="font-semibold text-gray-400">
+                                <div
+                                    className="
+                                        mt-8
+                                        grid
+                                        gap-4
+
+                                        md:grid-cols-2
+                                    "
+                                >
+
+
+                                    {/* Your Answer */}
+
+                                    <div
+                                        className="
+                                            rounded-xl
+                                            border
+                                            border-slate-200
+                                            bg-white
+                                            p-5
+
+                                            dark:border-white/10
+                                            dark:bg-black/20
+                                        "
+                                    >
+
+                                        <p
+                                            className="
+                                                font-semibold
+                                                text-slate-500
+
+                                                dark:text-zinc-400
+                                            "
+                                        >
 
                                             Your Answer
 
                                         </p>
 
+
                                         <p
+                                            className={`
+                                                mt-3
+                                                text-2xl
+                                                font-bold
 
-                                            className={`mt-3 text-2xl font-bold
+                                                ${correct
 
-                                            ${correct
+                                                    ? "text-green-600 dark:text-green-400"
 
-                                                    ? "text-green-400"
-
-                                                    : "text-red-400"
-
-                                                }`}
-
+                                                    : "text-red-600 dark:text-red-400"
+                                                }
+                                            `}
                                         >
 
                                             {
-
                                                 answers[index]
 
                                                     ? `Option ${answers[index]}`
 
                                                     : "Not Answered"
-
                                             }
 
                                         </p>
 
                                     </div>
 
-                                    <div className="rounded-xl bg-black/20 p-5">
 
-                                        <p className="font-semibold text-gray-400">
+                                    {/* Correct Answer */}
+
+                                    <div
+                                        className="
+                                            rounded-xl
+                                            border
+                                            border-slate-200
+                                            bg-white
+                                            p-5
+
+                                            dark:border-white/10
+                                            dark:bg-black/20
+                                        "
+                                    >
+
+                                        <p
+                                            className="
+                                                font-semibold
+                                                text-slate-500
+
+                                                dark:text-zinc-400
+                                            "
+                                        >
 
                                             Correct Answer
 
                                         </p>
 
-                                        <p className="mt-3 text-2xl font-bold text-green-400">
 
-                                            Option {question.correct_answer}
+                                        <p
+                                            className="
+                                                mt-3
+                                                text-2xl
+                                                font-bold
+                                                text-green-600
+
+                                                dark:text-green-400
+                                            "
+                                        >
+
+                                            Option {
+                                                question.correct_answer
+                                            }
 
                                         </p>
 
@@ -326,15 +597,48 @@ function QuizResult({
 
                                 </div>
 
-                                <div className="mt-8 rounded-2xl bg-slate-900 p-6">
 
-                                    <h4 className="text-lg font-bold text-cyan-300">
+                                {/* Explanation */}
+
+                                <div
+                                    className="
+                                        mt-8
+                                        rounded-2xl
+                                        border
+                                        border-slate-200
+                                        bg-slate-50
+                                        p-6
+
+                                        dark:border-white/10
+                                        dark:bg-[#111113]
+                                    "
+                                >
+
+                                    <h4
+                                        className="
+                                            text-lg
+                                            font-bold
+                                            text-cyan-700
+
+                                            dark:text-cyan-300
+                                        "
+                                    >
 
                                         💡 Explanation
 
                                     </h4>
 
-                                    <p className="mt-4 leading-8 text-gray-300">
+
+                                    <p
+                                        className="
+                                            mt-4
+                                            break-words
+                                            leading-8
+                                            text-slate-700
+
+                                            dark:text-zinc-300
+                                        "
+                                    >
 
                                         {question.explanation}
 
@@ -346,39 +650,84 @@ function QuizResult({
 
                         );
 
-                    })
-
-                }
+                    }
+                )}
 
             </div>
 
-            {/* Bottom Buttons */}
 
-            <div className="mt-16 flex flex-wrap justify-center gap-5">
+            {/* ==========================
+                Bottom Buttons
+            ========================== */}
+
+            <div
+                className="
+                    mt-16
+                    flex
+                    flex-wrap
+                    justify-center
+                    gap-5
+                "
+            >
+
+
+                {/* Retake Quiz */}
 
                 <button
-
+                    type="button"
                     onClick={onRetake}
+                    className="
+                        cursor-pointer
+                        rounded-xl
+                        bg-cyan-500
+                        px-8
+                        py-4
+                        font-semibold
+                        text-slate-950
+                        shadow-md
+                        shadow-cyan-500/20
+                        transition-all
+                        duration-300
 
-                    className="rounded-xl bg-cyan-500 px-8 py-4 font-semibold text-black transition duration-300 hover:scale-105 hover:bg-cyan-400"
-
+                        hover:-translate-y-0.5
+                        hover:bg-cyan-400
+                        hover:shadow-lg
+                    "
                 >
 
                     🔄 Retake Quiz
 
                 </button>
 
+
+                {/* Download Report */}
+
                 <button
-
+                    type="button"
                     onClick={handleDownload}
+                    className="
+                        cursor-pointer
+                        rounded-xl
+                        bg-violet-600
+                        px-8
+                        py-4
+                        font-semibold
+                        text-white
+                        shadow-md
+                        shadow-violet-500/20
+                        transition-all
+                        duration-300
 
-                    className="rounded-xl bg-violet-600 px-8 py-4 font-semibold text-white transition duration-300 hover:scale-105 hover:bg-violet-500"
-
+                        hover:-translate-y-0.5
+                        hover:bg-violet-500
+                        hover:shadow-lg
+                    "
                 >
 
                     📥 Download Report
 
                 </button>
+
             </div>
 
         </div>

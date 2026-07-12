@@ -12,26 +12,70 @@ function ChatMessage({ sender, message }) {
     return (
 
         <div
-            className={`flex ${isUser
+            className={`
+                flex
+                ${isUser
                     ? "justify-end"
                     : "justify-start"
-                }`}
+                }
+            `}
         >
 
             <div
-                className={`max-w-[80%] rounded-2xl p-5 shadow-xl transition-all duration-300 hover:shadow-cyan-500/10 ${isUser
-                        ? "bg-cyan-500 text-black"
-                        : "border border-cyan-500/20 bg-white/5 text-white"
-                    }`}
+                className={`
+                    max-w-[85%]
+                    rounded-2xl
+                    p-5
+                    shadow-md
+                    transition-all
+                    duration-300
+
+                    sm:max-w-[80%]
+
+                    ${isUser
+
+                        ? `
+                                bg-cyan-500
+                                text-slate-950
+                                shadow-cyan-500/10
+                            `
+
+                        : `
+                                border
+                                border-slate-200
+                                bg-white
+                                text-slate-800
+                                shadow-slate-200/50
+
+                                dark:border-white/10
+                                dark:bg-[#18181b]
+                                dark:text-zinc-200
+                                dark:shadow-none
+                            `
+                    }
+                `}
             >
 
-                <div className="mb-3 flex items-center justify-between gap-5">
+
+                {/* Message Header */}
+
+                <div
+                    className="
+                        mb-3
+                        flex
+                        items-center
+                        justify-between
+                        gap-5
+                    "
+                >
 
                     <div className="flex items-center gap-2">
 
                         <span className="text-xl">
 
-                            {isUser ? "👤" : "🤖"}
+                            {isUser
+                                ? "👤"
+                                : "🤖"}
 
                         </span>
 
@@ -45,25 +89,47 @@ function ChatMessage({ sender, message }) {
 
                     </div>
 
+
+                    {/* Copy AI Response */}
+
                     {!isUser && (
 
-                        <CopyButton text={message} />
+                        <CopyButton
+                            text={message}
+                        />
 
                     )}
 
                 </div>
 
-                <p className="whitespace-pre-wrap leading-7">
+
+                {/* Message */}
+
+                <p
+                    className="
+                        whitespace-pre-wrap
+                        break-words
+                        leading-7
+                    "
+                >
 
                     {message}
 
                 </p>
 
+
+                {/* Time */}
+
                 <p
-                    className={`mt-4 text-xs ${isUser
-                            ? "text-black/70"
-                            : "text-gray-500"
-                        }`}
+                    className={`
+                        mt-4
+                        text-xs
+
+                        ${isUser
+                            ? "text-slate-800/70"
+                            : "text-slate-400 dark:text-zinc-500"
+                        }
+                    `}
                 >
 
                     {time}

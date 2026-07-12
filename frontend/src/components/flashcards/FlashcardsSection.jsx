@@ -15,7 +15,11 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import StudyComplete from "./StudyComplete";
 
 
-function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
+function FlashcardsSection({
+    documentId,
+    onGenerated,
+    onStatusChange,
+}) {
 
     const [cards, setCards] = useState([]);
 
@@ -31,6 +35,7 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
     const [studyCompleted, setStudyCompleted] = useState(false);
 
+
     // ==========================
     // Load Flashcards
     // ==========================
@@ -41,13 +46,18 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
     }, [documentId]);
 
+
     const loadFlashcards = async () => {
 
         try {
 
-            const response = await getFlashcards(documentId);
+            const response =
+                await getFlashcards(documentId);
 
-            setCards(response.flashcards);
+            const loadedCards =
+                response.flashcards || [];
+
+            setCards(loadedCards);
 
             setCurrent(0);
 
@@ -55,11 +65,21 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
             setStudyCompleted(false);
 
+
             // Restore learned cards from DB
 
-            const learnedCards = response.flashcards
-                .filter((card) => card.is_learned)
-                .map((card) => card.id);
+            const learnedCards = loadedCards
+
+                .filter(
+                    (card) =>
+                        card.is_learned
+                )
+
+                .map(
+                    (card) =>
+                        card.id
+                );
+
 
             setLearned(learnedCards);
 
@@ -73,6 +93,7 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
     };
 
+
     // ==========================
     // Generate Flashcards
     // ==========================
@@ -85,28 +106,52 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
             setLoading(true);
 
-            const response = await generateFlashcards(documentId);
 
-            const generatedCards = response.flashcards || [];
+            const response =
+                await generateFlashcards(
+                    documentId
+                );
+
+
+            const generatedCards =
+                response.flashcards || [];
+
 
             setCards(generatedCards);
 
             setCurrent(0);
 
+
             setLearned(
+
                 generatedCards
-                    .filter((card) => card.is_learned)
-                    .map((card) => card.id)
+
+                    .filter(
+                        (card) =>
+                            card.is_learned
+                    )
+
+                    .map(
+                        (card) =>
+                            card.id
+                    )
+
             );
+
 
             setFlipped(false);
 
             setStudyCompleted(false);
 
+
             // Refresh parent flashcard status
+
             await onGenerated?.();
 
-            toast.success("Flashcards generated!");
+
+            toast.success(
+                "Flashcards generated!"
+            );
 
         }
 
@@ -114,7 +159,9 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
             console.error(error);
 
-            toast.error("Failed to generate flashcards.");
+            toast.error(
+                "Failed to generate flashcards."
+            );
 
         }
 
@@ -126,6 +173,7 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
     };
 
+
     // ==========================
     // Next Card
     // ==========================
@@ -134,13 +182,21 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
         if (cards.length === 0) return;
 
-        if (current >= cards.length - 1) return;
+        if (
+            current >=
+            cards.length - 1
+        ) {
+            return;
+        }
 
         setFlipped(false);
 
-        setCurrent((prev) => prev + 1);
+        setCurrent(
+            (prev) => prev + 1
+        );
 
     };
+
 
     // ==========================
     // Previous Card
@@ -154,9 +210,12 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
         setFlipped(false);
 
-        setCurrent((prev) => prev - 1);
+        setCurrent(
+            (prev) => prev - 1
+        );
 
     };
+
 
     // ==========================
     // Shuffle
@@ -164,11 +223,13 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
     const shuffleCards = () => {
 
-        const shuffled = [...cards].sort(
-
-            () => Math.random() - 0.5
-
+        const shuffled = [
+            ...cards,
+        ].sort(
+            () =>
+                Math.random() - 0.5
         );
+
 
         setCards(shuffled);
 
@@ -176,59 +237,91 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
         setFlipped(false);
 
-        toast.success("Cards shuffled!");
+
+        toast.success(
+            "Cards shuffled!"
+        );
 
     };
 
+
     // ==========================
-    // Learned
+    // Mark as Learned
     // ==========================
 
     const markLearned = async () => {
 
         // No cards or request already running
-        if (cards.length === 0 || markingLearned) return;
+
+        if (
+            cards.length === 0 ||
+            markingLearned
+        ) {
+            return;
+        }
+
 
         const card = cards[current];
 
+
         if (!card) return;
 
-        // Already learned
-        if (learned.includes(card.id)) {
 
-            toast.info("Already marked as learned.");
+        // Already learned
+
+        if (
+            learned.includes(card.id)
+        ) {
+
+            toast.info(
+                "Already marked as learned."
+            );
 
             return;
 
         }
 
+
         try {
 
             // Immediately lock the button
+
             setMarkingLearned(true);
+
 
             await markFlashcardLearned(
                 card.id,
                 true
             );
 
-            // Prevent duplicate IDs in local state
+
+            // Prevent duplicate IDs
+            // in local state
+
             setLearned((prev) => {
 
-                if (prev.includes(card.id)) {
+                if (
+                    prev.includes(card.id)
+                ) {
 
                     return prev;
 
                 }
 
+
                 return [
+
                     ...prev,
+
                     card.id,
+
                 ];
 
             });
 
+
             // Update current card locally
+
             setCards((prev) =>
 
                 prev.map((c) =>
@@ -236,8 +329,11 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
                     c.id === card.id
 
                         ? {
+
                             ...c,
+
                             is_learned: true,
+
                         }
 
                         : c
@@ -246,8 +342,12 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
             );
 
-            // Refresh status/count from backend
+
+            // Refresh parent status/count
+            // from backend
+
             await onStatusChange?.();
+
 
             toast.success(
                 "Marked as learned!"
@@ -272,6 +372,8 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
         }
 
     };
+
+
     // ==========================
     // Keyboard Shortcuts
     // ==========================
@@ -280,7 +382,9 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
         const handleKeyDown = (event) => {
 
-            const tag = event.target.tagName;
+            const tag =
+                event.target.tagName;
+
 
             if (
 
@@ -294,6 +398,7 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
             }
 
+
             switch (event.key) {
 
                 case "ArrowRight":
@@ -302,11 +407,13 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
                     break;
 
+
                 case "ArrowLeft":
 
                     previousCard();
 
                     break;
+
 
                 case "l":
 
@@ -316,6 +423,7 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
                     break;
 
+
                 case "s":
 
                 case "S":
@@ -323,6 +431,7 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
                     shuffleCards();
 
                     break;
+
 
                 default:
 
@@ -332,6 +441,7 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
         };
 
+
         window.addEventListener(
 
             "keydown",
@@ -339,6 +449,7 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
             handleKeyDown
 
         );
+
 
         return () => {
 
@@ -352,13 +463,24 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
         };
 
-    }, [cards, current, learned]);
+    }, [
+        cards,
+        current,
+        learned,
+        markingLearned,
+    ]);
+
+
+    // ==========================
+    // Restart Study
+    // ==========================
 
     const restartStudy = async () => {
 
         try {
 
-            // Reset all flashcards in database
+            // Reset all flashcards
+            // in database
 
             await Promise.all(
 
@@ -376,6 +498,7 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
             );
 
+
             // Update local state
 
             setCards((prev) =>
@@ -390,6 +513,7 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
             );
 
+
             setLearned([]);
 
             setCurrent(0);
@@ -398,7 +522,15 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
             setStudyCompleted(false);
 
-            toast.success("Study restarted!");
+
+            // Refresh parent status
+
+            await onStatusChange?.();
+
+
+            toast.success(
+                "Study restarted!"
+            );
 
         }
 
@@ -406,194 +538,314 @@ function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
             console.error(error);
 
-            toast.error("Failed to restart study.");
+            toast.error(
+                "Failed to restart study."
+            );
 
         }
 
     };
+
+
     const startQuiz = () => {
 
-        toast.info("🚀 Quiz Generator coming next!");
+        toast.info(
+            "🚀 Quiz Generator coming next!"
+        );
 
     };
 
+
     return (
 
-        <div className="mt-12 rounded-3xl border border-cyan-500/20 bg-white/5 p-8 shadow-xl">
+        <div
+            className="
+                mt-12
+                rounded-3xl
+                border
+                border-slate-200
+                bg-white
+                p-8
+                shadow-xl
+                shadow-slate-200/50
+                transition-colors
+                duration-300
 
-            <h2 className="mb-2 text-3xl font-bold text-white">
+                dark:border-white/10
+                dark:bg-[#18181b]
+                dark:shadow-none
+            "
+        >
+
+
+            {/* ==========================
+                Header
+            ========================== */}
+
+            <h2
+                className="
+                    mb-2
+                    text-3xl
+                    font-bold
+                    text-slate-950
+
+                    dark:text-white
+                "
+            >
 
                 📚 NightBat AI Study Flashcards
 
             </h2>
 
-            <p className="mb-8 text-gray-400">
 
-                Master your document faster with NightBat AI-generated study cards.
+            <p
+                className="
+                    mb-8
+                    text-slate-600
+
+                    dark:text-zinc-400
+                "
+            >
+
+                Master your document faster with
+                NightBat AI-generated study cards.
 
             </p>
 
-            {
 
-                cards.length === 0 ? (
+            {/* ==========================
+                No Flashcards
+            ========================== */}
 
-                    <div className="py-20 text-center">
+            {cards.length === 0 ? (
 
-                        <p className="mb-6 text-lg text-gray-400">
+                <div className="py-20 text-center">
 
-                            No flashcards generated yet.
+                    <p
+                        className="
+                            mb-6
+                            text-lg
+                            text-slate-600
 
-                        </p>
+                            dark:text-zinc-400
+                        "
+                    >
 
-                        <button
+                        No flashcards generated yet.
 
-                            onClick={handleGenerate}
+                    </p>
 
-                            disabled={loading}
 
-                            className="rounded-xl bg-cyan-500 px-8 py-4 font-semibold text-black transition hover:bg-cyan-400 disabled:opacity-60"
+                    <button
 
-                        >
+                        type="button"
 
-                            {
+                        onClick={handleGenerate}
 
-                                loading
+                        disabled={loading}
 
-                                    ? "🧠 NightBat AI is creating flashcards..."
+                        className="
+                            cursor-pointer
+                            rounded-xl
+                            bg-cyan-500
+                            px-8
+                            py-4
+                            font-semibold
+                            text-slate-950
+                            shadow-md
+                            shadow-cyan-500/20
+                            transition-all
+                            duration-300
 
-                                    : "⚡ Generate Flashcards"
+                            hover:-translate-y-0.5
+                            hover:bg-cyan-400
+                            hover:shadow-lg
 
-                            }
-
-                        </button>
-
-                    </div>
-
-                ) : (
-
-                    <>
-
-                        {
-
-                            !studyCompleted && (
-
-                                <div className="mb-6 text-center">
-
-                                    <span className="rounded-full bg-cyan-500/20 px-5 py-2 text-cyan-300">
-
-                                        Card {current + 1} of {cards.length}
-
-                                    </span>
-
-                                </div>
-
-                            )
-
-                        }
+                            disabled:cursor-not-allowed
+                            disabled:opacity-60
+                            disabled:hover:translate-y-0
+                        "
+                    >
 
                         {
+                            loading
 
-                            !studyCompleted && (
+                                ? "🧠 NightBat AI is creating flashcards..."
 
-                                <FlashcardProgress
-
-                                    current={current}
-
-                                    total={cards.length}
-
-                                    learned={learned.length}
-
-                                />
-
-                            )
-
+                                : "⚡ Generate Flashcards"
                         }
 
-                        {
+                    </button>
 
-                            studyCompleted && (
+                </div>
 
-                                <StudyComplete
+            ) : (
 
-                                    total={cards.length}
-
-                                    onRestart={restartStudy}
-
-                                    onQuiz={startQuiz}
-
-                                />
-
-                            )
-
-                        }
-
-                        {
-
-                            !studyCompleted && (
-
-                                <>
-
-                                    <Flashcard
-
-                                        question={cards[current].question}
-
-                                        answer={cards[current].answer}
-
-                                        flipped={flipped}
-
-                                        setFlipped={setFlipped}
-
-                                    />
-
-                                    <FlashcardControls
-
-                                        previousCard={previousCard}
-
-                                        nextCard={nextCard}
-
-                                        shuffleCards={shuffleCards}
-
-                                        markLearned={markLearned}
-
-                                        markingLearned={markingLearned}
-
-                                        learned={
-                                            learned.includes(
-                                                cards[current]?.id
-                                            )
-                                        }
-
-                                        isFirst={current === 0}
-
-                                        isLast={current === cards.length - 1}
-
-                                        showFinish={
-                                            current === cards.length - 1 &&
-                                            learned.includes(cards[current]?.id)
-                                        }
-
-                                        onFinish={() =>
-                                            setStudyCompleted(true)
-                                        }
-
-                                    />
-
-                                    <KeyboardShortcuts />
-
-                                </>
-
-                            )
-
-                        }
+                <>
 
 
+                    {/* ==========================
+                        Current Card Badge
+                    ========================== */}
+
+                    {!studyCompleted && (
+
+                        <div className="mb-6 text-center">
+
+                            <span
+                                className="
+                                    inline-flex
+                                    rounded-full
+                                    border
+                                    border-cyan-200
+                                    bg-cyan-50
+                                    px-5
+                                    py-2
+                                    font-medium
+                                    text-cyan-700
+
+                                    dark:border-cyan-500/20
+                                    dark:bg-cyan-500/10
+                                    dark:text-cyan-300
+                                "
+                            >
+
+                                Card {current + 1} of {cards.length}
+
+                            </span>
+
+                        </div>
+
+                    )}
 
 
-                    </>
+                    {/* ==========================
+                        Progress
+                    ========================== */}
 
-                )
+                    {!studyCompleted && (
 
-            }
+                        <FlashcardProgress
+
+                            current={current}
+
+                            total={cards.length}
+
+                            learned={learned.length}
+
+                        />
+
+                    )}
+
+
+                    {/* ==========================
+                        Study Complete
+                    ========================== */}
+
+                    {studyCompleted && (
+
+                        <StudyComplete
+
+                            total={cards.length}
+
+                            onRestart={restartStudy}
+
+                            onQuiz={startQuiz}
+
+                        />
+
+                    )}
+
+
+                    {/* ==========================
+                        Active Flashcard
+                    ========================== */}
+
+                    {!studyCompleted && (
+
+                        <>
+
+                            <Flashcard
+
+                                question={
+                                    cards[current].question
+                                }
+
+                                answer={
+                                    cards[current].answer
+                                }
+
+                                flipped={flipped}
+
+                                setFlipped={
+                                    setFlipped
+                                }
+
+                            />
+
+
+                            <FlashcardControls
+
+                                previousCard={
+                                    previousCard
+                                }
+
+                                nextCard={
+                                    nextCard
+                                }
+
+                                shuffleCards={
+                                    shuffleCards
+                                }
+
+                                markLearned={
+                                    markLearned
+                                }
+
+                                markingLearned={
+                                    markingLearned
+                                }
+
+                                learned={
+                                    learned.includes(
+                                        cards[current]?.id
+                                    )
+                                }
+
+                                isFirst={
+                                    current === 0
+                                }
+
+                                isLast={
+                                    current ===
+                                    cards.length - 1
+                                }
+
+                                showFinish={
+                                    current ===
+                                    cards.length - 1 &&
+
+                                    learned.includes(
+                                        cards[current]?.id
+                                    )
+                                }
+
+                                onFinish={() =>
+                                    setStudyCompleted(true)
+                                }
+
+                            />
+
+
+                            <KeyboardShortcuts />
+
+                        </>
+
+                    )}
+
+                </>
+
+            )}
 
         </div>
 

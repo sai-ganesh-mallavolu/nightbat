@@ -7,7 +7,7 @@ const steps = [
     "🔎 Finding key insights...",
     "📝 Preparing intelligent summary...",
     "💡 Generating action items...",
-    "✨ Finalizing analysis..."
+    "✨ Finalizing analysis...",
 ];
 
 function Loader() {
@@ -34,71 +34,158 @@ function Loader() {
 
     }, []);
 
+
     return (
 
-        <div className="mt-12 rounded-2xl border border-cyan-500/20 bg-white/5 p-8 shadow-xl">
+        <div
+            className="
+                mt-12
+                rounded-2xl
+                border border-slate-200
+                bg-white
+                p-8
+                shadow-lg
+                shadow-slate-200/50
+                transition-colors
+                duration-300
 
-            <div className="mb-6 text-center">
+                dark:border-white/10
+                dark:bg-[#18181b]
+                dark:shadow-none
+            "
+        >
+
+            {/* Header */}
+
+            <div className="mb-8 text-center">
 
                 <div className="text-5xl">
                     🤖
                 </div>
 
-                <h2 className="mt-3 text-3xl font-bold text-cyan-400">
+                <h2
+                    className="
+                        mt-3
+                        text-3xl
+                        font-bold
+                        text-cyan-600
+
+                        dark:text-cyan-400
+                    "
+                >
                     NightBat AI
                 </h2>
 
-                <p className="mt-2 text-gray-400">
+                <p
+                    className="
+                        mt-2
+                        text-slate-600
+
+                        dark:text-zinc-400
+                    "
+                >
                     Please wait while your document is being analyzed...
                 </p>
 
             </div>
 
+
+            {/* Analysis Steps */}
+
             <div className="space-y-4">
 
-                {steps.map((step, index) => (
+                {steps.map((step, index) => {
 
-                    <div
-                        key={index}
-                        className="flex items-center gap-3"
-                    >
+                    const isCompleted =
+                        index < currentStep;
 
-                        {index < currentStep && (
-                            <span className="text-green-400 text-xl">
-                                ✅
-                            </span>
-                        )}
+                    const isCurrent =
+                        index === currentStep;
 
-                        {index === currentStep && (
-                            <span className="text-cyan-400 animate-pulse text-xl">
-                                ⏳
-                            </span>
-                        )}
+                    const isPending =
+                        index > currentStep;
 
-                        {index > currentStep && (
-                            <span className="text-gray-600 text-xl">
-                                ⬜
-                            </span>
-                        )}
+                    return (
 
-                        <span
-                            className={`${index <= currentStep
-                                    ? "text-white"
-                                    : "text-gray-500"
-                                }`}
+                        <div
+                            key={index}
+                            className="
+                                flex
+                                items-center
+                                gap-3
+                                rounded-xl
+                                px-3
+                                py-2
+                                transition-colors
+                                duration-300
+                            "
                         >
-                            {step}
-                        </span>
 
-                    </div>
+                            {/* Step Icon */}
 
-                ))}
+                            {isCompleted && (
+
+                                <span className="text-xl text-green-600 dark:text-green-400">
+                                    ✅
+                                </span>
+
+                            )}
+
+                            {isCurrent && (
+
+                                <span className="animate-pulse text-xl text-cyan-600 dark:text-cyan-400">
+                                    ⏳
+                                </span>
+
+                            )}
+
+                            {isPending && (
+
+                                <span className="text-xl text-slate-300 dark:text-zinc-600">
+                                    ⬜
+                                </span>
+
+                            )}
+
+
+                            {/* Step Text */}
+
+                            <span
+                                className={`
+                                    transition-colors
+                                    duration-300
+
+                                    ${isCompleted
+                                        ? "font-medium text-slate-700 dark:text-zinc-300"
+                                        : ""
+                                    }
+
+                                    ${isCurrent
+                                        ? "font-semibold text-slate-950 dark:text-white"
+                                        : ""
+                                    }
+
+                                    ${isPending
+                                        ? "text-slate-400 dark:text-zinc-500"
+                                        : ""
+                                    }
+                                `}
+                            >
+                                {step}
+                            </span>
+
+                        </div>
+
+                    );
+
+                })}
 
             </div>
 
         </div>
 
     );
+
 }
 
 export default Loader;

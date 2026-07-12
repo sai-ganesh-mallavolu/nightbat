@@ -6,17 +6,48 @@ function ActionItemsCard({ items }) {
 
     return (
 
-        <div className="rounded-2xl border border-cyan-500/20 bg-white/5 p-6 shadow-lg">
+        <div
+            className="
+                rounded-2xl
+                border
+                border-slate-200
+                bg-white
+                p-6
+                shadow-md
+                shadow-slate-200/50
+                transition-colors
+                duration-300
 
-            <div className="mb-5 flex items-center justify-between">
+                dark:border-white/10
+                dark:bg-[#18181b]
+                dark:shadow-none
+            "
+        >
 
-                <h2 className="text-2xl font-bold text-cyan-400">
+            {/* Header */}
+
+            <div className="mb-5 flex items-center justify-between gap-4">
+
+                <h2
+                    className="
+                        text-2xl
+                        font-bold
+                        text-cyan-600
+
+                        dark:text-cyan-400
+                    "
+                >
                     ✅ Action Items
                 </h2>
 
-                <CopyButton text={items.join("\n")} />
+                <CopyButton
+                    text={items.join("\n")}
+                />
 
             </div>
+
+
+            {/* Action Items List */}
 
             <ul className="space-y-4">
 
@@ -24,12 +55,33 @@ function ActionItemsCard({ items }) {
 
                     <li
                         key={index}
-                        className="flex items-start gap-3 text-gray-300"
+                        className="
+                            flex
+                            items-start
+                            gap-3
+                            text-slate-700
+
+                            dark:text-zinc-300
+                        "
                     >
 
-                        <span className="font-bold text-green-400">
+                        {/* Checkbox Icon */}
+
+                        <span
+                            className="
+                                mt-0.5
+                                shrink-0
+                                font-bold
+                                text-green-600
+
+                                dark:text-green-400
+                            "
+                        >
                             □
                         </span>
+
+
+                        {/* Action Item */}
 
                         <span className="leading-7">
                             {item}

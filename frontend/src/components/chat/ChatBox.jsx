@@ -7,11 +7,15 @@ import {
 } from "../../services/historyService";
 
 import loadingMessages from "./loadingMessages";
+
 import ChatHeader from "./ChatHeader";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
+
 import ConfirmModal from "../common/ConfirmModal";
+
 import { toast } from "react-toastify";
+
 
 function ChatBox({ documentId }) {
 
@@ -31,6 +35,7 @@ function ChatBox({ documentId }) {
 
     const bottomRef = useRef(null);
 
+
     // ==========================
     // Auto Scroll
     // ==========================
@@ -45,6 +50,7 @@ function ChatBox({ documentId }) {
 
     }, [messages, loading]);
 
+
     // ==========================
     // Load Previous Chat
     // ==========================
@@ -55,11 +61,13 @@ function ChatBox({ documentId }) {
 
     }, [documentId]);
 
+
     const loadChatHistory = async () => {
 
         try {
 
-            const history = await getChatHistory(documentId);
+            const history =
+                await getChatHistory(documentId);
 
             setMessages(history);
 
@@ -73,6 +81,7 @@ function ChatBox({ documentId }) {
 
     };
 
+
     // ==========================
     // Loading Animation
     // ==========================
@@ -85,7 +94,9 @@ function ChatBox({ documentId }) {
 
         const interval = setInterval(() => {
 
-            index = (index + 1) % loadingMessages.length;
+            index =
+                (index + 1) %
+                loadingMessages.length;
 
             setLoadingText(
                 loadingMessages[index]
@@ -93,9 +104,12 @@ function ChatBox({ documentId }) {
 
         }, 1800);
 
-        return () => clearInterval(interval);
+
+        return () =>
+            clearInterval(interval);
 
     }, [loading]);
+
 
     // ==========================
     // Send Message
@@ -103,11 +117,19 @@ function ChatBox({ documentId }) {
 
     const handleSend = async () => {
 
-        if (!question.trim() || loading) return;
+        if (
+            !question.trim() ||
+            loading
+        ) {
+            return;
+        }
 
-        const currentQuestion = question;
 
-        // Show instantly
+        const currentQuestion =
+            question;
+
+
+        // Show user message instantly
 
         setMessages((prev) => [
 
@@ -123,7 +145,9 @@ function ChatBox({ documentId }) {
 
         ]);
 
+
         setQuestion("");
+
 
         try {
 
@@ -133,6 +157,7 @@ function ChatBox({ documentId }) {
                 loadingMessages[0]
             );
 
+
             await chatWithDocument(
 
                 documentId,
@@ -141,11 +166,13 @@ function ChatBox({ documentId }) {
 
             );
 
-            // Reload chat from DB
 
-            const history = await getChatHistory(
-                documentId
-            );
+            // Reload chat from database
+
+            const history =
+                await getChatHistory(
+                    documentId
+                );
 
             setMessages(history);
 
@@ -154,6 +181,7 @@ function ChatBox({ documentId }) {
         catch (error) {
 
             console.error(error);
+
 
             setMessages((prev) => [
 
@@ -180,6 +208,7 @@ function ChatBox({ documentId }) {
 
     };
 
+
     // ==========================
     // Clear Conversation
     // ==========================
@@ -190,19 +219,24 @@ function ChatBox({ documentId }) {
 
     };
 
+
     const handleClearChat = async () => {
 
         try {
 
             setClearing(true);
 
-            await clearChatHistory(documentId);
+            await clearChatHistory(
+                documentId
+            );
 
             setMessages([]);
 
             setShowConfirm(false);
 
-            toast.success("Conversation cleared successfully!");
+            toast.success(
+                "Conversation cleared successfully!"
+            );
 
         }
 
@@ -210,7 +244,9 @@ function ChatBox({ documentId }) {
 
             console.error(error);
 
-            toast.error("Failed to clear conversation.");
+            toast.error(
+                "Failed to clear conversation."
+            );
 
         }
 
@@ -222,62 +258,71 @@ function ChatBox({ documentId }) {
 
     };
 
+
     return (
 
-        <div className="mt-12 overflow-hidden rounded-3xl border border-cyan-500/20 bg-white/5 shadow-2xl">
+        <div
+            className="
+                mt-12
+                overflow-hidden
+                rounded-3xl
+                border
+                border-slate-200
+                bg-white
+                shadow-xl
+                shadow-slate-200/50
+                transition-colors
+                duration-300
+
+                dark:border-white/10
+                dark:bg-[#18181b]
+                dark:shadow-none
+            "
+        >
+
+            {/* Chat Header */}
 
             <ChatHeader
-
-                hasMessages={messages.length > 0}
-
+                hasMessages={
+                    messages.length > 0
+                }
                 onClear={clearChat}
-
             />
+
+
+            {/* Chat Messages */}
 
             <ChatMessages
-
                 messages={messages}
-
                 loading={loading}
-
                 loadingText={loadingText}
-
                 bottomRef={bottomRef}
-
             />
+
+
+            {/* Chat Input */}
 
             <ChatInput
-
                 question={question}
-
                 setQuestion={setQuestion}
-
                 handleSend={handleSend}
-
                 loading={loading}
-
             />
 
-            {/* 👇 Add this here */}
+
+            {/* Clear Conversation Modal */}
 
             <ConfirmModal
-
                 open={showConfirm}
-
                 title="Clear Conversation"
-
                 message="Are you sure you want to permanently delete this conversation? This action cannot be undone."
-
                 confirmText="Delete"
-
                 cancelText="Cancel"
-
                 loading={clearing}
-
-                onCancel={() => setShowConfirm(false)}
-
+                onCancel={() =>
+                    setShowConfirm(false)
+                }
                 onConfirm={handleClearChat}
-
             />
 
         </div>

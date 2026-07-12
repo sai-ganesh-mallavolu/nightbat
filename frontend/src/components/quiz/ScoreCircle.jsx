@@ -2,15 +2,20 @@ function ScoreCircle({ percentage }) {
 
     const radius = 90;
 
-    const circumference = 2 * Math.PI * radius;
+    const circumference =
+        2 * Math.PI * radius;
 
     const offset =
         circumference -
-        (percentage / 100) * circumference;
+        (percentage / 100) *
+        circumference;
+
 
     return (
 
-        <div className="flex justify-center">
+        <div className="relative flex justify-center">
+
+            {/* Circular Progress */}
 
             <svg
                 width="220"
@@ -18,43 +23,88 @@ function ScoreCircle({ percentage }) {
                 className="-rotate-90"
             >
 
-                <circle
-                    cx="110"
-                    cy="110"
-                    r={radius}
-                    stroke="#1e293b"
-                    strokeWidth="14"
-                    fill="none"
-                />
+                {/* Background Circle */}
 
                 <circle
                     cx="110"
                     cy="110"
                     r={radius}
-                    stroke="#06b6d4"
+                    strokeWidth="14"
+                    fill="none"
+                    className="
+                        stroke-slate-200
+
+                        dark:stroke-zinc-700
+                    "
+                />
+
+
+                {/* Progress Circle */}
+
+                <circle
+                    cx="110"
+                    cy="110"
+                    r={radius}
                     strokeWidth="14"
                     fill="none"
                     strokeLinecap="round"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={offset}
+                    strokeDasharray={
+                        circumference
+                    }
+                    strokeDashoffset={
+                        offset
+                    }
+                    className="
+                        stroke-cyan-500
+
+                        dark:stroke-cyan-400
+                    "
                     style={{
-                        transition: "stroke-dashoffset 1.5s ease",
+                        transition:
+                            "stroke-dashoffset 1.5s ease",
                     }}
                 />
 
             </svg>
 
-            <div className="absolute flex h-[220px] w-[220px] items-center justify-center">
+
+            {/* Score Text */}
+
+            <div
+                className="
+                    absolute
+                    inset-0
+                    flex
+                    items-center
+                    justify-center
+                "
+            >
 
                 <div className="text-center">
 
-                    <h2 className="text-5xl font-bold text-cyan-400">
+                    <h2
+                        className="
+                            text-5xl
+                            font-bold
+                            text-cyan-600
+
+                            dark:text-cyan-400
+                        "
+                    >
 
                         {percentage}%
 
                     </h2>
 
-                    <p className="mt-2 text-gray-400">
+
+                    <p
+                        className="
+                            mt-2
+                            text-slate-500
+
+                            dark:text-zinc-400
+                        "
+                    >
 
                         Accuracy
 

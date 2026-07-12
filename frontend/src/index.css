@@ -1,15 +1,40 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode in Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 html {
   scroll-behavior: smooth;
+  background-color: #ffffff;
+}
+
+html.dark {
+  background-color: #000000;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #030712;
-  color: white;
+  min-width: 320px;
+  min-height: 100vh;
+
+  background-color: #ffffff;
+  color: #111827;
+
   font-family: Inter, sans-serif;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+html.dark body {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+#root {
+  min-height: 100vh;
 }
 
 * {

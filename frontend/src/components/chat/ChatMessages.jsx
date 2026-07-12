@@ -16,13 +16,29 @@ function ChatMessages({
 
     return (
 
-        <div className="h-[500px] overflow-y-auto bg-black/20 p-6">
+        <div
+            className="
+                h-[500px]
+                overflow-y-auto
+                bg-slate-50
+                p-6
+                transition-colors
+                duration-300
+
+                dark:bg-[#111113]
+            "
+        >
+
+            {/* Welcome Screen */}
 
             {messages.length === 0 && !loading && (
 
                 <WelcomeScreen />
 
             )}
+
+
+            {/* Messages */}
 
             <div className="space-y-5">
 
@@ -36,6 +52,9 @@ function ChatMessages({
 
                 ))}
 
+
+                {/* AI Typing Indicator */}
+
                 {loading && (
 
                     <TypingIndicator
@@ -44,7 +63,10 @@ function ChatMessages({
 
                 )}
 
-                <div ref={bottomRef}></div>
+
+                {/* Auto Scroll Target */}
+
+                <div ref={bottomRef} />
 
             </div>
 

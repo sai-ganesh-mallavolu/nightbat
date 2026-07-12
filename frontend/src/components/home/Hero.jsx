@@ -1,38 +1,165 @@
 import { Link } from "react-router-dom";
 
 function Hero() {
+
     return (
-        <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gray-950 px-6">
-            {/* Background Blur */}
-            <div className="absolute -left-20 top-20 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl"></div>
 
-            <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl"></div>
+        <section
+            className="
+                relative
+                flex min-h-screen
+                items-center justify-center
+                overflow-hidden
+                bg-gradient-to-b
+                from-white
+                via-slate-50
+                to-slate-100
+                px-6
+                text-slate-900
+                transition-colors
+                duration-300
 
-            <div className="relative mx-auto flex max-w-7xl flex-col items-center px-6 text-center">
+                dark:from-[#09090b]
+                dark:via-[#0c0c0f]
+                dark:to-[#111113]
+                dark:text-white
+            "
+        >
 
-                <span className="mb-6 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-6 py-3 text-base font-medium text-cyan-300">
+            {/* Subtle Background Pattern */}
+
+            <div
+                className="
+                    pointer-events-none
+                    absolute inset-0
+                    opacity-[0.035]
+
+                    dark:opacity-[0.05]
+                "
+                style={{
+                    backgroundImage:
+                        "radial-gradient(circle, currentColor 1px, transparent 1px)",
+                    backgroundSize: "28px 28px",
+                }}
+            />
+
+
+            {/* Hero Content */}
+
+            <div
+                className="
+                    relative z-10
+                    mx-auto
+                    flex max-w-7xl
+                    flex-col items-center
+                    px-6
+                    text-center
+                "
+            >
+
+                {/* Badge */}
+
+                <span
+                    className="
+                        mb-6
+                        rounded-full
+                        border border-cyan-200
+                        bg-white/80
+                        px-6 py-3
+                        text-base
+                        font-medium
+                        text-cyan-700
+                        shadow-sm
+                        backdrop-blur-sm
+                        transition-colors
+                        duration-300
+
+                        dark:border-cyan-400/20
+                        dark:bg-white/5
+                        dark:text-cyan-300
+                        dark:shadow-none
+                    "
+                >
                     🚀 AI Powered Document Intelligence
                 </span>
 
-                <h1 className="max-w-5xl text-5xl font-extrabold leading-tight tracking-tight md:text-7xl">
+
+                {/* Heading */}
+
+                <h1
+                    className="
+                        max-w-5xl
+                        text-5xl
+                        font-extrabold
+                        leading-tight
+                        tracking-tight
+                        text-slate-950
+
+                        md:text-7xl
+
+                        dark:text-white
+                    "
+                >
+
                     Analyze Any
-                    <span className="text-cyan-400"> Document </span>
+
+                    <span className="text-cyan-500 dark:text-cyan-400">
+                        {" "}Document{" "}
+                    </span>
+
                     with AI
+
                 </h1>
 
-                <p className="mt-8 max-w-xl text-lg leading-8 text-gray-300">
+
+                {/* Description */}
+
+                <p
+                    className="
+                        mt-8
+                        max-w-2xl
+                        text-lg
+                        leading-8
+                        text-slate-600
+
+                        dark:text-zinc-400
+                    "
+                >
                     Upload PDFs, DOCX or TXT files and instantly generate
                     summaries, key insights, action items and intelligent answers.
                 </p>
 
-                <div className="mt-10 flex gap-5">
+
+                {/* Buttons */}
+
+                <div className="mt-10 flex flex-wrap justify-center gap-4">
+
+                    {/* Primary Button */}
 
                     <Link
                         to="/upload"
-                        className="rounded-xl bg-cyan-500 px-8 py-4 font-semibold text-black transition-all duration-300 hover:scale-105 hover:bg-cyan-400"
+                        className="
+                            rounded-xl
+                            bg-cyan-500
+                            px-8 py-4
+                            font-semibold
+                            text-slate-950
+                            shadow-lg
+                            shadow-cyan-500/20
+                            transition-all
+                            duration-300
+
+                            hover:-translate-y-0.5
+                            hover:bg-cyan-400
+                            hover:shadow-xl
+                            hover:shadow-cyan-500/25
+                        "
                     >
                         Upload Document
                     </Link>
+
+
+                    {/* Secondary Button */}
 
                     <button
                         onClick={() =>
@@ -42,7 +169,28 @@ function Hero() {
                                     behavior: "smooth",
                                 })
                         }
-                        className="rounded-xl border border-cyan-500 px-8 py-3 font-semibold text-cyan-400 transition duration-300 hover:bg-cyan-500 hover:text-black"
+                        className="
+                            rounded-xl
+                            border border-slate-300
+                            bg-white
+                            px-8 py-4
+                            font-semibold
+                            text-slate-700
+                            shadow-sm
+                            transition-all
+                            duration-300
+
+                            hover:-translate-y-0.5
+                            hover:border-cyan-400
+                            hover:text-cyan-600
+
+                            dark:border-white/15
+                            dark:bg-white/5
+                            dark:text-zinc-200
+                            dark:hover:border-cyan-400
+                            dark:hover:bg-cyan-400/10
+                            dark:hover:text-cyan-300
+                        "
                     >
                         Learn More
                     </button>
@@ -50,8 +198,11 @@ function Hero() {
                 </div>
 
             </div>
+
         </section>
+
     );
+
 }
 
 export default Hero;

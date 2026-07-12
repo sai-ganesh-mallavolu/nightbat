@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 
 import {
-
     getQuiz,
-
     generateQuiz,
-
     saveQuizAttempt,
-
 } from "../../services/quizService";
 
 import QuizCard from "./QuizCard";
@@ -17,11 +13,16 @@ import QuizTimer from "./QuizTimer";
 import QuestionPalette from "./QuestionPalette";
 import QuizNavigation from "./QuizNavigation";
 import SubmitQuizModal from "./SubmitQuizModal";
-import QuizHistory from "./QuizHistory";
 
 import { toast } from "react-toastify";
 
-function QuizSection({ documentId, onGenerated, onStatusChange, }) {
+
+function QuizSection({
+    documentId,
+    onGenerated,
+    onStatusChange,
+    onAttemptSaved,
+}) {
 
     const [questions, setQuestions] = useState([]);
 
@@ -41,6 +42,7 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
     const [timerKey, setTimerKey] = useState(0);
 
+
     // ==========================
     // Load Quiz
     // ==========================
@@ -51,15 +53,20 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
     }, [documentId]);
 
+
     const loadQuiz = async () => {
 
         try {
 
-            const response = await getQuiz(documentId);
+            const response =
+                await getQuiz(documentId);
 
-            if (response.questions.length > 0) {
+            const loadedQuestions =
+                response.questions || [];
 
-                setQuestions(response.questions);
+            if (loadedQuestions.length > 0) {
+
+                setQuestions(loadedQuestions);
 
             }
 
@@ -73,6 +80,7 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
     };
 
+
     // ==========================
     // Generate Quiz
     // ==========================
@@ -85,9 +93,12 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
             setLoading(true);
 
-            const response = await generateQuiz(documentId);
+            const response =
+                await generateQuiz(documentId);
 
-            setQuestions(response.questions);
+            setQuestions(
+                response.questions || []
+            );
 
             setCurrent(0);
 
@@ -99,12 +110,19 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
             setSecondsLeft(600);
 
-            setTimerKey((prev) => prev + 1);
+            setTimerKey(
+                (prev) => prev + 1
+            );
+
 
             // Refresh quiz status in parent
+
             await onGenerated?.();
 
-            toast.success("Quiz generated!");
+
+            toast.success(
+                "Quiz generated!"
+            );
 
         }
 
@@ -112,7 +130,9 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
             console.error(error);
 
-            toast.error("Failed to generate quiz.");
+            toast.error(
+                "Failed to generate quiz."
+            );
 
         }
 
@@ -123,6 +143,7 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
         }
 
     };
+
 
     // ==========================
     // Select Answer
@@ -140,25 +161,37 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
     };
 
+
     // ==========================
     // Navigation
     // ==========================
 
     const nextQuestion = () => {
 
-        if (current >= questions.length - 1) return;
+        if (
+            current >=
+            questions.length - 1
+        ) {
+            return;
+        }
 
-        setCurrent((prev) => prev + 1);
+        setCurrent(
+            (prev) => prev + 1
+        );
 
     };
+
 
     const previousQuestion = () => {
 
         if (current <= 0) return;
 
-        setCurrent((prev) => prev - 1);
+        setCurrent(
+            (prev) => prev - 1
+        );
 
     };
+
 
     // ==========================
     // Submit
@@ -170,57 +203,107 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
     };
 
+
     const confirmSubmit = async () => {
 
         setShowSubmitModal(false);
 
+
         let correct = 0;
 
-        questions.forEach((question, index) => {
-            if (answers[index] === question.correct_answer) {
-                correct++;
+
+        questions.forEach(
+            (question, index) => {
+
+                if (
+                    answers[index] ===
+                    question.correct_answer
+                ) {
+
+                    correct++;
+
+                }
+
             }
-        });
-
-        const answered = Object.keys(answers).length;
-
-        const wrong = answered - correct;
-
-        const unanswered = questions.length - answered;
-
-        const percentage = Math.round(
-            (correct / questions.length) * 100
         );
 
-        const timeTaken = 600 - secondsLeft;
+
+        const answered =
+            Object.keys(answers).length;
+
+
+        const wrong =
+            answered - correct;
+
+
+        const unanswered =
+            questions.length - answered;
+
+
+        const percentage =
+            Math.round(
+
+                (
+                    correct /
+                    questions.length
+                ) * 100
+
+            );
+
+
+        const timeTaken =
+            600 - secondsLeft;
+
 
         const resultData = {
+
             correct,
+
             wrong,
+
             unanswered,
+
             percentage,
+
             timeTaken,
+
         };
+
 
         try {
 
             // 1. Save quiz attempt in backend
+
             await saveQuizAttempt(
+
                 documentId,
+
                 {
+
                     score: percentage,
+
                     correct,
+
                     wrong,
+
                     skipped: unanswered,
+
                     accuracy: percentage,
+
                     time_taken: timeTaken,
+
                 }
+
             );
+
 
             // 2. Refresh Attempts and Best Score
             await onStatusChange?.();
 
-            // 3. Show result screen
+            // 3. Refresh Previous Attempts history
+            onAttemptSaved?.();
+
+            // 4. Show result screen
             setResult(resultData);
 
             setSubmitted(true);
@@ -229,12 +312,15 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
                 "Quiz submitted successfully!"
             );
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(
                 "Failed to submit quiz:",
                 error
             );
+
 
             toast.error(
                 "Failed to save quiz attempt."
@@ -243,6 +329,11 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
         }
 
     };
+
+
+    // ==========================
+    // Restart Quiz
+    // ==========================
 
     const restartQuiz = () => {
 
@@ -256,15 +347,31 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
         setSecondsLeft(600);
 
-        setTimerKey((prev) => prev + 1);
+        setTimerKey(
+            (prev) => prev + 1
+        );
 
     };
 
-    const answeredCount = Object.keys(answers).length;
 
-    const unansweredQuestions = questions
-        .map((_, index) => index + 1)
-        .filter((index) => answers[index - 1] === undefined);
+    const answeredCount =
+        Object.keys(answers).length;
+
+
+    const unansweredQuestions =
+        questions
+
+            .map(
+                (_, index) =>
+                    index + 1
+            )
+
+            .filter(
+                (index) =>
+                    answers[index - 1] ===
+                    undefined
+            );
+
 
     // ==========================
     // Result Screen
@@ -274,173 +381,235 @@ function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
         return (
 
-            <>
-
-                <QuizResult
-
-                    questions={questions}
-
-                    answers={answers}
-
-                    result={result}
-
-                    onRetake={restartQuiz}
-
-                />
-
-                <QuizHistory
-
-                    documentId={documentId}
-
-                />
-
-            </>
+            <QuizResult
+                questions={questions}
+                answers={answers}
+                result={result}
+                onRetake={restartQuiz}
+            />
 
         );
 
     }
 
+
     return (
 
-        <div className="mt-12 rounded-3xl border border-cyan-500/20 bg-white/5 p-8 shadow-xl">
+        <div
+            className="
+                mt-12
+                rounded-3xl
+                border
+                border-slate-200
+                bg-white
+                p-8
+                shadow-xl
+                shadow-slate-200/50
+                transition-colors
+                duration-300
 
-            <h2 className="mb-2 text-3xl font-bold text-white">
+                dark:border-white/10
+                dark:bg-[#18181b]
+                dark:shadow-none
+            "
+        >
+
+
+            {/* ==========================
+                Header
+            ========================== */}
+
+            <h2
+                className="
+                    mb-2
+                    text-3xl
+                    font-bold
+                    text-slate-950
+
+                    dark:text-white
+                "
+            >
 
                 📝 AI Quiz
 
             </h2>
 
-            <p className="mb-8 text-gray-400">
 
-                Test your understanding with AI-generated questions.
+            <p
+                className="
+                    mb-8
+                    text-slate-600
+
+                    dark:text-zinc-400
+                "
+            >
+
+                Test your understanding with
+                AI-generated questions.
 
             </p>
 
-            {
 
-                questions.length === 0 ? (
+            {/* ==========================
+                Quiz Content
+            ========================== */}
 
-                    <div className="py-20 text-center">
+            {questions.length === 0 ? (
 
-                        <button
+                <div className="py-20 text-center">
 
-                            onClick={handleGenerate}
 
-                            disabled={loading}
+                    <p
+                        className="
+                            mb-6
+                            text-lg
+                            text-slate-600
 
-                            className="rounded-xl bg-cyan-500 px-8 py-4 font-semibold text-black transition hover:bg-cyan-400 disabled:opacity-60"
+                            dark:text-zinc-400
+                        "
+                    >
 
-                        >
+                        No quiz generated yet.
 
-                            {
+                    </p>
 
-                                loading
 
-                                    ? "Generating Quiz..."
+                    <button
+                        type="button"
+                        onClick={handleGenerate}
+                        disabled={loading}
+                        className="
+                            cursor-pointer
+                            rounded-xl
+                            bg-cyan-500
+                            px-8
+                            py-4
+                            font-semibold
+                            text-slate-950
+                            shadow-md
+                            shadow-cyan-500/20
+                            transition-all
+                            duration-300
 
-                                    : "⚡ Generate Quiz"
+                            hover:-translate-y-0.5
+                            hover:bg-cyan-400
+                            hover:shadow-lg
 
-                            }
+                            disabled:cursor-not-allowed
+                            disabled:opacity-60
+                            disabled:hover:translate-y-0
+                        "
+                    >
 
-                        </button>
+                        {
+                            loading
 
-                    </div>
+                                ? "🧠 Generating Quiz..."
 
-                ) : (
+                                : "⚡ Generate Quiz"
+                        }
 
-                    <>
+                    </button>
 
-                        {/* Timer */}
+                </div>
 
-                        <QuizTimer
-                            key={timerKey}
-                            totalSeconds={600}
-                            onTimeUp={confirmSubmit}
-                            onTick={setSecondsLeft}
-                        />
+            ) : (
 
-                        {/* Progress */}
+                <>
 
-                        <QuizProgress
 
-                            current={current}
+                    {/* Timer */}
 
-                            total={questions.length}
+                    <QuizTimer
+                        key={timerKey}
+                        totalSeconds={600}
+                        onTimeUp={confirmSubmit}
+                        onTick={setSecondsLeft}
+                    />
 
-                        />
 
-                        {/* Question Palette */}
+                    {/* Progress */}
 
-                        <QuestionPalette
+                    <QuizProgress
+                        current={current}
+                        total={questions.length}
+                    />
 
-                            total={questions.length}
 
-                            current={current}
+                    {/* Question Palette */}
 
-                            answers={answers}
+                    <QuestionPalette
+                        total={questions.length}
+                        current={current}
+                        answers={answers}
+                        onSelect={setCurrent}
+                    />
 
-                            onSelect={setCurrent}
 
-                        />
+                    {/* Quiz Card */}
 
-                        {/* Quiz Card */}
+                    <QuizCard
+                        question={
+                            questions[current]
+                        }
+                        selected={
+                            answers[current]
+                        }
+                        onSelect={
+                            selectAnswer
+                        }
+                    />
 
-                        <QuizCard
 
-                            question={questions[current]}
+                    {/* Navigation */}
 
-                            selected={answers[current]}
+                    <QuizNavigation
+                        current={current}
+                        total={questions.length}
+                        previousQuestion={
+                            previousQuestion
+                        }
+                        nextQuestion={
+                            nextQuestion
+                        }
+                        submitQuiz={
+                            submitQuiz
+                        }
+                    />
 
-                            onSelect={selectAnswer}
+                </>
 
-                        />
+            )}
 
-                        {/* Navigation */}
 
-                        <QuizNavigation
-
-                            current={current}
-
-                            total={questions.length}
-
-                            previousQuestion={previousQuestion}
-
-                            nextQuestion={nextQuestion}
-
-                            submitQuiz={submitQuiz}
-
-                        />
-
-                    </>
-
-                )
-
-            }
-
-            {/* Submit Confirmation Modal */}
+            {/* ==========================
+                Submit Confirmation Modal
+            ========================== */}
 
             <SubmitQuizModal
-
                 open={showSubmitModal}
-
                 answered={answeredCount}
-
                 total={questions.length}
-
-                unansweredQuestions={unansweredQuestions}
-
-                onCancel={() => setShowSubmitModal(false)}
-
+                unansweredQuestions={
+                    unansweredQuestions
+                }
+                onCancel={() =>
+                    setShowSubmitModal(false)
+                }
                 onSubmit={confirmSubmit}
+                onQuestionSelect={
+                    (questionNo) => {
 
-                onQuestionSelect={(questionNo) => {
+                        setCurrent(
+                            questionNo - 1
+                        );
 
-                    setCurrent(questionNo - 1);
+                        setShowSubmitModal(
+                            false
+                        );
 
-                    setShowSubmitModal(false);
-
-                }}
-
+                    }
+                }
             />
 
         </div>

@@ -6,11 +6,37 @@ function SummaryCard({ summary }) {
 
     return (
 
-        <div className="rounded-2xl border border-cyan-500/20 bg-white/5 p-6 shadow-lg">
+        <div
+            className="
+                rounded-2xl
+                border
+                border-slate-200
+                bg-white
+                p-6
+                shadow-md
+                shadow-slate-200/50
+                transition-colors
+                duration-300
 
-            <div className="mb-5 flex items-center justify-between">
+                dark:border-white/10
+                dark:bg-[#18181b]
+                dark:shadow-none
+            "
+        >
 
-                <h2 className="text-2xl font-bold text-cyan-400">
+            {/* Header */}
+
+            <div className="mb-5 flex items-center justify-between gap-4">
+
+                <h2
+                    className="
+                        text-2xl
+                        font-bold
+                        text-cyan-600
+
+                        dark:text-cyan-400
+                    "
+                >
                     📄 Summary
                 </h2>
 
@@ -18,7 +44,18 @@ function SummaryCard({ summary }) {
 
             </div>
 
-            <p className="whitespace-pre-wrap leading-8 text-gray-300">
+
+            {/* Summary Content */}
+
+            <p
+                className="
+                    whitespace-pre-wrap
+                    leading-8
+                    text-slate-700
+
+                    dark:text-zinc-300
+                "
+            >
                 {summary}
             </p>
 

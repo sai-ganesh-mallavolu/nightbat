@@ -12,47 +12,96 @@ function QuestionPalette({
 
     return (
 
-        <div className="mb-8 flex flex-wrap justify-center gap-3">
+        <div
+            className="
+                mb-8
+                flex
+                flex-wrap
+                justify-center
+                gap-3
+            "
+        >
 
-            {
+            {[...Array(total)].map((_, index) => {
 
-                [...Array(total)].map((_, index) => {
+                const answered =
+                    answers[index] !== undefined;
 
-                    const answered = answers[index];
+                return (
 
-                    return (
-
-                        <button
-
-                            key={index}
-
-                            onClick={() => onSelect(index)}
-
-                            className={`h-11 w-11 rounded-full font-semibold transition
+                    <button
+                        type="button"
+                        key={index}
+                        onClick={() =>
+                            onSelect(index)
+                        }
+                        className={`
+                            flex
+                            h-11
+                            w-11
+                            cursor-pointer
+                            items-center
+                            justify-center
+                            rounded-full
+                            border
+                            font-semibold
+                            transition-all
+                            duration-300
 
                             ${current === index
 
-                                    ? "bg-cyan-500 text-black"
+                                ? `
+                                        border-cyan-500
+                                        bg-cyan-500
+                                        text-slate-950
+                                        shadow-md
+                                        shadow-cyan-500/20
+                                        ring-2
+                                        ring-cyan-500/20
+                                    `
 
-                                    : answered
+                                : answered
 
-                                        ? "bg-green-500 text-white"
+                                    ? `
+                                            border-green-500
+                                            bg-green-500
+                                            text-white
+                                            shadow-sm
+                                            shadow-green-500/20
 
-                                        : "bg-slate-700 text-gray-300 hover:bg-slate-600"
+                                            hover:-translate-y-0.5
+                                            hover:bg-green-400
+                                        `
 
-                                }`}
+                                    : `
+                                            border-slate-300
+                                            bg-white
+                                            text-slate-700
+                                            shadow-sm
 
-                        >
+                                            hover:-translate-y-0.5
+                                            hover:border-cyan-400
+                                            hover:bg-slate-100
 
-                            {index + 1}
+                                            dark:border-white/10
+                                            dark:bg-zinc-700
+                                            dark:text-zinc-300
+                                            dark:shadow-none
 
-                        </button>
+                                            dark:hover:border-cyan-500/50
+                                            dark:hover:bg-zinc-600
+                                        `
+                            }
+                        `}
+                    >
 
-                    );
+                        {index + 1}
 
-                })
+                    </button>
 
-            }
+                );
+
+            })}
 
         </div>
 

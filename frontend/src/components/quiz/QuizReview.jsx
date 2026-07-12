@@ -10,63 +10,141 @@ function QuizReview({
 
         <div className="space-y-8">
 
-            {
+            {questions.map((question, index) => (
 
-                questions.map((question, index) => (
+                <div
+                    key={question.id}
+                    className="
+                        rounded-2xl
+                        border
+                        border-slate-200
+                        bg-white
+                        p-6
+                        shadow-sm
+                        transition-all
+                        duration-300
 
-                    <div
+                        hover:border-cyan-300
+                        hover:shadow-md
 
-                        key={question.id}
+                        dark:border-white/10
+                        dark:bg-[#18181b]
+                        dark:shadow-none
+                        dark:hover:border-cyan-500/30
+                    "
+                >
 
-                        className="rounded-2xl border border-slate-700 bg-white/5 p-6"
+                    {/* Question */}
 
+                    <h3
+                        className="
+                            text-lg
+                            font-semibold
+                            leading-8
+                            text-slate-950
+
+                            dark:text-white
+                        "
                     >
 
-                        <h3 className="text-lg font-semibold text-white">
+                        Q{index + 1}.{" "}
+                        {question.question}
 
-                            Q{index + 1}. {question.question}
+                    </h3>
 
-                        </h3>
 
-                        <p className="mt-4">
+                    {/* User Answer */}
 
-                            <span className="font-semibold text-red-400">
+                    <p
+                        className="
+                            mt-4
+                            text-slate-700
 
-                                Your Answer:
+                            dark:text-zinc-300
+                        "
+                    >
 
-                            </span>{" "}
+                        <span
+                            className="
+                                font-semibold
+                                text-red-600
 
-                            {answers[index] || "Not Answered"}
+                                dark:text-red-400
+                            "
+                        >
+
+                            Your Answer:
+
+                        </span>{" "}
+
+                        {answers[index] || "Not Answered"}
+
+                    </p>
+
+
+                    {/* Correct Answer */}
+
+                    <p
+                        className="
+                            mt-2
+                            text-slate-700
+
+                            dark:text-zinc-300
+                        "
+                    >
+
+                        <span
+                            className="
+                                font-semibold
+                                text-green-600
+
+                                dark:text-green-400
+                            "
+                        >
+
+                            Correct Answer:
+
+                        </span>{" "}
+
+                        {question.correct_answer}
+
+                    </p>
+
+
+                    {/* Explanation */}
+
+                    <div
+                        className="
+                            mt-5
+                            rounded-xl
+                            border
+                            border-cyan-200
+                            bg-cyan-50
+                            p-4
+
+                            dark:border-cyan-500/20
+                            dark:bg-cyan-500/10
+                        "
+                    >
+
+                        <p
+                            className="
+                                leading-7
+                                text-slate-700
+
+                                dark:text-zinc-300
+                            "
+                        >
+
+                            💡 {question.explanation}
 
                         </p>
-
-                        <p className="mt-2">
-
-                            <span className="font-semibold text-green-400">
-
-                                Correct Answer:
-
-                            </span>{" "}
-
-                            {question.correct_answer}
-
-                        </p>
-
-                        <div className="mt-4 rounded-xl bg-cyan-500/10 p-4">
-
-                            <p className="text-gray-300">
-
-                                💡 {question.explanation}
-
-                            </p>
-
-                        </div>
 
                     </div>
 
-                ))
+                </div>
 
-            }
+            ))}
 
         </div>
 

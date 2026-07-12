@@ -4,7 +4,9 @@ function BadgeCard({ percentage }) {
 
     let title = "Keep Practicing";
 
-    let color = "text-red-400";
+    let color =
+        "text-red-600 dark:text-red-400";
+
 
     if (percentage >= 90) {
 
@@ -12,7 +14,8 @@ function BadgeCard({ percentage }) {
 
         title = "Gold";
 
-        color = "text-yellow-400";
+        color =
+            "text-yellow-600 dark:text-yellow-400";
 
     }
 
@@ -22,7 +25,8 @@ function BadgeCard({ percentage }) {
 
         title = "Silver";
 
-        color = "text-gray-300";
+        color =
+            "text-slate-500 dark:text-zinc-300";
 
     }
 
@@ -32,13 +36,17 @@ function BadgeCard({ percentage }) {
 
         title = "Bronze";
 
-        color = "text-orange-400";
+        color =
+            "text-orange-600 dark:text-orange-400";
 
     }
+
 
     return (
 
         <div className="text-center">
+
+            {/* Badge */}
 
             <div className="text-7xl">
 
@@ -46,7 +54,17 @@ function BadgeCard({ percentage }) {
 
             </div>
 
-            <h2 className={`mt-3 text-3xl font-bold ${color}`}>
+
+            {/* Badge Title */}
+
+            <h2
+                className={`
+                    mt-3
+                    text-3xl
+                    font-bold
+                    ${color}
+                `}
+            >
 
                 {title}
 

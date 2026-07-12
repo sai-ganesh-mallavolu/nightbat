@@ -17,11 +17,18 @@ function Upload() {
 
     const [loading, setLoading] = useState(false);
 
+
+    // ==========================
+    // Analyze Document
+    // ==========================
+
     const handleAnalyze = async () => {
 
         if (!file) {
 
-            toast.warning("Please select a document first.");
+            toast.warning(
+                "Please select a document first."
+            );
 
             return;
 
@@ -31,12 +38,17 @@ function Upload() {
 
             setLoading(true);
 
-            const response = await uploadDocument(file);
+            const response =
+                await uploadDocument(file);
 
-            toast.success("Analysis completed successfully! 🎉");
+            toast.success(
+                "Analysis completed successfully! 🎉"
+            );
 
             // Redirect to Document Details page
-            navigate(`/history/${response.id}`);
+            navigate(
+                `/history/${response.id}`
+            );
 
         }
 
@@ -44,7 +56,9 @@ function Upload() {
 
             console.error(error);
 
-            toast.error("Analysis failed. Please try again.");
+            toast.error(
+                "Analysis failed. Please try again."
+            );
 
         }
 
@@ -56,49 +70,99 @@ function Upload() {
 
     };
 
+
+    // ==========================
+    // Remove File
+    // ==========================
+
     const handleRemoveFile = () => {
 
         setFile(null);
 
-        toast.info("Document removed.");
+        toast.info(
+            "Document removed."
+        );
 
     };
 
+
     return (
 
-        <section className="min-h-screen bg-gray-950 px-6 py-20">
+        <section
+            className="
+                min-h-screen
+                bg-gradient-to-b
+                from-white
+                via-slate-50
+                to-slate-100
+                px-6
+                py-20
+                text-slate-900
+                transition-colors
+                duration-300
+
+                dark:from-[#09090b]
+                dark:via-[#0c0c0f]
+                dark:to-[#111113]
+                dark:text-white
+            "
+        >
 
             <div className="mx-auto max-w-5xl">
 
-                <h1 className="text-center text-5xl font-bold">
 
-                    Upload Your Document
+                {/* Page Header */}
 
-                </h1>
+                <div className="text-center">
 
-                <p className="mt-5 text-center text-gray-400">
+                    <h1
+                        className="
+                            text-4xl
+                            font-extrabold
+                            tracking-tight
+                            text-slate-950
 
-                    Upload a document and let NightBat AI analyze it.
+                            md:text-5xl
 
-                </p>
+                            dark:text-white
+                        "
+                    >
+                        Upload Your Document
+                    </h1>
+
+
+                    <p
+                        className="
+                            mx-auto
+                            mt-5
+                            max-w-2xl
+                            text-lg
+                            leading-8
+                            text-slate-600
+
+                            dark:text-zinc-400
+                        "
+                    >
+                        Upload a document and let
+                        NightBat AI analyze it.
+                    </p>
+
+                </div>
+
 
                 {/* Upload Box */}
 
                 <div className="mt-14">
 
                     <UploadBox
-
                         file={file}
-
                         setFile={setFile}
-
                         loading={loading}
-
                         handleAnalyze={handleAnalyze}
-
                     />
 
                 </div>
+
 
                 {/* File Information */}
 
@@ -106,48 +170,94 @@ function Upload() {
 
                     <div className="mt-10">
 
-                        <FileInfoCard file={file} />
+                        <FileInfoCard
+                            file={file}
+                        />
 
                     </div>
 
                 )}
 
-                {/* Buttons */}
+
+                {/* Action Buttons */}
 
                 {file && (
 
-                    <div className="mt-8 flex justify-center gap-5">
+                    <div
+                        className="
+                            mt-8
+                            flex
+                            flex-wrap
+                            justify-center
+                            gap-5
+                        "
+                    >
+
+                        {/* Remove File */}
 
                         <button
-
                             onClick={handleRemoveFile}
+                            disabled={loading}
+                            className="
+                                cursor-pointer
+                                rounded-xl
+                                border border-red-200
+                                bg-red-50
+                                px-8 py-3
+                                font-semibold
+                                text-red-600
+                                transition-all
+                                duration-300
 
-                            className="cursor-pointer rounded-xl bg-red-500 px-8 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-red-600"
+                                hover:-translate-y-0.5
+                                hover:border-red-300
+                                hover:bg-red-100
 
+                                disabled:cursor-not-allowed
+                                disabled:opacity-60
+
+                                dark:border-red-500/20
+                                dark:bg-red-500/10
+                                dark:text-red-400
+                                dark:hover:bg-red-500/20
+                            "
                         >
-
                             Remove File
-
                         </button>
 
+
+                        {/* Analyze Document */}
+
                         <button
-
                             onClick={handleAnalyze}
-
                             disabled={loading}
+                            className="
+                                cursor-pointer
+                                rounded-xl
+                                bg-cyan-500
+                                px-8 py-3
+                                font-semibold
+                                text-slate-950
+                                shadow-lg
+                                shadow-cyan-500/20
+                                transition-all
+                                duration-300
 
-                            className="cursor-pointer rounded-xl bg-cyan-500 px-8 py-3 font-semibold text-black transition-all duration-300 hover:scale-105 hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
+                                hover:-translate-y-0.5
+                                hover:bg-cyan-400
+                                hover:shadow-xl
+                                hover:shadow-cyan-500/25
 
+                                disabled:cursor-not-allowed
+                                disabled:opacity-60
+                                disabled:hover:translate-y-0
+                            "
                         >
 
                             {
-
                                 loading
-
                                     ? "Analyzing..."
-
                                     : "Analyze Document"
-
                             }
 
                         </button>
@@ -155,6 +265,7 @@ function Upload() {
                     </div>
 
                 )}
+
 
                 {/* AI Loader */}
 

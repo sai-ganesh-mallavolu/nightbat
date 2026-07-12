@@ -7,22 +7,48 @@ function QuizProgress({
 }) {
 
     const percentage =
+        total === 0
+            ? 0
+            : ((current + 1) / total) * 100;
 
-        ((current + 1) / total) * 100;
 
     return (
 
         <div className="mb-8">
 
-            <div className="mb-2 flex justify-between text-sm text-gray-400">
 
-                <span>
+            {/* Progress Information */}
+
+            <div
+                className="
+                    mb-2
+                    flex
+                    justify-between
+                    text-sm
+                "
+            >
+
+                <span
+                    className="
+                        font-medium
+                        text-slate-600
+
+                        dark:text-zinc-400
+                    "
+                >
 
                     Question {current + 1}
 
                 </span>
 
-                <span>
+
+                <span
+                    className="
+                        text-slate-500
+
+                        dark:text-zinc-400
+                    "
+                >
 
                     {total}
 
@@ -30,18 +56,33 @@ function QuizProgress({
 
             </div>
 
-            <div className="h-3 overflow-hidden rounded-full bg-slate-700">
+
+            {/* Progress Bar */}
+
+            <div
+                className="
+                    h-3
+                    overflow-hidden
+                    rounded-full
+                    bg-slate-200
+
+                    dark:bg-zinc-700
+                "
+            >
 
                 <div
-
-                    className="h-full rounded-full bg-cyan-400 transition-all duration-500"
-
+                    className="
+                        h-full
+                        rounded-full
+                        bg-gradient-to-r
+                        from-cyan-400
+                        to-cyan-500
+                        transition-all
+                        duration-500
+                    "
                     style={{
-
-                        width: `${percentage}%`
-
+                        width: `${percentage}%`,
                     }}
-
                 />
 
             </div>
