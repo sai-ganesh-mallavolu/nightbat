@@ -15,11 +15,13 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import StudyComplete from "./StudyComplete";
 
 
-function FlashcardsSection({ documentId }) {
+function FlashcardsSection({ documentId, onGenerated, onStatusChange, }) {
 
     const [cards, setCards] = useState([]);
 
     const [loading, setLoading] = useState(false);
+
+    const [markingLearned, setMarkingLearned] = useState(false);
 
     const [current, setCurrent] = useState(0);
 
@@ -77,21 +79,32 @@ function FlashcardsSection({ documentId }) {
 
     const handleGenerate = async () => {
 
+        if (loading) return;
+
         try {
 
             setLoading(true);
 
             const response = await generateFlashcards(documentId);
 
-            setCards(response.flashcards);
+            const generatedCards = response.flashcards || [];
+
+            setCards(generatedCards);
 
             setCurrent(0);
 
-            setLearned([]);
+            setLearned(
+                generatedCards
+                    .filter((card) => card.is_learned)
+                    .map((card) => card.id)
+            );
 
             setFlipped(false);
 
             setStudyCompleted(false);
+
+            // Refresh parent flashcard status
+            await onGenerated?.();
 
             toast.success("Flashcards generated!");
 
@@ -173,10 +186,14 @@ function FlashcardsSection({ documentId }) {
 
     const markLearned = async () => {
 
-        if (cards.length === 0) return;
+        // No cards or request already running
+        if (cards.length === 0 || markingLearned) return;
 
         const card = cards[current];
 
+        if (!card) return;
+
+        // Already learned
         if (learned.includes(card.id)) {
 
             toast.info("Already marked as learned.");
@@ -187,22 +204,31 @@ function FlashcardsSection({ documentId }) {
 
         try {
 
+            // Immediately lock the button
+            setMarkingLearned(true);
+
             await markFlashcardLearned(
-
                 card.id,
-
                 true
-
             );
 
-            setLearned((prev) => [
+            // Prevent duplicate IDs in local state
+            setLearned((prev) => {
 
-                ...prev,
+                if (prev.includes(card.id)) {
 
-                card.id,
+                    return prev;
 
-            ]);
+                }
 
+                return [
+                    ...prev,
+                    card.id,
+                ];
+
+            });
+
+            // Update current card locally
             setCards((prev) =>
 
                 prev.map((c) =>
@@ -210,11 +236,8 @@ function FlashcardsSection({ documentId }) {
                     c.id === card.id
 
                         ? {
-
                             ...c,
-
                             is_learned: true,
-
                         }
 
                         : c
@@ -223,10 +246,11 @@ function FlashcardsSection({ documentId }) {
 
             );
 
+            // Refresh status/count from backend
+            await onStatusChange?.();
+
             toast.success(
-
                 "Marked as learned!"
-
             );
 
         }
@@ -236,10 +260,14 @@ function FlashcardsSection({ documentId }) {
             console.error(error);
 
             toast.error(
-
                 "Failed to update learning status."
-
             );
+
+        }
+
+        finally {
+
+            setMarkingLearned(false);
 
         }
 
@@ -527,14 +555,12 @@ function FlashcardsSection({ documentId }) {
 
                                         markLearned={markLearned}
 
+                                        markingLearned={markingLearned}
+
                                         learned={
-
                                             learned.includes(
-
                                                 cards[current]?.id
-
                                             )
-
                                         }
 
                                         isFirst={current === 0}
@@ -542,17 +568,12 @@ function FlashcardsSection({ documentId }) {
                                         isLast={current === cards.length - 1}
 
                                         showFinish={
-
                                             current === cards.length - 1 &&
-
                                             learned.includes(cards[current]?.id)
-
                                         }
 
                                         onFinish={() =>
-
                                             setStudyCompleted(true)
-
                                         }
 
                                     />

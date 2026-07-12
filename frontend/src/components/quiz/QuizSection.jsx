@@ -21,7 +21,7 @@ import QuizHistory from "./QuizHistory";
 
 import { toast } from "react-toastify";
 
-function QuizSection({ documentId }) {
+function QuizSection({ documentId, onGenerated, onStatusChange, }) {
 
     const [questions, setQuestions] = useState([]);
 
@@ -79,6 +79,8 @@ function QuizSection({ documentId }) {
 
     const handleGenerate = async () => {
 
+        if (loading) return;
+
         try {
 
             setLoading(true);
@@ -94,6 +96,13 @@ function QuizSection({ documentId }) {
             setSubmitted(false);
 
             setResult(null);
+
+            setSecondsLeft(600);
+
+            setTimerKey((prev) => prev + 1);
+
+            // Refresh quiz status in parent
+            await onGenerated?.();
 
             toast.success("Quiz generated!");
 
@@ -168,13 +177,9 @@ function QuizSection({ documentId }) {
         let correct = 0;
 
         questions.forEach((question, index) => {
-
             if (answers[index] === question.correct_answer) {
-
                 correct++;
-
             }
-
         });
 
         const answered = Object.keys(answers).length;
@@ -184,52 +189,58 @@ function QuizSection({ documentId }) {
         const unanswered = questions.length - answered;
 
         const percentage = Math.round(
-
             (correct / questions.length) * 100
-
         );
 
         const timeTaken = 600 - secondsLeft;
 
         const resultData = {
-
             correct,
-
             wrong,
-
             unanswered,
-
             percentage,
-
             timeTaken,
-
         };
 
-        setResult(resultData);
+        try {
 
-        await saveQuizAttempt(
+            // 1. Save quiz attempt in backend
+            await saveQuizAttempt(
+                documentId,
+                {
+                    score: percentage,
+                    correct,
+                    wrong,
+                    skipped: unanswered,
+                    accuracy: percentage,
+                    time_taken: timeTaken,
+                }
+            );
 
-            documentId,
+            // 2. Refresh Attempts and Best Score
+            await onStatusChange?.();
 
-            {
+            // 3. Show result screen
+            setResult(resultData);
 
-                score: percentage,
+            setSubmitted(true);
 
-                correct,
+            toast.success(
+                "Quiz submitted successfully!"
+            );
 
-                wrong,
+        } catch (error) {
 
-                skipped: unanswered,
+            console.error(
+                "Failed to submit quiz:",
+                error
+            );
 
-                accuracy: percentage,
+            toast.error(
+                "Failed to save quiz attempt."
+            );
 
-                time_taken: timeTaken,
-
-            }
-
-        );
-
-        setSubmitted(true);
+        }
 
     };
 

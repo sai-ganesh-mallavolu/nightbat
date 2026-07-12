@@ -79,6 +79,26 @@ function DocumentDetails() {
 
     };
 
+    const refreshFlashcardStatus = async () => {
+        try {
+            const flash = await getFlashcardStatus(id);
+            setFlashStatus(flash);
+        } catch (error) {
+            console.error("Failed to refresh flashcard status:", error);
+        }
+    };
+
+    const refreshQuizStatus = async () => {
+        try {
+            const quiz = await getQuizStatus(id);
+            setQuizStatus(quiz);
+        } catch (error) {
+            console.error(
+                "Failed to refresh quiz status:",
+                error
+            );
+        }
+    };
     const handleReanalyze = async () => {
 
         try {
@@ -500,9 +520,9 @@ function DocumentDetails() {
                                 <div className="mt-8">
 
                                     <FlashcardsSection
-
                                         documentId={document.id}
-
+                                        onGenerated={refreshFlashcardStatus}
+                                        onStatusChange={refreshFlashcardStatus}
                                     />
 
                                 </div>
@@ -640,11 +660,10 @@ function DocumentDetails() {
                                 <div className="mt-8">
 
                                     <QuizSection
-
                                         documentId={document.id}
-
+                                        onGenerated={refreshQuizStatus}
+                                        onStatusChange={refreshQuizStatus}
                                     />
-
                                 </div>
 
                             )}

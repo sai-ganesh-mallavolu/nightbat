@@ -8,6 +8,8 @@ function FlashcardControls({
 
     markLearned,
 
+    markingLearned,
+
     learned,
 
     isFirst,
@@ -51,15 +53,39 @@ function FlashcardControls({
             {/* Mark as Learned */}
 
             <button
+
                 onClick={markLearned}
-                disabled={learned}
-                className={`w-56 rounded-xl px-6 py-3 font-semibold transition duration-300 hover:scale-105
-    ${learned
+
+                disabled={learned || markingLearned}
+
+                className={`w-56 rounded-xl px-6 py-3 font-semibold transition duration-300
+
+        ${learned
+
                         ? "cursor-not-allowed bg-green-500 text-white"
-                        : "bg-amber-500 text-black hover:bg-amber-400"
+
+                        : markingLearned
+
+                            ? "cursor-wait bg-amber-500/60 text-black"
+
+                            : "bg-amber-500 text-black hover:bg-amber-400 hover:scale-105"
+
                     }`}
+
             >
-                {learned ? "✅ Learned" : "⭐ Mark as Learned"}
+
+                {
+                    learned
+
+                        ? "✅ Learned"
+
+                        : markingLearned
+
+                            ? "⏳ Updating..."
+
+                            : "⭐ Mark as Learned"
+                }
+
             </button>
 
             {/* Shuffle */}
