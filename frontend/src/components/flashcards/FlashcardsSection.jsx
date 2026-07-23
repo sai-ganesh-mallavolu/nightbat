@@ -57,6 +57,11 @@ function FlashcardsSection({
             const loadedCards =
                 response.flashcards || [];
 
+            if (loadedCards.length === 0) {
+                await handleGenerate();
+                return;
+            }
+
             setCards(loadedCards);
 
             setCurrent(0);
@@ -621,61 +626,15 @@ function FlashcardsSection({
 
                 <div className="py-20 text-center">
 
-                    <p
-                        className="
-                            mb-6
-                            text-lg
-                            text-slate-600
+                    <div className="animate-spin text-6xl mb-6">🤖</div>
 
-                            dark:text-zinc-400
-                        "
-                    >
+                    <h3 className="text-2xl font-bold dark:text-white">
+                        Generating Flashcards...
+                    </h3>
 
-                        No flashcards generated yet.
-
+                    <p className="mt-4 text-slate-600 dark:text-zinc-400">
+                        NightBat AI is creating flashcards. Please wait...
                     </p>
-
-
-                    <button
-
-                        type="button"
-
-                        onClick={handleGenerate}
-
-                        disabled={loading}
-
-                        className="
-                            cursor-pointer
-                            rounded-xl
-                            bg-cyan-500
-                            px-8
-                            py-4
-                            font-semibold
-                            text-slate-950
-                            shadow-md
-                            shadow-cyan-500/20
-                            transition-all
-                            duration-300
-
-                            hover:-translate-y-0.5
-                            hover:bg-cyan-400
-                            hover:shadow-lg
-
-                            disabled:cursor-not-allowed
-                            disabled:opacity-60
-                            disabled:hover:translate-y-0
-                        "
-                    >
-
-                        {
-                            loading
-
-                                ? "🧠 NightBat AI is creating flashcards..."
-
-                                : "⚡ Generate Flashcards"
-                        }
-
-                    </button>
 
                 </div>
 
