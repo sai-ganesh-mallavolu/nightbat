@@ -272,29 +272,27 @@ function Navbar() {
 
                         <>
 
-                            <ThemeToggle />
-
                             <Link
                                 to="/login"
                                 className="
-                                    rounded-xl
+                                rounded-xl
 
-                                    border
-                                    border-cyan-500
+                                border
+                                border-cyan-500
 
-                                    px-5
-                                    py-2
+                                px-5
+                                py-2
 
-                                    font-semibold
+                                font-semibold
 
-                                    text-cyan-500
+                                text-cyan-500
 
-                                    transition-all
-                                    duration-300
+                                transition-all
+                                duration-300
 
-                                    hover:bg-cyan-500
-                                    hover:text-black
-                                "
+                                hover:bg-cyan-500
+                                hover:text-black
+                            "
                             >
                                 Login
                             </Link>
@@ -302,22 +300,22 @@ function Navbar() {
                             <Link
                                 to="/login"
                                 className="
-                                    rounded-xl
+                                rounded-xl
 
-                                    bg-cyan-500
+                                bg-cyan-500
 
-                                    px-5
-                                    py-2
+                                px-5
+                                py-2
 
-                                    font-semibold
+                                font-semibold
 
-                                    text-black
+                                text-black
 
-                                    transition-all
-                                    duration-300
+                                transition-all
+                                duration-300
 
-                                    hover:opacity-90
-                                "
+                                hover:opacity-90
+                            "
                             >
                                 Register
                             </Link>
