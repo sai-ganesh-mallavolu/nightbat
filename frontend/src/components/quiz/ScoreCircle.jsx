@@ -1,4 +1,10 @@
-function ScoreCircle({ percentage }) {
+function ScoreCircle({ percentage = 0 }) {
+
+    // Prevent invalid values
+    const safePercentage = Math.min(
+        100,
+        Math.max(0, Number(percentage) || 0)
+    );
 
     const radius = 90;
 
@@ -7,20 +13,38 @@ function ScoreCircle({ percentage }) {
 
     const offset =
         circumference -
-        (percentage / 100) *
+        (safePercentage / 100) *
         circumference;
-
 
     return (
 
-        <div className="relative flex justify-center">
+        <div
+            className="
+                relative
+
+                mx-auto
+
+                flex
+                items-center
+                justify-center
+
+                w-[180px]
+                h-[180px]
+
+                sm:w-[220px]
+                sm:h-[220px]
+            "
+        >
 
             {/* Circular Progress */}
 
             <svg
-                width="220"
-                height="220"
+                width="100%"
+                height="100%"
+                viewBox="0 0 220 220"
                 className="-rotate-90"
+                role="img"
+                aria-label={`Quiz accuracy ${safePercentage} percent`}
             >
 
                 {/* Background Circle */}
@@ -38,7 +62,6 @@ function ScoreCircle({ percentage }) {
                     "
                 />
 
-
                 {/* Progress Circle */}
 
                 <circle
@@ -48,12 +71,8 @@ function ScoreCircle({ percentage }) {
                     strokeWidth="14"
                     fill="none"
                     strokeLinecap="round"
-                    strokeDasharray={
-                        circumference
-                    }
-                    strokeDashoffset={
-                        offset
-                    }
+                    strokeDasharray={circumference}
+                    strokeDashoffset={offset}
                     className="
                         stroke-cyan-500
 
@@ -61,12 +80,11 @@ function ScoreCircle({ percentage }) {
                     "
                     style={{
                         transition:
-                            "stroke-dashoffset 1.5s ease",
+                            "stroke-dashoffset 1.5s ease-in-out",
                     }}
                 />
 
             </svg>
-
 
             {/* Score Text */}
 
@@ -74,6 +92,7 @@ function ScoreCircle({ percentage }) {
                 className="
                     absolute
                     inset-0
+
                     flex
                     items-center
                     justify-center
@@ -84,22 +103,30 @@ function ScoreCircle({ percentage }) {
 
                     <h2
                         className="
-                            text-5xl
+                            text-4xl
+                            sm:text-5xl
+
                             font-bold
+
                             text-cyan-600
 
                             dark:text-cyan-400
                         "
                     >
 
-                        {percentage}%
+                        {safePercentage}%
 
                     </h2>
-
 
                     <p
                         className="
                             mt-2
+
+                            text-sm
+                            sm:text-base
+
+                            font-medium
+
                             text-slate-500
 
                             dark:text-zinc-400

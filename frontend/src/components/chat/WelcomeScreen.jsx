@@ -2,12 +2,25 @@ function WelcomeScreen() {
 
     return (
 
-        <div className="mt-20 text-center">
+        <div
+            className="
+                mt-10
+                sm:mt-16
+                lg:mt-20
 
+                text-center
+            "
+        >
 
             {/* AI Icon */}
 
-            <div className="text-7xl">
+            <div
+                className="
+                    text-5xl
+                    sm:text-6xl
+                    lg:text-7xl
+                "
+            >
                 🤖
             </div>
 
@@ -16,8 +29,13 @@ function WelcomeScreen() {
 
             <h2
                 className="
-                    mt-6
-                    text-4xl
+                    mt-5
+                    sm:mt-6
+
+                    text-2xl
+                    sm:text-3xl
+                    lg:text-4xl
+
                     font-bold
                     text-slate-950
 
@@ -32,8 +50,19 @@ function WelcomeScreen() {
 
             <p
                 className="
-                    mt-4
-                    text-lg
+                    mx-auto
+                    mt-3
+                    sm:mt-4
+
+                    max-w-xl
+
+                    px-2
+
+                    text-base
+                    sm:text-lg
+
+                    leading-7
+
                     text-slate-600
 
                     dark:text-zinc-400
@@ -48,15 +77,28 @@ function WelcomeScreen() {
             <div
                 className="
                     mx-auto
-                    mt-10
+                    mt-8
+                    sm:mt-10
+
+                    w-full
                     max-w-xl
-                    rounded-2xl
+
+                    rounded-xl
+                    sm:rounded-2xl
+
                     border
                     border-slate-200
+
                     bg-white
-                    p-6
+
+                    p-4
+                    sm:p-5
+                    lg:p-6
+
                     text-left
+
                     shadow-sm
+
                     transition-colors
                     duration-300
 
@@ -69,7 +111,10 @@ function WelcomeScreen() {
                 <h3
                     className="
                         mb-4
-                        text-xl
+
+                        text-lg
+                        sm:text-xl
+
                         font-semibold
                         text-cyan-600
 
@@ -83,6 +128,12 @@ function WelcomeScreen() {
                 <ul
                     className="
                         space-y-3
+
+                        text-sm
+                        sm:text-base
+
+                        leading-7
+
                         text-slate-700
 
                         dark:text-zinc-300

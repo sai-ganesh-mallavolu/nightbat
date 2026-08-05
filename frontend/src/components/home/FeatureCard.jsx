@@ -5,15 +5,23 @@ function FeatureCard({ Icon, title, description }) {
         <div
             className="
                 group
-                rounded-2xl
+
+                rounded-xl
+                sm:rounded-2xl
+
                 border border-slate-200
                 bg-white
-                p-6
+
+                p-5
+                sm:p-6
+
                 shadow-sm
                 transition-all
                 duration-300
 
-                hover:-translate-y-2
+                hover:-translate-y-1
+                sm:hover:-translate-y-2
+
                 hover:border-cyan-400
                 hover:shadow-xl
                 hover:shadow-cyan-500/10
@@ -31,21 +39,37 @@ function FeatureCard({ Icon, title, description }) {
 
             <div
                 className="
-                    mb-5
+                    mb-4
+                    sm:mb-5
+
                     inline-flex
-                    rounded-xl
+
+                    rounded-lg
+                    sm:rounded-xl
+
                     bg-cyan-50
-                    p-4
+
+                    p-3
+                    sm:p-4
+
                     text-cyan-600
-                    transition-colors
+                    transition-all
                     duration-300
+
+                    group-hover:scale-110
 
                     dark:bg-cyan-500/10
                     dark:text-cyan-400
                 "
             >
                 <Icon
-                    size={34}
+                    className="
+                        h-7
+                        w-7
+
+                        sm:h-8
+                        sm:w-8
+                    "
                     strokeWidth={2}
                 />
             </div>
@@ -56,7 +80,10 @@ function FeatureCard({ Icon, title, description }) {
             <h3
                 className="
                     mb-3
-                    text-2xl
+
+                    text-xl
+                    sm:text-2xl
+
                     font-bold
                     text-slate-900
 
@@ -71,7 +98,12 @@ function FeatureCard({ Icon, title, description }) {
 
             <p
                 className="
-                    leading-7
+                    text-sm
+                    sm:text-base
+
+                    leading-6
+                    sm:leading-7
+
                     text-slate-600
 
                     dark:text-zinc-400

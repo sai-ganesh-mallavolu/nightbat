@@ -69,7 +69,8 @@ function ConfirmModal({
                 items-center
                 justify-center
                 bg-slate-950/50
-                px-6
+                px-4
+                sm:px-6
                 backdrop-blur-sm
 
                 dark:bg-black/70
@@ -94,23 +95,36 @@ function ConfirmModal({
                 }
 
                 className="
-                    w-full
-                    max-w-md
-                    animate-[fadeIn_.25s_ease]
-                    rounded-3xl
-                    border
-                    border-slate-200
-                    bg-white
-                    p-8
-                    shadow-2xl
-                    shadow-slate-950/20
-                    transition-colors
-                    duration-300
+                w-full
+                max-w-md
 
-                    dark:border-white/10
-                    dark:bg-[#18181b]
-                    dark:shadow-black/50
-                "
+                max-h-[90vh]
+                overflow-y-auto
+
+                animate-[fadeIn_.25s_ease]
+
+                rounded-2xl
+                sm:rounded-3xl
+
+                border
+                border-slate-200
+
+                bg-white
+
+                p-5
+                sm:p-6
+                lg:p-8
+
+                shadow-2xl
+                shadow-slate-950/20
+
+                transition-colors
+                duration-300
+
+                dark:border-white/10
+                dark:bg-[#18181b]
+                dark:shadow-black/50
+            "
 
             >
 
@@ -122,8 +136,13 @@ function ConfirmModal({
                     <div
                         className="
                             flex
-                            h-20
-                            w-20
+                            h-16
+                            w-16
+                            sm:h-20
+                            sm:w-20
+
+                            text-4xl
+                            sm:text-5xl
                             items-center
                             justify-center
                             rounded-full
@@ -136,7 +155,12 @@ function ConfirmModal({
                         "
                     >
 
-                        <span className="text-5xl">
+                        <span
+                            className="
+                                text-4xl
+                                sm:text-5xl
+                            "
+                        >
 
                             🗑️
 
@@ -153,7 +177,8 @@ function ConfirmModal({
                     className="
                         mt-6
                         text-center
-                        text-3xl
+                        text-2xl
+                        sm:text-3xl
                         font-bold
                         text-slate-950
 
@@ -172,7 +197,11 @@ function ConfirmModal({
                     className="
                         mt-5
                         text-center
-                        leading-7
+                        text-sm
+                        sm:text-base
+
+                        leading-6
+                        sm:leading-7
                         text-slate-600
 
                         dark:text-zinc-400
@@ -186,7 +215,19 @@ function ConfirmModal({
 
                 {/* Buttons */}
 
-                <div className="mt-10 flex gap-4">
+                <div
+                    className="
+                        mt-8
+                        sm:mt-10
+
+                        flex
+                        flex-col
+                        gap-3
+
+                        sm:flex-row
+                        sm:gap-4
+                    "
+                >
 
 
                     {/* Cancel Button */}
@@ -206,7 +247,11 @@ function ConfirmModal({
                             border
                             border-slate-300
                             bg-white
-                            py-3
+                            py-2.5
+                            sm:py-3
+
+                            text-sm
+                            sm:text-base
                             font-semibold
                             text-slate-700
                             transition-all
@@ -248,7 +293,11 @@ function ConfirmModal({
                             cursor-pointer
                             rounded-xl
                             bg-red-500
-                            py-3
+                            py-2.5
+                            sm:py-3
+
+                            text-sm
+                            sm:text-base
                             font-semibold
                             text-white
                             shadow-lg
@@ -285,7 +334,8 @@ function ConfirmModal({
                     className="
                         mt-6
                         text-center
-                        text-xs
+                        text-[11px]
+                        sm:text-xs
                         text-slate-400
 
                         dark:text-zinc-600

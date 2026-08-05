@@ -195,8 +195,13 @@ function History() {
                 from-white
                 via-slate-50
                 to-slate-100
-                px-6
-                py-20
+                px-4
+                sm:px-6
+                lg:px-8
+
+                py-12
+                sm:py-16
+                lg:py-20
                 text-slate-900
                 transition-colors
                 duration-300
@@ -208,23 +213,33 @@ function History() {
             "
         >
 
-            <div className="mx-auto max-w-7xl">
+            <div
+                className="
+                    mx-auto
+                    w-full
+                    max-w-7xl
+                "
+            >
 
 
                 {/* ==========================
                     Header
                 ========================== */}
 
-                <div className="mb-14">
+                <div className="mb-10
+                        sm:mb-12
+                        lg:mb-14">
 
                     <h1
                         className="
-                            text-4xl
+                            text-3xl
+                            sm:text-4xl
+                            lg:text-5xl
                             font-extrabold
                             tracking-tight
                             text-slate-950
 
-                            md:text-5xl
+                            
 
                             dark:text-white
                         "
@@ -237,8 +252,13 @@ function History() {
                         className="
                             mt-4
                             max-w-2xl
-                            text-lg
-                            leading-8
+                            px-2
+
+                            text-base
+                            sm:text-lg
+
+                            leading-7
+                            sm:leading-8
                             text-slate-600
 
                             dark:text-zinc-400
@@ -258,10 +278,13 @@ function History() {
                 <div
                     className="
                         grid
-                        gap-6
 
-                        md:grid-cols-2
+                        grid-cols-1
+                        sm:grid-cols-2
                         xl:grid-cols-4
+
+                        gap-4
+                        sm:gap-6
                     "
                 >
 
@@ -300,7 +323,9 @@ function History() {
                     Search
                 ========================== */}
 
-                <div className="mt-12">
+                <div className="mt-8
+                        sm:mt-10
+                        lg:mt-12">
 
                     <div className="relative">
 
@@ -313,11 +338,20 @@ function History() {
                             }
                             className="
                                 w-full
-                                rounded-2xl
+                                rounded-xl
+                                sm:rounded-2xl
+
+                                px-4
+                                sm:px-6
+
+                                py-3
+                                sm:py-5
+
+                                text-base
+                                sm:text-lg
                                 border border-slate-300
                                 bg-white
-                                px-6 py-5
-                                text-lg
+                                
                                 text-slate-900
                                 shadow-sm
                                 outline-none
@@ -353,14 +387,16 @@ function History() {
 
                     <div className="mt-24 text-center">
 
-                        <div className="animate-pulse text-7xl">
+                        <div className="animate-pulse text-6xl
+                                    sm:text-7xl">
                             🤖
                         </div>
 
                         <h2
                             className="
                                 mt-6
-                                text-3xl
+                                text-2xl
+                                sm:text-3xl
                                 font-bold
                                 text-cyan-600
 
@@ -396,12 +432,18 @@ function History() {
                         <div
                             className="
                                 mt-20
-                                rounded-3xl
+                                rounded-2xl
+                                sm:rounded-3xl
+
+                                p-8
+                                sm:p-12
+                                lg:p-16
+
                                 border-2
                                 border-dashed
                                 border-slate-300
                                 bg-white
-                                p-16
+
                                 text-center
                                 shadow-sm
 
@@ -411,19 +453,20 @@ function History() {
                             "
                         >
 
-                            <div className="text-8xl">
+                            <div className="text-6xl sm:text-8xl">
                                 📂
                             </div>
 
                             <h2
                                 className="
-                                    mt-8
-                                    text-4xl
-                                    font-bold
-                                    text-slate-950
+                                mt-8
+                                text-2xl
+                                sm:text-4xl
+                                font-bold
+                                text-slate-950
 
-                                    dark:text-white
-                                "
+                                dark:text-white
+                            "
                             >
                                 No Documents Found
                             </h2>
@@ -451,7 +494,11 @@ function History() {
                 {!loading &&
                     filteredDocuments.length > 0 && (
 
-                        <div className="mt-12 space-y-6">
+                        <div className="mt-8
+                                sm:mt-12
+
+                                space-y-4
+                                sm:space-y-6">
 
                             {filteredDocuments.map((doc) => (
 

@@ -80,24 +80,42 @@ function Register() {
     };
 
 
-    // Common input styles
+    // ==========================
+    // Common Input Styles
+    // ==========================
 
     const inputClassName = `
         w-full
+
         rounded-xl
-        border border-slate-300
+
+        border
+        border-slate-300
+
         bg-slate-50
-        p-4
+
+        px-4
+        py-3
+        sm:py-4
+
+        text-sm
+        sm:text-base
+
         text-slate-900
-        outline-none
-        transition-all
-        duration-300
+
         placeholder:text-slate-400
 
+        transition-all
+        duration-300
+
+        outline-none
+
+        focus:outline-none
         focus:border-cyan-500
         focus:bg-white
         focus:ring-4
         focus:ring-cyan-500/10
+        focus:ring-offset-2
 
         dark:border-white/10
         dark:bg-[#111113]
@@ -107,6 +125,7 @@ function Register() {
         dark:focus:border-cyan-400
         dark:focus:bg-[#111113]
         dark:focus:ring-cyan-400/10
+        dark:focus:ring-offset-[#09090b]
     `;
 
 
@@ -114,14 +133,23 @@ function Register() {
 
         <section
             className="
-                flex min-h-screen
-                items-center justify-center
+                flex
+                min-h-screen
+                items-center
+                justify-center
+
                 bg-gradient-to-br
                 from-white
                 via-slate-50
                 to-slate-100
-                px-6
-                py-12
+
+                px-4
+                sm:px-6
+                lg:px-8
+
+                py-10
+                sm:py-12
+
                 transition-colors
                 duration-300
 
@@ -137,12 +165,22 @@ function Register() {
                 className="
                     w-full
                     max-w-lg
-                    rounded-3xl
-                    border border-slate-200
+
+                    rounded-2xl
+                    sm:rounded-3xl
+
+                    border
+                    border-slate-200
+
                     bg-white
-                    p-10
+
+                    p-6
+                    sm:p-8
+                    lg:p-10
+
                     shadow-xl
                     shadow-slate-200/60
+
                     transition-colors
                     duration-300
 
@@ -157,14 +195,22 @@ function Register() {
 
                 <div className="text-center">
 
-                    <div className="text-6xl">
+                    <div
+                        className="
+                            text-5xl
+                            sm:text-6xl
+                        "
+                    >
                         🦇
                     </div>
 
                     <h1
                         className="
                             mt-4
-                            text-4xl
+
+                            text-3xl
+                            sm:text-4xl
+
                             font-extrabold
                             text-slate-950
 
@@ -176,7 +222,12 @@ function Register() {
 
                     <p
                         className="
-                            mt-3
+                            mt-2
+                            sm:mt-3
+
+                            text-sm
+                            sm:text-base
+
                             text-slate-600
 
                             dark:text-zinc-400
@@ -187,12 +238,16 @@ function Register() {
 
                 </div>
 
-
                 {/* Register Form */}
 
                 <form
                     onSubmit={handleSubmit}
-                    className="mt-8 space-y-5"
+                    className="
+                        mt-8
+                        sm:mt-10
+
+                        space-y-5
+                    "
                 >
 
                     {/* First Name & Last Name */}
@@ -221,7 +276,6 @@ function Register() {
 
                     </div>
 
-
                     {/* Username */}
 
                     <input
@@ -234,7 +288,6 @@ function Register() {
                         autoComplete="username"
                         className={inputClassName}
                     />
-
 
                     {/* Email */}
 
@@ -249,7 +302,6 @@ function Register() {
                         className={inputClassName}
                     />
 
-
                     {/* Password */}
 
                     <input
@@ -262,7 +314,6 @@ function Register() {
                         autoComplete="new-password"
                         className={inputClassName}
                     />
-
 
                     {/* Confirm Password */}
 
@@ -277,7 +328,6 @@ function Register() {
                         className={inputClassName}
                     />
 
-
                     {/* Create Account Button */}
 
                     <button
@@ -285,13 +335,25 @@ function Register() {
                         disabled={loading}
                         className="
                             w-full
+
+                            cursor-pointer
+
                             rounded-xl
+
                             bg-cyan-500
-                            py-4
+
+                            py-3
+                            sm:py-4
+
+                            text-sm
+                            sm:text-base
+
                             font-bold
                             text-slate-950
+
                             shadow-lg
                             shadow-cyan-500/20
+
                             transition-all
                             duration-300
 
@@ -299,6 +361,14 @@ function Register() {
                             hover:bg-cyan-400
                             hover:shadow-xl
                             hover:shadow-cyan-500/25
+
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-cyan-500
+                            focus:ring-offset-2
+
+                            dark:focus:ring-cyan-400
+                            dark:focus:ring-offset-[#09090b]
 
                             disabled:cursor-not-allowed
                             disabled:opacity-60
@@ -322,7 +392,12 @@ function Register() {
                 <p
                     className="
                         mt-8
+
                         text-center
+
+                        text-sm
+                        sm:text-base
+
                         text-slate-600
 
                         dark:text-zinc-400
@@ -335,12 +410,23 @@ function Register() {
                         to="/login"
                         className="
                             font-semibold
+
                             text-cyan-600
+
                             transition
+
                             hover:text-cyan-500
+
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-cyan-500
+                            focus:ring-offset-2
 
                             dark:text-cyan-400
                             dark:hover:text-cyan-300
+
+                            dark:focus:ring-cyan-400
+                            dark:focus:ring-offset-[#09090b]
                         "
                     >
                         Login

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import Confetti from "react-confetti";
 import { useWindowSize } from "@uidotdev/usehooks";
@@ -8,7 +8,6 @@ import BadgeCard from "./BadgeCard";
 import QuizStats from "./QuizStats";
 
 import { downloadQuizReport } from "../../pdf/downloadQuizReport";
-
 
 function QuizResult({
 
@@ -22,11 +21,12 @@ function QuizResult({
 
 }) {
 
-    const { width, height } = useWindowSize();
+    const { width, height } =
+        useWindowSize();
 
     const [animatedPercentage, setAnimatedPercentage] =
         useState(0);
-
+    const analysisRef = useRef(null);
 
     // ==========================
     // Score Animation
@@ -50,44 +50,67 @@ function QuizResult({
 
         }, 15);
 
-
         return () =>
             clearInterval(interval);
 
     }, [result.percentage]);
 
+    useEffect(() => {
+        analysisRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    }, []);
 
     // ==========================
     // Performance Message
     // ==========================
 
-    const getMessage = () => {
+    const performanceMessage = useMemo(() => {
 
         if (result.percentage >= 90) {
 
-            return "Outstanding Performance! 🎉";
+            return {
+                title: "Outstanding Performance! 🎉",
+                feedback:
+                    "Outstanding! You have mastered this document exceptionally well. Keep maintaining this level of performance.",
+            };
 
         }
 
         if (result.percentage >= 75) {
 
-            return "Excellent Work! 👏";
+            return {
+                title: "Excellent Work! 👏",
+                feedback:
+                    "Excellent understanding! Review only the questions you missed to achieve perfection.",
+            };
 
         }
 
         if (result.percentage >= 60) {
 
-            return "Good Job! 👍";
+            return {
+                title: "Good Job! 👍",
+                feedback:
+                    "Good attempt. Spend a little more time reviewing the explanations for incorrect answers.",
+            };
 
         }
 
-        return "Keep Practicing 💪";
+        return {
 
-    };
+            title: "Keep Practicing 💪",
 
+            feedback:
+                "You should revise this document once more and attempt the quiz again. Practice will improve your score.",
+
+        };
+
+    }, [result.percentage]);
 
     // ==========================
-    // Download Quiz Report
+    // Download Report
     // ==========================
 
     const handleDownload = () => {
@@ -106,20 +129,29 @@ function QuizResult({
         });
 
     };
-
-
     return (
 
         <div
+            ref={analysisRef}
             className="
-                mt-12
+                mt-8
+                sm:mt-10
+                lg:mt-12
+
                 rounded-3xl
+
                 border
                 border-slate-200
+
                 bg-white
-                p-10
+
+                p-5
+                sm:p-8
+                lg:p-10
+
                 shadow-2xl
                 shadow-slate-200/50
+
                 transition-colors
                 duration-300
 
@@ -129,7 +161,6 @@ function QuizResult({
             "
         >
 
-
             {/* ==========================
                 Confetti
             ========================== */}
@@ -137,14 +168,13 @@ function QuizResult({
             {result.percentage >= 90 && (
 
                 <Confetti
-                    width={width}
-                    height={height}
+                    width={width ?? window.innerWidth}
+                    height={height ?? window.innerHeight}
                     recycle={false}
                     numberOfPieces={350}
                 />
 
             )}
-
 
             {/* ==========================
                 Heading
@@ -154,11 +184,13 @@ function QuizResult({
 
                 <h1
                     className="
-                        text-4xl
-                        font-bold
-                        text-slate-950
+                        text-3xl
+                        sm:text-4xl
+                        lg:text-5xl
 
-                        md:text-5xl
+                        font-bold
+
+                        text-slate-950
 
                         dark:text-white
                     "
@@ -168,23 +200,24 @@ function QuizResult({
 
                 </h1>
 
-
                 <p
                     className="
                         mt-4
-                        text-xl
+
+                        text-lg
+                        sm:text-xl
+
                         text-slate-600
 
                         dark:text-zinc-400
                     "
                 >
 
-                    {getMessage()}
+                    {performanceMessage.title}
 
                 </p>
 
             </div>
-
 
             {/* ==========================
                 Score Banner
@@ -192,12 +225,19 @@ function QuizResult({
 
             <div
                 className="
-                    mt-10
+                    mt-8
+                    sm:mt-10
+
                     rounded-3xl
+
                     border
                     border-cyan-200
+
                     bg-cyan-50
-                    p-8
+
+                    p-6
+                    sm:p-8
+
                     text-center
 
                     dark:border-cyan-500/20
@@ -207,8 +247,11 @@ function QuizResult({
 
                 <h2
                     className="
-                        text-5xl
+                        text-4xl
+                        sm:text-5xl
+
                         font-bold
+
                         text-cyan-600
 
                         dark:text-cyan-300
@@ -219,10 +262,13 @@ function QuizResult({
 
                 </h2>
 
-
                 <p
                     className="
                         mt-3
+
+                        text-sm
+                        sm:text-base
+
                         text-slate-600
 
                         dark:text-zinc-300
@@ -235,7 +281,6 @@ function QuizResult({
 
             </div>
 
-
             {/* ==========================
                 Score Circle
             ========================== */}
@@ -243,48 +288,53 @@ function QuizResult({
             <div
                 className="
                     relative
-                    mt-12
+
+                    mt-10
+                    sm:mt-12
+
                     flex
                     justify-center
                 "
             >
 
                 <ScoreCircle
-                    percentage={
-                        animatedPercentage
-                    }
+                    percentage={animatedPercentage}
                 />
 
             </div>
-
 
             {/* ==========================
                 Badge
             ========================== */}
 
-            <div className="mt-10">
+            <div className="mt-8 sm:mt-10">
 
                 <BadgeCard
-                    percentage={
-                        result.percentage
-                    }
+                    percentage={result.percentage}
                 />
 
             </div>
-
-
             {/* ==========================
                 AI Feedback
             ========================== */}
 
             <div
                 className="
-                    mt-10
+                    mt-8
+                    sm:mt-10
+
                     rounded-3xl
+
                     border
                     border-cyan-200
+
                     bg-cyan-50
-                    p-8
+
+                    p-5
+                    sm:p-8
+
+                    transition-colors
+                    duration-300
 
                     dark:border-cyan-500/20
                     dark:bg-cyan-500/10
@@ -293,8 +343,11 @@ function QuizResult({
 
                 <h2
                     className="
-                        text-2xl
+                        text-xl
+                        sm:text-2xl
+
                         font-bold
+
                         text-cyan-700
 
                         dark:text-cyan-300
@@ -305,57 +358,53 @@ function QuizResult({
 
                 </h2>
 
-
                 <p
                     className="
-                        mt-5
-                        leading-8
+                        mt-4
+
+                        text-sm
+                        sm:text-base
+
+                        leading-7
+                        sm:leading-8
+
                         text-slate-700
 
                         dark:text-zinc-300
                     "
                 >
 
-                    {
-                        result.percentage >= 90
-
-                            ? "Outstanding! You have mastered this document exceptionally well. Keep maintaining this level of performance."
-
-                            : result.percentage >= 75
-
-                                ? "Excellent understanding! Review only the questions you missed to achieve perfection."
-
-                                : result.percentage >= 60
-
-                                    ? "Good attempt. Spend a little more time reviewing the explanations for incorrect answers."
-
-                                    : "You should revise this document once more and attempt the quiz again. Practice will improve your score."
-                    }
+                    {performanceMessage.feedback}
 
                 </p>
 
             </div>
 
-
             {/* ==========================
                 Statistics
             ========================== */}
 
-            <QuizStats
-                result={result}
-            />
+            <div className="mt-8 sm:mt-10">
 
+                <QuizStats
+                    result={result}
+                />
+
+            </div>
 
             {/* ==========================
                 Review Heading
             ========================== */}
 
-            <div className="mt-16">
+            <div className="mt-12 sm:mt-16">
 
                 <h2
                     className="
-                        text-3xl
+                        text-2xl
+                        sm:text-3xl
+
                         font-bold
+
                         text-slate-950
 
                         dark:text-white
@@ -366,87 +415,136 @@ function QuizResult({
 
                 </h2>
 
-
                 <p
                     className="
                         mt-2
+
+                        text-sm
+                        sm:text-base
+
+                        leading-7
+
                         text-slate-600
 
                         dark:text-zinc-400
                     "
                 >
 
-                    Check every answer along
-                    with the explanation.
+                    Review every question, compare your answer with the
+                    correct answer, and learn from the explanation provided.
 
                 </p>
 
             </div>
 
-
             {/* ==========================
                 Review Cards
             ========================== */}
 
-            <div className="mt-10 space-y-8">
+            <div
+                className="
+                    mt-8
+                    sm:mt-10
 
-                {questions.map(
-                    (question, index) => {
+                    space-y-6
+                    sm:space-y-8
+                "
+            >
 
-                        const correct =
+                {questions.map((question, index) => {
 
-                            answers[index] ===
-                            question.correct_answer;
+                    const userAnswer =
+                        answers[index];
 
+                    const isAnswered =
+                        userAnswer !== undefined;
 
-                        return (
+                    const isCorrect =
+                        userAnswer ===
+                        question.correct_answer;
 
-                            <div
-                                key={
-                                    question.id ??
-                                    index
-                                }
-                                className={`
-                                    rounded-2xl
-                                    border
-                                    p-8
-                                    transition-all
-                                    duration-300
+                    return (
 
-                                    ${correct
+                        <div
+                            key={question.id ?? index}
+                            className={`
+                                rounded-2xl
+
+                                border
+
+                                p-5
+                                sm:p-8
+
+                                transition-all
+                                duration-300
+
+                                ${isCorrect
+
+                                    ? `
+                                        border-green-200
+
+                                        bg-gradient-to-r
+                                        from-green-50
+                                        to-white
+
+                                        dark:border-green-500/20
+                                        dark:from-green-500/10
+                                        dark:to-transparent
+                                    `
+
+                                    : isAnswered
 
                                         ? `
-                                                border-green-200
-                                                bg-gradient-to-r
-                                                from-green-50
-                                                to-white
+                                            border-red-200
 
-                                                dark:border-green-500/20
-                                                dark:from-green-500/10
-                                                dark:to-transparent
-                                            `
+                                            bg-gradient-to-r
+                                            from-red-50
+                                            to-white
+
+                                            dark:border-red-500/20
+                                            dark:from-red-500/10
+                                            dark:to-transparent
+                                        `
 
                                         : `
-                                                border-red-200
-                                                bg-gradient-to-r
-                                                from-red-50
-                                                to-white
+                                            border-amber-200
 
-                                                dark:border-red-500/20
-                                                dark:from-red-500/10
-                                                dark:to-transparent
-                                            `
-                                    }
-                                `}
+                                            bg-gradient-to-r
+                                            from-amber-50
+                                            to-white
+
+                                            dark:border-amber-500/20
+                                            dark:from-amber-500/10
+                                            dark:to-transparent
+                                        `
+                                }
+                            `}
+                        >
+
+                            {/* Status */}
+
+                            <div
+                                className="
+                                    mb-5
+
+                                    flex
+                                    flex-wrap
+
+                                    items-center
+
+                                    justify-between
+
+                                    gap-3
+                                "
                             >
-
-
-                                {/* Question Number */}
 
                                 <h3
                                     className="
-                                        text-xl
-                                        font-semibold
+                                        text-lg
+                                        sm:text-xl
+
+                                        font-bold
+
                                         text-slate-950
 
                                         dark:text-white
@@ -457,190 +555,244 @@ function QuizResult({
 
                                 </h3>
 
+                                {isCorrect ? (
 
-                                {/* Question */}
-
-                                <p
-                                    className="
-                                        mt-4
-                                        break-words
-                                        text-lg
-                                        leading-8
-                                        text-slate-700
-
-                                        dark:text-zinc-200
-                                    "
-                                >
-
-                                    {question.question}
-
-                                </p>
-
-
-                                {/* Answer Comparison */}
-
-                                <div
-                                    className="
-                                        mt-8
-                                        grid
-                                        gap-4
-
-                                        md:grid-cols-2
-                                    "
-                                >
-
-
-                                    {/* Your Answer */}
-
-                                    <div
+                                    <span
                                         className="
-                                            rounded-xl
-                                            border
-                                            border-slate-200
-                                            bg-white
-                                            p-5
+                                            rounded-full
 
-                                            dark:border-white/10
-                                            dark:bg-black/20
+                                            bg-green-100
+
+                                            px-3
+                                            py-1
+
+                                            text-xs
+                                            sm:text-sm
+
+                                            font-semibold
+
+                                            text-green-700
+
+                                            dark:bg-green-500/10
+                                            dark:text-green-300
                                         "
                                     >
 
-                                        <p
-                                            className="
-                                                font-semibold
-                                                text-slate-500
+                                        ✅ Correct
 
-                                                dark:text-zinc-400
-                                            "
-                                        >
+                                    </span>
 
-                                            Your Answer
+                                ) : isAnswered ? (
 
-                                        </p>
-
-
-                                        <p
-                                            className={`
-                                                mt-3
-                                                text-2xl
-                                                font-bold
-
-                                                ${correct
-
-                                                    ? "text-green-600 dark:text-green-400"
-
-                                                    : "text-red-600 dark:text-red-400"
-                                                }
-                                            `}
-                                        >
-
-                                            {
-                                                answers[index]
-
-                                                    ? `Option ${answers[index]}`
-
-                                                    : "Not Answered"
-                                            }
-
-                                        </p>
-
-                                    </div>
-
-
-                                    {/* Correct Answer */}
-
-                                    <div
+                                    <span
                                         className="
-                                            rounded-xl
-                                            border
-                                            border-slate-200
-                                            bg-white
-                                            p-5
+                                            rounded-full
 
-                                            dark:border-white/10
-                                            dark:bg-black/20
+                                            bg-red-100
+
+                                            px-3
+                                            py-1
+
+                                            text-xs
+                                            sm:text-sm
+
+                                            font-semibold
+
+                                            text-red-700
+
+                                            dark:bg-red-500/10
+                                            dark:text-red-300
                                         "
                                     >
 
-                                        <p
-                                            className="
-                                                font-semibold
-                                                text-slate-500
+                                        ❌ Incorrect
 
-                                                dark:text-zinc-400
-                                            "
-                                        >
+                                    </span>
 
-                                            Correct Answer
+                                ) : (
 
-                                        </p>
+                                    <span
+                                        className="
+                                            rounded-full
 
+                                            bg-amber-100
 
-                                        <p
-                                            className="
-                                                mt-3
-                                                text-2xl
-                                                font-bold
-                                                text-green-600
+                                            px-3
+                                            py-1
 
-                                                dark:text-green-400
-                                            "
-                                        >
+                                            text-xs
+                                            sm:text-sm
 
-                                            Option {
-                                                question.correct_answer
-                                            }
+                                            font-semibold
 
-                                        </p>
+                                            text-amber-700
 
-                                    </div>
+                                            dark:bg-amber-500/10
+                                            dark:text-amber-300
+                                        "
+                                    >
 
-                                </div>
+                                        ⚠️ Not Answered
 
+                                    </span>
 
-                                {/* Explanation */}
+                                )}
+
+                            </div>
+
+                            {/* Question */}
+
+                            <p
+                                className="
+                                    break-words
+
+                                    text-base
+                                    sm:text-lg
+
+                                    leading-7
+                                    sm:leading-8
+
+                                    text-slate-700
+
+                                    dark:text-zinc-200
+                                "
+                            >
+
+                                {question.question}
+
+                            </p>
+
+                            {/* Answer Comparison */}
+
+                            <div
+                                className="
+                                    mt-8
+
+                                    grid
+
+                                    gap-4
+
+                                    md:grid-cols-2
+                                "
+                            >
+                                {/* Your Answer */}
 
                                 <div
                                     className="
-                                        mt-8
-                                        rounded-2xl
+                                        rounded-xl
+
                                         border
                                         border-slate-200
-                                        bg-slate-50
-                                        p-6
+
+                                        bg-white
+
+                                        p-5
 
                                         dark:border-white/10
-                                        dark:bg-[#111113]
+                                        dark:bg-black/20
                                     "
                                 >
-
-                                    <h4
-                                        className="
-                                            text-lg
-                                            font-bold
-                                            text-cyan-700
-
-                                            dark:text-cyan-300
-                                        "
-                                    >
-
-                                        💡 Explanation
-
-                                    </h4>
-
 
                                     <p
                                         className="
-                                            mt-4
-                                            break-words
-                                            leading-8
-                                            text-slate-700
+                                            text-sm
 
-                                            dark:text-zinc-300
+                                            font-semibold
+
+                                            text-slate-500
+
+                                            dark:text-zinc-400
                                         "
                                     >
 
-                                        {question.explanation}
+                                        Your Answer
+
+                                    </p>
+
+                                    <p
+                                        className={`
+                                            mt-3
+
+                                            break-words
+
+                                            text-xl
+                                            sm:text-2xl
+
+                                            font-bold
+
+                                            ${isCorrect
+
+                                                ? "text-green-600 dark:text-green-400"
+
+                                                : isAnswered
+
+                                                    ? "text-red-600 dark:text-red-400"
+
+                                                    : "text-amber-600 dark:text-amber-400"
+                                            }
+                                        `}
+                                    >
+
+                                        {isAnswered
+                                            ? `Option ${userAnswer}`
+                                            : "Not Answered"}
+
+                                    </p>
+
+                                </div>
+
+                                {/* Correct Answer */}
+
+                                <div
+                                    className="
+                                        rounded-xl
+
+                                        border
+                                        border-slate-200
+
+                                        bg-white
+
+                                        p-5
+
+                                        dark:border-white/10
+                                        dark:bg-black/20
+                                    "
+                                >
+
+                                    <p
+                                        className="
+                                            text-sm
+
+                                            font-semibold
+
+                                            text-slate-500
+
+                                            dark:text-zinc-400
+                                        "
+                                    >
+
+                                        Correct Answer
+
+                                    </p>
+
+                                    <p
+                                        className="
+                                            mt-3
+
+                                            break-words
+
+                                            text-xl
+                                            sm:text-2xl
+
+                                            font-bold
+
+                                            text-green-600
+
+                                            dark:text-green-400
+                                        "
+                                    >
+
+                                        Option {question.correct_answer}
 
                                     </p>
 
@@ -648,50 +800,139 @@ function QuizResult({
 
                             </div>
 
-                        );
+                            {/* Explanation */}
 
-                    }
-                )}
+                            <div
+                                className="
+                                    mt-8
+
+                                    rounded-2xl
+
+                                    border
+                                    border-slate-200
+
+                                    bg-slate-50
+
+                                    p-5
+                                    sm:p-6
+
+                                    dark:border-white/10
+                                    dark:bg-[#111113]
+                                "
+                            >
+
+                                <h4
+                                    className="
+                                        text-base
+                                        sm:text-lg
+
+                                        font-bold
+
+                                        text-cyan-700
+
+                                        dark:text-cyan-300
+                                    "
+                                >
+
+                                    💡 Explanation
+
+                                </h4>
+
+                                <p
+                                    className="
+                                        mt-4
+
+                                        break-words
+
+                                        text-sm
+                                        sm:text-base
+
+                                        leading-7
+                                        sm:leading-8
+
+                                        text-slate-700
+
+                                        dark:text-zinc-300
+                                    "
+                                >
+
+                                    {question.explanation}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    );
+
+                })}
 
             </div>
-
-
             {/* ==========================
                 Bottom Buttons
             ========================== */}
 
             <div
                 className="
-                    mt-16
+                    mt-12
+                    sm:mt-16
+
                     flex
-                    flex-wrap
+                    flex-col
+                    sm:flex-row
+
+                    items-stretch
+                    sm:items-center
+
                     justify-center
-                    gap-5
+
+                    gap-4
+                    sm:gap-5
                 "
             >
-
 
                 {/* Retake Quiz */}
 
                 <button
                     type="button"
+                    aria-label="Retake Quiz"
                     onClick={onRetake}
                     className="
+                        w-full
+                        sm:w-auto
+
                         cursor-pointer
+
                         rounded-xl
+
                         bg-cyan-500
+
                         px-8
                         py-4
+
+                        text-sm
+                        sm:text-base
+
                         font-semibold
+
                         text-slate-950
+
                         shadow-md
                         shadow-cyan-500/20
+
                         transition-all
                         duration-300
 
                         hover:-translate-y-0.5
                         hover:bg-cyan-400
                         hover:shadow-lg
+
+                        active:translate-y-0
+
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-cyan-400
                     "
                 >
 
@@ -699,28 +940,47 @@ function QuizResult({
 
                 </button>
 
-
                 {/* Download Report */}
 
                 <button
                     type="button"
+                    aria-label="Download Quiz Report"
                     onClick={handleDownload}
                     className="
+                        w-full
+                        sm:w-auto
+
                         cursor-pointer
+
                         rounded-xl
+
                         bg-violet-600
+
                         px-8
                         py-4
+
+                        text-sm
+                        sm:text-base
+
                         font-semibold
+
                         text-white
+
                         shadow-md
                         shadow-violet-500/20
+
                         transition-all
                         duration-300
 
                         hover:-translate-y-0.5
                         hover:bg-violet-500
                         hover:shadow-lg
+
+                        active:translate-y-0
+
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-violet-400
                     "
                 >
 

@@ -2,19 +2,27 @@ function FileInfoCard({ file }) {
 
     if (!file) return null;
 
-
     // ==========================
     // Get File Type
     // ==========================
 
     const getFileType = () => {
 
-        const extension = file.name
+        return file.name
             .split(".")
             .pop()
             .toUpperCase();
 
-        return extension;
+    };
+
+
+    // ==========================
+    // Get File Size
+    // ==========================
+
+    const getFileSize = () => {
+
+        return `${(file.size / 1024 / 1024).toFixed(2)} MB`;
 
     };
 
@@ -24,10 +32,19 @@ function FileInfoCard({ file }) {
         <div
             className="
                 rounded-2xl
-                border border-slate-200
+                sm:rounded-3xl
+
+                border
+                border-slate-200
+
                 bg-white
-                p-6
-                shadow-sm
+
+                p-5
+                sm:p-6
+
+                shadow-md
+                shadow-slate-200/50
+
                 transition-colors
                 duration-300
 
@@ -42,8 +59,12 @@ function FileInfoCard({ file }) {
             <h2
                 className="
                     mb-6
-                    text-2xl
+
+                    text-xl
+                    sm:text-2xl
+
                     font-bold
+
                     text-cyan-600
 
                     dark:text-cyan-400
@@ -55,106 +76,204 @@ function FileInfoCard({ file }) {
 
             {/* File Details */}
 
-            <div
-                className="
-                    space-y-4
-                    text-slate-600
-
-                    dark:text-zinc-400
-                "
-            >
+            <div className="space-y-4">
 
                 {/* File Name */}
 
-                <p className="break-words">
+                <div
+                    className="
+                        rounded-xl
 
-                    <span
+                        bg-slate-50
+
+                        p-4
+
+                        dark:bg-white/5
+                    "
+                >
+
+                    <p
                         className="
+                            text-xs
+                            uppercase
+                            tracking-wider
+
+                            text-slate-500
+
+                            dark:text-zinc-400
+                        "
+                    >
+                        File Name
+                    </p>
+
+                    <p
+                        className="
+                            mt-1
+
+                            break-all
+
+                            text-sm
+                            sm:text-base
+
                             font-semibold
+
                             text-slate-900
 
                             dark:text-white
                         "
                     >
-                        Name:
-                    </span>{" "}
+                        {file.name}
+                    </p>
 
-                    {file.name}
-
-                </p>
+                </div>
 
 
                 {/* File Size */}
 
-                <p>
+                <div
+                    className="
+                        rounded-xl
 
-                    <span
+                        bg-slate-50
+
+                        p-4
+
+                        dark:bg-white/5
+                    "
+                >
+
+                    <p
                         className="
+                            text-xs
+                            uppercase
+                            tracking-wider
+
+                            text-slate-500
+
+                            dark:text-zinc-400
+                        "
+                    >
+                        File Size
+                    </p>
+
+                    <p
+                        className="
+                            mt-1
+
+                            text-sm
+                            sm:text-base
+
                             font-semibold
+
                             text-slate-900
 
                             dark:text-white
                         "
                     >
-                        Size:
-                    </span>{" "}
+                        {getFileSize()}
+                    </p>
 
-                    {(
-                        file.size /
-                        1024 /
-                        1024
-                    ).toFixed(2)} MB
-
-                </p>
+                </div>
 
 
                 {/* File Type */}
 
-                <p>
+                <div
+                    className="
+                        rounded-xl
 
-                    <span
+                        bg-slate-50
+
+                        p-4
+
+                        dark:bg-white/5
+                    "
+                >
+
+                    <p
                         className="
+                            text-xs
+                            uppercase
+                            tracking-wider
+
+                            text-slate-500
+
+                            dark:text-zinc-400
+                        "
+                    >
+                        File Type
+                    </p>
+
+                    <p
+                        className="
+                            mt-1
+
+                            text-sm
+                            sm:text-base
+
                             font-semibold
+
                             text-slate-900
 
                             dark:text-white
                         "
                     >
-                        Type:
-                    </span>{" "}
+                        {getFileType()}
+                    </p>
 
-                    {getFileType()}
-
-                </p>
+                </div>
 
 
                 {/* Status */}
 
-                <p>
+                <div
+                    className="
+                        rounded-xl
 
-                    <span
+                        border
+                        border-green-200
+
+                        bg-green-50
+
+                        p-4
+
+                        dark:border-green-500/30
+                        dark:bg-green-500/10
+                    "
+                >
+
+                    <p
                         className="
-                            font-semibold
-                            text-slate-900
+                            text-xs
+                            uppercase
+                            tracking-wider
 
-                            dark:text-white
-                        "
-                    >
-                        Status:
-                    </span>{" "}
-
-                    <span
-                        className="
-                            font-medium
-                            text-green-600
+                            text-green-700
 
                             dark:text-green-400
                         "
                     >
-                        Ready for AI Analysis ✅
-                    </span>
+                        Status
+                    </p>
 
-                </p>
+                    <p
+                        className="
+                            mt-1
+
+                            text-sm
+                            sm:text-base
+
+                            font-semibold
+
+                            text-green-700
+
+                            dark:text-green-400
+                        "
+                    >
+                        ✅ Ready for AI Analysis
+                    </p>
+
+                </div>
 
             </div>
 

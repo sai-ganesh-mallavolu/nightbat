@@ -11,13 +11,21 @@ function StatsCard({
             className="
                 group
                 overflow-hidden
-                rounded-3xl
+
+                rounded-2xl
+                sm:rounded-3xl
+
                 border
                 border-slate-200
+
                 bg-white
-                p-6
+
+                p-5
+                sm:p-6
+
                 shadow-md
                 shadow-slate-200/60
+
                 transition-all
                 duration-300
 
@@ -37,18 +45,21 @@ function StatsCard({
             "
         >
 
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-4">
 
                 {/* Stats Information */}
 
-                <div>
+                <div className="min-w-0">
 
                     <p
                         className="
-                            text-sm
+                            text-xs
+                            sm:text-sm
+
                             font-medium
                             uppercase
                             tracking-widest
+
                             text-slate-500
 
                             dark:text-zinc-400
@@ -57,12 +68,19 @@ function StatsCard({
                         {title}
                     </p>
 
-
                     <h2
                         className={`
-                            mt-4
-                            text-5xl
+                            mt-3
+                            sm:mt-4
+
+                            break-words
+
+                            text-3xl
+                            sm:text-4xl
+                            lg:text-5xl
+
                             font-bold
+
                             ${color}
                         `}
                     >
@@ -71,15 +89,26 @@ function StatsCard({
 
                 </div>
 
-
                 {/* Icon */}
 
                 <div
                     className="
-                        rounded-2xl
+                        flex
+                        shrink-0
+                        items-center
+                        justify-center
+
+                        rounded-xl
+                        sm:rounded-2xl
+
                         bg-slate-100
-                        p-4
-                        text-4xl
+
+                        p-3
+                        sm:p-4
+
+                        text-3xl
+                        sm:text-4xl
+
                         transition-all
                         duration-300
 
@@ -95,15 +124,18 @@ function StatsCard({
 
             </div>
 
-
             {/* Bottom Accent Line */}
 
             <div
                 className="
-                    mt-6
+                    mt-5
+                    sm:mt-6
+
                     h-1
+
                     overflow-hidden
                     rounded-full
+
                     bg-slate-200
 
                     dark:bg-white/10
@@ -114,8 +146,15 @@ function StatsCard({
                     className="
                         h-full
                         w-2/3
+
                         rounded-full
+
                         bg-cyan-500
+
+                        transition-all
+                        duration-300
+
+                        group-hover:w-full
 
                         dark:bg-cyan-400
                     "

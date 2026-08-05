@@ -23,14 +23,20 @@ function ChatMessage({ sender, message }) {
 
             <div
                 className={`
-                    max-w-[85%]
-                    rounded-2xl
-                    p-5
+                    max-w-[95%]
+                    sm:max-w-[90%]
+                    md:max-w-[80%]
+                    lg:max-w-[75%]
+                    rounded-xl
+                    sm:rounded-2xl
+                    p-3
+                    sm:p-4
+                    lg:p-5
                     shadow-md
                     transition-all
                     duration-300
 
-                    sm:max-w-[80%]
+                    
 
                     ${isUser
 
@@ -65,13 +71,15 @@ function ChatMessage({ sender, message }) {
                         flex
                         items-center
                         justify-between
-                        gap-5
+                        gap-2
+                        sm:gap-5
                     "
                 >
 
                     <div className="flex items-center gap-2">
 
-                        <span className="text-xl">
+                        <span className="text-lg
+                            sm:text-xl">
 
                             {isUser
                                 ? "👤"
@@ -79,7 +87,9 @@ function ChatMessage({ sender, message }) {
 
                         </span>
 
-                        <span className="font-semibold">
+                        <span className="text-sm
+                            sm:text-base
+                            font-semibold">
 
                             {isUser
                                 ? "You"
@@ -109,7 +119,11 @@ function ChatMessage({ sender, message }) {
                     className="
                         whitespace-pre-wrap
                         break-words
-                        leading-7
+                        overflow-x-auto
+                        leading-6
+                        sm:leading-7
+                        text-sm
+                        sm:text-base
                     "
                 >
 
@@ -122,8 +136,10 @@ function ChatMessage({ sender, message }) {
 
                 <p
                     className={`
-                        mt-4
-                        text-xs
+                        mt-3
+                        sm:mt-4
+                        text-[11px]
+                        sm:text-xs
 
                         ${isUser
                             ? "text-slate-800/70"

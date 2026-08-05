@@ -41,6 +41,10 @@ function DocumentDetails() {
 
     const [showFlashcards, setShowFlashcards] = useState(false);
 
+    const [openingFlashcards, setOpeningFlashcards] = useState(false);
+
+    const [openingQuiz, setOpeningQuiz] = useState(false);
+
     const [quizHistoryRefreshKey, setQuizHistoryRefreshKey] = useState(0);
 
 
@@ -231,6 +235,20 @@ function DocumentDetails() {
 
     };
 
+    const handleOpenFlashcards = () => {
+        if (openingFlashcards || showFlashcards) return;
+
+        setOpeningFlashcards(true);
+        setShowFlashcards(true);
+    };
+
+    const handleOpenQuiz = () => {
+        if (openingQuiz || showQuiz) return;
+
+        setOpeningQuiz(true);
+        setShowQuiz(true);
+    };
+
 
     // ==========================
     // Loading Screen
@@ -347,8 +365,12 @@ function DocumentDetails() {
                 from-white
                 via-slate-50
                 to-slate-100
-                px-6
-                py-20
+                px-4
+                py-10
+                sm:px-6
+                lg:px-8
+                sm:py-16
+                lg:py-20
                 text-slate-900
                 transition-colors
                 duration-300
@@ -373,7 +395,9 @@ function DocumentDetails() {
                         border
                         border-slate-200
                         bg-white
-                        p-8
+                        p-5
+                        sm:p-6
+                        lg:p-8
                         shadow-xl
                         shadow-slate-200/50
                         transition-colors
@@ -405,14 +429,23 @@ function DocumentDetails() {
                             <div
                                 className="
                                     flex
-                                    h-24
-                                    w-24
+                                    h-16
+                                    w-16
+                                    text-4xl
+
+                                    sm:h-20
+                                    sm:w-20
+                                    sm:text-5xl
+
+                                    lg:h-24
+                                    lg:w-24
+                                    lg:text-6xl
                                     shrink-0
                                     items-center
                                     justify-center
                                     rounded-3xl
                                     bg-cyan-50
-                                    text-6xl
+                                    
 
                                     dark:bg-cyan-500/10
                                 "
@@ -427,9 +460,11 @@ function DocumentDetails() {
 
                                 <h1
                                     className="
-                                        break-all
-                                        text-4xl
-                                        font-extrabold
+                                    break-all
+                                    text-xl
+                                    sm:text-2xl
+                                    lg:text-4xl
+                                    font-extrabold
                                         text-slate-950
 
                                         dark:text-white
@@ -529,7 +564,7 @@ function DocumentDetails() {
 
                         {hasAnalysis && (
 
-                            <div className="flex flex-wrap gap-3">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
 
 
                                 {/* Copy All */}
@@ -541,7 +576,9 @@ function DocumentDetails() {
                                         border
                                         border-cyan-200
                                         bg-cyan-50
-                                        px-6
+                                        w-full
+                                        sm:w-auto
+                                        px-5
                                         py-3
                                         font-semibold
                                         text-cyan-700
@@ -573,7 +610,9 @@ function DocumentDetails() {
                                         border
                                         border-violet-200
                                         bg-violet-50
-                                        px-6
+                                        w-full
+                                        sm:w-auto
+                                        px-5
                                         py-3
                                         font-semibold
                                         text-violet-700
@@ -633,7 +672,9 @@ function DocumentDetails() {
                         <h2
                             className="
                                 mt-6
-                                text-4xl
+                                text-xl
+                                sm:text-2xl
+                                lg:text-4xl
                                 font-bold
                                 text-slate-950
 
@@ -667,6 +708,8 @@ function DocumentDetails() {
                                 mt-10
                                 rounded-2xl
                                 bg-cyan-500
+                                w-full
+                                sm:w-auto
                                 px-10
                                 py-4
                                 text-lg
@@ -730,7 +773,8 @@ function DocumentDetails() {
 
                                 <h2
                                     className="
-                                        text-3xl
+                                        text-2xl
+                                        sm:text-3xl
                                         font-bold
                                         text-slate-950
 
@@ -772,7 +816,8 @@ function DocumentDetails() {
 
                             <h2
                                 className="
-                                    text-3xl
+                                    text-2xl
+                                    sm:text-3xl
                                     font-bold
                                     text-slate-950
 
@@ -903,14 +948,14 @@ function DocumentDetails() {
 
                                         type="button"
 
-                                        onClick={() =>
-                                            setShowFlashcards(true)
-                                        }
+                                        onClick={handleOpenFlashcards}
 
                                         className="
                                             mt-8
                                             rounded-xl
                                             bg-cyan-500
+                                            w-full
+                                            sm:w-auto
                                             px-8
                                             py-4
                                             font-bold
@@ -920,6 +965,7 @@ function DocumentDetails() {
 
                                             hover:bg-cyan-400
                                         "
+
                                     >
 
                                         {flashStatus.completed
@@ -977,13 +1023,9 @@ function DocumentDetails() {
                                     </p>
 
                                     <button
-
                                         type="button"
-
-                                        onClick={() =>
-                                            setShowFlashcards(true)
-                                        }
-
+                                        onClick={handleOpenFlashcards}
+                                        disabled={openingFlashcards}
                                         className="
                                             mt-8
                                             rounded-xl
@@ -996,11 +1038,15 @@ function DocumentDetails() {
                                             duration-300
 
                                             hover:bg-cyan-400
-                                        "
+
+                                            disabled:cursor-not-allowed
+                                            disabled:opacity-60
+                                            disabled:hover:bg-cyan-500
+                                            "
                                     >
-
-                                        🚀 Generate Flashcards
-
+                                        {openingFlashcards
+                                            ? "⏳ Generating Flashcards..."
+                                            : "🚀 Generate Flashcards"}
                                     </button>
 
                                 </div>
@@ -1014,7 +1060,10 @@ function DocumentDetails() {
 
                                     <FlashcardsSection
                                         documentId={document.id}
-                                        onGenerated={refreshFlashcardStatus}
+                                        onGenerated={async () => {
+                                            await refreshFlashcardStatus();
+                                            setOpeningFlashcards(false);
+                                        }}
                                         onStatusChange={refreshFlashcardStatus}
                                     />
 
@@ -1033,7 +1082,8 @@ function DocumentDetails() {
 
                             <h2
                                 className="
-                                    text-3xl
+                                    text-2xl
+                                    sm:text-3xl
                                     font-bold
                                     text-slate-950
 
@@ -1209,14 +1259,14 @@ function DocumentDetails() {
 
                                         type="button"
 
-                                        onClick={() =>
-                                            setShowQuiz(true)
-                                        }
+                                        onClick={handleOpenQuiz}
 
                                         className="
                                             mt-8
                                             rounded-xl
                                             bg-cyan-500
+                                            w-full
+                                            sm:w-auto
                                             px-8
                                             py-4
                                             font-bold
@@ -1286,17 +1336,15 @@ function DocumentDetails() {
                                     </p>
 
                                     <button
-
                                         type="button"
-
-                                        onClick={() =>
-                                            setShowQuiz(true)
-                                        }
-
+                                        onClick={handleOpenQuiz}
+                                        disabled={openingQuiz}
                                         className="
                                             mt-8
                                             rounded-xl
                                             bg-cyan-500
+                                            w-full
+                                            sm:w-auto
                                             px-8
                                             py-4
                                             font-bold
@@ -1305,11 +1353,15 @@ function DocumentDetails() {
                                             duration-300
 
                                             hover:bg-cyan-400
+
+                                            disabled:cursor-not-allowed
+                                            disabled:opacity-60
+                                            disabled:hover:bg-cyan-500
                                         "
                                     >
-
-                                        🚀 Generate Quiz
-
+                                        {openingQuiz
+                                            ? "⏳ Generating Quiz..."
+                                            : "🚀 Generate Quiz"}
                                     </button>
 
                                 </div>
@@ -1323,7 +1375,10 @@ function DocumentDetails() {
 
                                     <QuizSection
                                         documentId={document.id}
-                                        onGenerated={refreshQuizStatus}
+                                        onGenerated={async () => {
+                                            await refreshQuizStatus();
+                                            setOpeningQuiz(false);
+                                        }}
                                         onStatusChange={refreshQuizStatus}
                                         onAttemptSaved={() =>
                                             setQuizHistoryRefreshKey(

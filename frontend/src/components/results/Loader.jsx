@@ -34,18 +34,28 @@ function Loader() {
 
     }, []);
 
-
     return (
 
         <div
             className="
-                mt-12
+                mt-8
+                sm:mt-10
+                lg:mt-12
+
                 rounded-2xl
-                border border-slate-200
+                sm:rounded-3xl
+
+                border
+                border-slate-200
+
                 bg-white
-                p-8
+
+                p-6
+                sm:p-8
+
                 shadow-lg
                 shadow-slate-200/50
+
                 transition-colors
                 duration-300
 
@@ -59,15 +69,26 @@ function Loader() {
 
             <div className="mb-8 text-center">
 
-                <div className="text-5xl">
+                <div
+                    className="
+                        text-5xl
+                        sm:text-6xl
+
+                        animate-bounce
+                    "
+                >
                     🤖
                 </div>
 
                 <h2
                     className="
                         mt-3
-                        text-3xl
+
+                        text-2xl
+                        sm:text-3xl
+
                         font-bold
+
                         text-cyan-600
 
                         dark:text-cyan-400
@@ -79,6 +100,12 @@ function Loader() {
                 <p
                     className="
                         mt-2
+
+                        text-sm
+                        sm:text-base
+
+                        leading-7
+
                         text-slate-600
 
                         dark:text-zinc-400
@@ -89,43 +116,98 @@ function Loader() {
 
             </div>
 
+            {/* Progress Bar */}
+
+            <div
+                className="
+                    mb-8
+
+                    h-2
+
+                    overflow-hidden
+
+                    rounded-full
+
+                    bg-slate-200
+
+                    dark:bg-white/10
+                "
+            >
+
+                <div
+                    className="
+
+                        h-full
+
+                        rounded-full
+
+                        bg-cyan-500
+
+                        transition-all
+                        duration-500
+
+                        dark:bg-cyan-400
+                    "
+                    style={{
+                        width: `${((currentStep + 1) / steps.length) * 100}%`,
+                    }}
+                />
+
+            </div>
 
             {/* Analysis Steps */}
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
 
                 {steps.map((step, index) => {
 
-                    const isCompleted =
-                        index < currentStep;
+                    const isCompleted = index < currentStep;
 
-                    const isCurrent =
-                        index === currentStep;
+                    const isCurrent = index === currentStep;
 
-                    const isPending =
-                        index > currentStep;
+                    const isPending = index > currentStep;
 
                     return (
 
                         <div
                             key={index}
-                            className="
+                            className={`
                                 flex
                                 items-center
+
                                 gap-3
+
                                 rounded-xl
+
                                 px-3
-                                py-2
-                                transition-colors
+                                sm:px-4
+
+                                py-3
+
+                                transition-all
                                 duration-300
-                            "
+
+                                ${isCurrent
+                                    ? "bg-cyan-50 dark:bg-cyan-500/10"
+                                    : ""
+                                }
+                            `}
                         >
 
                             {/* Step Icon */}
 
                             {isCompleted && (
 
-                                <span className="text-xl text-green-600 dark:text-green-400">
+                                <span
+                                    className="
+                                        text-lg
+                                        sm:text-xl
+
+                                        text-green-600
+
+                                        dark:text-green-400
+                                    "
+                                >
                                     ✅
                                 </span>
 
@@ -133,7 +215,18 @@ function Loader() {
 
                             {isCurrent && (
 
-                                <span className="animate-pulse text-xl text-cyan-600 dark:text-cyan-400">
+                                <span
+                                    className="
+                                        animate-pulse
+
+                                        text-lg
+                                        sm:text-xl
+
+                                        text-cyan-600
+
+                                        dark:text-cyan-400
+                                    "
+                                >
                                     ⏳
                                 </span>
 
@@ -141,17 +234,32 @@ function Loader() {
 
                             {isPending && (
 
-                                <span className="text-xl text-slate-300 dark:text-zinc-600">
+                                <span
+                                    className="
+                                        text-lg
+                                        sm:text-xl
+
+                                        text-slate-300
+
+                                        dark:text-zinc-600
+                                    "
+                                >
                                     ⬜
                                 </span>
 
                             )}
 
-
                             {/* Step Text */}
 
                             <span
                                 className={`
+                                    flex-1
+
+                                    break-words
+
+                                    text-sm
+                                    sm:text-base
+
                                     transition-colors
                                     duration-300
 

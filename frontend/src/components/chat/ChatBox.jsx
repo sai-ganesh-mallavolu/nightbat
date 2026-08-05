@@ -263,9 +263,12 @@ function ChatBox({ documentId }) {
 
         <div
             className="
-                mt-12
+                w-full
+                mt-8
+                sm:mt-12
                 overflow-hidden
-                rounded-3xl
+                rounded-2xl
+                sm:rounded-3xl
                 border
                 border-slate-200
                 bg-white

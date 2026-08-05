@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
     getQuiz,
@@ -16,7 +16,6 @@ import SubmitQuizModal from "./SubmitQuizModal";
 
 import { toast } from "react-toastify";
 
-
 function QuizSection({
     documentId,
     onGenerated,
@@ -25,23 +24,15 @@ function QuizSection({
 }) {
 
     const [questions, setQuestions] = useState([]);
-
     const [loading, setLoading] = useState(false);
-
+    const generatingRef = useRef(false);
     const [current, setCurrent] = useState(0);
-
     const [answers, setAnswers] = useState({});
-
     const [submitted, setSubmitted] = useState(false);
-
     const [showSubmitModal, setShowSubmitModal] = useState(false);
-
     const [secondsLeft, setSecondsLeft] = useState(600);
-
     const [result, setResult] = useState(null);
-
     const [timerKey, setTimerKey] = useState(0);
-
 
     // ==========================
     // Load Quiz
@@ -49,24 +40,26 @@ function QuizSection({
 
     useEffect(() => {
 
+        if (!documentId) return;
+
         loadQuiz();
 
     }, [documentId]);
-
 
     const loadQuiz = async () => {
 
         try {
 
-            const response =
-                await getQuiz(documentId);
+            const response = await getQuiz(documentId);
 
             const loadedQuestions =
                 response.questions || [];
 
             if (loadedQuestions.length === 0) {
+
                 await handleGenerate();
                 return;
+
             }
 
             setQuestions(loadedQuestions);
@@ -77,10 +70,17 @@ function QuizSection({
 
             console.error(error);
 
+            toast.error(
+
+                error?.response?.data?.message ||
+
+                "Failed to load quiz."
+
+            );
+
         }
 
     };
-
 
     // ==========================
     // Generate Quiz
@@ -88,7 +88,11 @@ function QuizSection({
 
     const handleGenerate = async () => {
 
-        if (loading) return;
+        if (loading || generatingRef.current) {
+            return;
+        }
+
+        generatingRef.current = true;
 
         try {
 
@@ -115,11 +119,7 @@ function QuizSection({
                 (prev) => prev + 1
             );
 
-
-            // Refresh quiz status in parent
-
             await onGenerated?.();
-
 
             toast.success(
                 "Quiz generated!"
@@ -132,19 +132,24 @@ function QuizSection({
             console.error(error);
 
             toast.error(
+
+                error?.response?.data?.message ||
+
                 "Failed to generate quiz."
+
             );
 
         }
 
         finally {
 
+            generatingRef.current = false;
+
             setLoading(false);
 
         }
 
     };
-
 
     // ==========================
     // Select Answer
@@ -169,16 +174,11 @@ function QuizSection({
 
     const nextQuestion = () => {
 
-        if (
-            current >=
-            questions.length - 1
-        ) {
+        if (current >= questions.length - 1) {
             return;
         }
 
-        setCurrent(
-            (prev) => prev + 1
-        );
+        setCurrent((prev) => prev + 1);
 
     };
 
@@ -187,9 +187,9 @@ function QuizSection({
 
         if (current <= 0) return;
 
-        setCurrent(
-            (prev) => prev - 1
-        );
+        setCurrent((prev) => prev - 1);
+
+
 
     };
 
@@ -209,52 +209,47 @@ function QuizSection({
 
         setShowSubmitModal(false);
 
-
         let correct = 0;
 
+        questions.forEach((question, index) => {
 
-        questions.forEach(
-            (question, index) => {
+            if (
 
-                if (
-                    answers[index] ===
-                    question.correct_answer
-                ) {
+                answers[index] ===
 
-                    correct++;
+                question.correct_answer
 
-                }
+            ) {
+
+                correct++;
 
             }
-        );
 
+        });
 
         const answered =
+
             Object.keys(answers).length;
 
-
         const wrong =
+
             answered - correct;
 
-
         const unanswered =
+
             questions.length - answered;
 
-
         const percentage =
+
             Math.round(
 
-                (
-                    correct /
-                    questions.length
-                ) * 100
+                (correct / questions.length) * 100
 
             );
 
-
         const timeTaken =
-            600 - secondsLeft;
 
+            600 - secondsLeft;
 
         const resultData = {
 
@@ -270,10 +265,7 @@ function QuizSection({
 
         };
 
-
         try {
-
-            // 1. Save quiz attempt in backend
 
             await saveQuizAttempt(
 
@@ -297,20 +289,20 @@ function QuizSection({
 
             );
 
-
-            // 2. Refresh Attempts and Best Score
             await onStatusChange?.();
 
-            // 3. Refresh Previous Attempts history
             onAttemptSaved?.();
 
-            // 4. Show result screen
             setResult(resultData);
 
             setSubmitted(true);
 
+
+
             toast.success(
+
                 "Quiz submitted successfully!"
+
             );
 
         }
@@ -318,13 +310,19 @@ function QuizSection({
         catch (error) {
 
             console.error(
+
                 "Failed to submit quiz:",
+
                 error
+
             );
 
-
             toast.error(
+
+                error?.response?.data?.message ||
+
                 "Failed to save quiz attempt."
+
             );
 
         }
@@ -349,30 +347,32 @@ function QuizSection({
         setSecondsLeft(600);
 
         setTimerKey(
+
             (prev) => prev + 1
+
         );
 
-    };
+        window.scrollTo({
 
+            top: 0,
+
+            behavior: "smooth",
+
+        });
+
+    };
 
     const answeredCount =
         Object.keys(answers).length;
 
-
     const unansweredQuestions =
         questions
-
-            .map(
-                (_, index) =>
-                    index + 1
-            )
-
+            .map((_, index) => index + 1)
             .filter(
                 (index) =>
                     answers[index - 1] ===
                     undefined
             );
-
 
     // ==========================
     // Result Screen
@@ -393,19 +393,29 @@ function QuizSection({
 
     }
 
-
     return (
 
         <div
             className="
-                mt-12
-                rounded-3xl
+                mt-8
+                sm:mt-10
+                lg:mt-12
+
+                rounded-2xl
+                sm:rounded-3xl
+
                 border
                 border-slate-200
+
                 bg-white
-                p-8
+
+                p-5
+                sm:p-6
+                lg:p-8
+
                 shadow-xl
                 shadow-slate-200/50
+
                 transition-colors
                 duration-300
 
@@ -415,7 +425,6 @@ function QuizSection({
             "
         >
 
-
             {/* ==========================
                 Header
             ========================== */}
@@ -423,33 +432,36 @@ function QuizSection({
             <h2
                 className="
                     mb-2
-                    text-3xl
+
+                    text-2xl
+                    sm:text-3xl
+
                     font-bold
+
                     text-slate-950
 
                     dark:text-white
                 "
             >
-
                 📝 AI Quiz
-
             </h2>
-
 
             <p
                 className="
                     mb-8
+
+                    text-sm
+                    sm:text-base
+
+                    leading-7
+
                     text-slate-600
 
                     dark:text-zinc-400
                 "
             >
-
-                Test your understanding with
-                AI-generated questions.
-
+                Test your understanding with AI-generated questions.
             </p>
-
 
             {/* ==========================
                 Quiz Content
@@ -457,17 +469,66 @@ function QuizSection({
 
             {questions.length === 0 ? (
 
-                <div className="py-20 text-center">
+                <div
+                    className="
+                        flex
+                        flex-col
+                        items-center
+                        justify-center
 
+                        py-16
+                        sm:py-20
 
-                    <div className="animate-spin text-6xl mb-6">🧠</div>
+                        text-center
+                    "
+                >
 
-                    <h3 className="text-2xl font-bold dark:text-white">
-                        Generating Quiz...
+                    <div
+                        className="
+                            mb-6
+
+                            animate-spin
+
+                            text-5xl
+                            sm:text-6xl
+                        "
+                    >
+                        🧠
+                    </div>
+
+                    <h3
+                        className="
+                            text-xl
+                            sm:text-2xl
+
+                            font-bold
+
+                            dark:text-white
+                        "
+                    >
+                        {loading
+                            ? "Generating Quiz..."
+                            : "Loading Quiz..."}
                     </h3>
 
-                    <p className="mt-4 text-slate-600 dark:text-zinc-400">
-                        NightBat AI is generating quiz. Please wait...
+                    <p
+                        className="
+                            mt-4
+
+                            max-w-md
+
+                            text-sm
+                            sm:text-base
+
+                            leading-7
+
+                            text-slate-600
+
+                            dark:text-zinc-400
+                        "
+                    >
+                        NightBat AI is preparing your quiz.
+                        Please wait...
                     </p>
 
                 </div>
@@ -475,7 +536,6 @@ function QuizSection({
             ) : (
 
                 <>
-
 
                     {/* Timer */}
 
@@ -486,7 +546,6 @@ function QuizSection({
                         onTick={setSecondsLeft}
                     />
 
-
                     {/* Progress */}
 
                     <QuizProgress
@@ -494,81 +553,65 @@ function QuizSection({
                         total={questions.length}
                     />
 
-
                     {/* Question Palette */}
 
                     <QuestionPalette
                         total={questions.length}
                         current={current}
                         answers={answers}
-                        onSelect={setCurrent}
-                    />
+                        onSelect={(index) => {
 
+                            setCurrent(index);
+
+
+
+                        }}
+                    />
 
                     {/* Quiz Card */}
 
                     <QuizCard
-                        question={
-                            questions[current]
-                        }
-                        selected={
-                            answers[current]
-                        }
-                        onSelect={
-                            selectAnswer
-                        }
+                        question={questions[current]}
+                        selected={answers[current]}
+                        onSelect={selectAnswer}
                     />
-
 
                     {/* Navigation */}
 
                     <QuizNavigation
                         current={current}
                         total={questions.length}
-                        previousQuestion={
-                            previousQuestion
-                        }
-                        nextQuestion={
-                            nextQuestion
-                        }
-                        submitQuiz={
-                            submitQuiz
-                        }
+                        previousQuestion={previousQuestion}
+                        nextQuestion={nextQuestion}
+                        submitQuiz={submitQuiz}
                     />
 
                 </>
 
             )}
 
-
             {/* ==========================
-                Submit Confirmation Modal
+                Submit Confirmation
             ========================== */}
 
             <SubmitQuizModal
                 open={showSubmitModal}
                 answered={answeredCount}
                 total={questions.length}
-                unansweredQuestions={
-                    unansweredQuestions
-                }
+                unansweredQuestions={unansweredQuestions}
                 onCancel={() =>
                     setShowSubmitModal(false)
                 }
                 onSubmit={confirmSubmit}
-                onQuestionSelect={
-                    (questionNo) => {
+                onQuestionSelect={(questionNo) => {
 
-                        setCurrent(
-                            questionNo - 1
-                        );
+                    setCurrent(questionNo - 1);
 
-                        setShowSubmitModal(
-                            false
-                        );
+                    setShowSubmitModal(false);
 
-                    }
-                }
+
+
+                }}
             />
 
         </div>

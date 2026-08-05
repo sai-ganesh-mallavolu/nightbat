@@ -71,7 +71,11 @@ function Features() {
             className="
                 border-t border-slate-200
                 bg-slate-100
-                py-24
+
+                py-16
+                sm:py-20
+                lg:py-24
+
                 transition-colors
                 duration-300
 
@@ -80,7 +84,17 @@ function Features() {
             "
         >
 
-            <div className="mx-auto max-w-7xl px-6">
+            <div
+                className="
+                    mx-auto
+                    w-full
+                    max-w-7xl
+
+                    px-4
+                    sm:px-6
+                    lg:px-8
+                "
+            >
 
                 {/* Section Heading */}
 
@@ -88,12 +102,13 @@ function Features() {
 
                     <h2
                         className="
-                            text-4xl
+                            text-3xl
+                            sm:text-4xl
+                            lg:text-5xl
+
                             font-bold
                             tracking-tight
                             text-slate-950
-
-                            md:text-5xl
 
                             dark:text-white
                         "
@@ -107,8 +122,15 @@ function Features() {
                             mx-auto
                             mt-5
                             max-w-3xl
-                            text-lg
-                            leading-8
+
+                            px-2
+
+                            text-base
+                            sm:text-lg
+
+                            leading-7
+                            sm:leading-8
+
                             text-slate-600
 
                             dark:text-zinc-400
@@ -125,12 +147,19 @@ function Features() {
 
                 <div
                     className="
-                        mt-20
-                        grid
-                        gap-8
+                        mt-12
+                        sm:mt-16
+                        lg:mt-20
 
-                        md:grid-cols-2
-                        lg:grid-cols-4
+                        grid
+
+                        gap-5
+                        sm:gap-6
+                        lg:gap-8
+
+                        grid-cols-1
+                        sm:grid-cols-2
+                        xl:grid-cols-4
                     "
                 >
 

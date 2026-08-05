@@ -9,12 +9,19 @@ function ActionItemsCard({ items }) {
         <div
             className="
                 rounded-2xl
+                sm:rounded-3xl
+
                 border
                 border-slate-200
+
                 bg-white
-                p-6
+
+                p-5
+                sm:p-6
+
                 shadow-md
                 shadow-slate-200/50
+
                 transition-colors
                 duration-300
 
@@ -26,12 +33,29 @@ function ActionItemsCard({ items }) {
 
             {/* Header */}
 
-            <div className="mb-5 flex items-center justify-between gap-4">
+            <div
+                className="
+                    mb-6
+
+                    flex
+                    flex-col
+                    gap-4
+
+                    sm:flex-row
+                    sm:items-center
+                    sm:justify-between
+                "
+            >
 
                 <h2
                     className="
-                        text-2xl
+                        break-words
+
+                        text-xl
+                        sm:text-2xl
+
                         font-bold
+
                         text-cyan-600
 
                         dark:text-cyan-400
@@ -40,9 +64,11 @@ function ActionItemsCard({ items }) {
                     ✅ Action Items
                 </h2>
 
-                <CopyButton
-                    text={items.join("\n")}
-                />
+                <div className="self-start sm:self-auto">
+                    <CopyButton
+                        text={items.join("\n")}
+                    />
+                </div>
 
             </div>
 
@@ -59,9 +85,17 @@ function ActionItemsCard({ items }) {
                             flex
                             items-start
                             gap-3
-                            text-slate-700
 
-                            dark:text-zinc-300
+                            rounded-xl
+
+                            bg-slate-50
+
+                            p-4
+
+                            transition-colors
+                            duration-300
+
+                            dark:bg-white/5
                         "
                     >
 
@@ -70,20 +104,41 @@ function ActionItemsCard({ items }) {
                         <span
                             className="
                                 mt-0.5
+
                                 shrink-0
+
+                                text-lg
+
                                 font-bold
+
                                 text-green-600
 
                                 dark:text-green-400
                             "
                         >
-                            □
+                            ☐
                         </span>
 
 
                         {/* Action Item */}
 
-                        <span className="leading-7">
+                        <span
+                            className="
+                                flex-1
+
+                                break-words
+
+                                text-sm
+                                sm:text-base
+
+                                leading-7
+                                sm:leading-8
+
+                                text-slate-700
+
+                                dark:text-zinc-300
+                            "
+                        >
                             {item}
                         </span>
 

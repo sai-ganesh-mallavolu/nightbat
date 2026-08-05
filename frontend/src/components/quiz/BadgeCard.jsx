@@ -1,4 +1,9 @@
-function BadgeCard({ percentage }) {
+function BadgeCard({ percentage = 0 }) {
+
+    const safePercentage = Math.min(
+        100,
+        Math.max(0, Number(percentage) || 0)
+    );
 
     let badge = "📚";
 
@@ -7,8 +12,7 @@ function BadgeCard({ percentage }) {
     let color =
         "text-red-600 dark:text-red-400";
 
-
-    if (percentage >= 90) {
+    if (safePercentage >= 90) {
 
         badge = "🥇";
 
@@ -19,7 +23,7 @@ function BadgeCard({ percentage }) {
 
     }
 
-    else if (percentage >= 75) {
+    else if (safePercentage >= 75) {
 
         badge = "🥈";
 
@@ -30,7 +34,7 @@ function BadgeCard({ percentage }) {
 
     }
 
-    else if (percentage >= 60) {
+    else if (safePercentage >= 60) {
 
         badge = "🥉";
 
@@ -41,27 +45,48 @@ function BadgeCard({ percentage }) {
 
     }
 
-
     return (
 
-        <div className="text-center">
+        <div
+            className="
+                flex
+                flex-col
+                items-center
+                justify-center
+                text-center
+            "
+        >
 
             {/* Badge */}
 
-            <div className="text-7xl">
+            <div
+                className="
+                    text-6xl
+                    sm:text-7xl
+
+                    leading-none
+
+                    select-none
+                "
+                role="img"
+                aria-label={`${title} badge`}
+            >
 
                 {badge}
 
             </div>
 
-
             {/* Badge Title */}
 
             <h2
                 className={`
-                    mt-3
-                    text-3xl
+                    mt-4
+
+                    text-2xl
+                    sm:text-3xl
+
                     font-bold
+
                     ${color}
                 `}
             >
@@ -69,6 +94,25 @@ function BadgeCard({ percentage }) {
                 {title}
 
             </h2>
+
+            {/* Subtitle */}
+
+            <p
+                className="
+                    mt-2
+
+                    text-sm
+                    sm:text-base
+
+                    text-slate-500
+
+                    dark:text-zinc-400
+                "
+            >
+
+                Achievement Badge
+
+            </p>
 
         </div>
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
     getFlashcards,
@@ -24,6 +24,8 @@ function FlashcardsSection({
     const [cards, setCards] = useState([]);
 
     const [loading, setLoading] = useState(false);
+
+    const generatingRef = useRef(false);
 
     const [markingLearned, setMarkingLearned] = useState(false);
 
@@ -105,7 +107,11 @@ function FlashcardsSection({
 
     const handleGenerate = async () => {
 
-        if (loading) return;
+        if (loading || generatingRef.current) {
+            return;
+        }
+
+        generatingRef.current = true;
 
         try {
 
@@ -172,6 +178,7 @@ function FlashcardsSection({
 
         finally {
 
+            generatingRef.current = false;
             setLoading(false);
 
         }

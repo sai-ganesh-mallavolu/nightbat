@@ -95,8 +95,13 @@ function Upload() {
                 from-white
                 via-slate-50
                 to-slate-100
-                px-6
-                py-20
+                px-4
+                sm:px-6
+                lg:px-8
+
+                py-12
+                sm:py-16
+                lg:py-20
                 text-slate-900
                 transition-colors
                 duration-300
@@ -108,7 +113,13 @@ function Upload() {
             "
         >
 
-            <div className="mx-auto max-w-5xl">
+            <div
+                className="
+                    mx-auto
+                    w-full
+                    max-w-5xl
+                "
+            >
 
 
                 {/* Page Header */}
@@ -117,12 +128,14 @@ function Upload() {
 
                     <h1
                         className="
-                            text-4xl
+                            text-3xl
+                            sm:text-4xl
+                            lg:text-5xl
                             font-extrabold
                             tracking-tight
                             text-slate-950
 
-                            md:text-5xl
+                            
 
                             dark:text-white
                         "
@@ -136,8 +149,13 @@ function Upload() {
                             mx-auto
                             mt-5
                             max-w-2xl
-                            text-lg
-                            leading-8
+                            px-2
+
+                            text-base
+                            sm:text-lg
+
+                            leading-7
+                            sm:leading-8
                             text-slate-600
 
                             dark:text-zinc-400
@@ -152,7 +170,9 @@ function Upload() {
 
                 {/* Upload Box */}
 
-                <div className="mt-14">
+                <div className="mt-8
+                    sm:mt-10
+                    lg:mt-14">
 
                     <UploadBox
                         file={file}
@@ -168,7 +188,8 @@ function Upload() {
 
                 {file && (
 
-                    <div className="mt-10">
+                    <div className="mt-8
+                            sm:mt-10">
 
                         <FileInfoCard
                             file={file}
@@ -186,10 +207,16 @@ function Upload() {
                     <div
                         className="
                             mt-8
+
                             flex
-                            flex-wrap
-                            justify-center
-                            gap-5
+                            flex-col
+
+                            gap-3
+
+                            sm:flex-row
+                            sm:flex-wrap
+                            sm:justify-center
+                            sm:gap-5
                         "
                     >
 
@@ -203,7 +230,17 @@ function Upload() {
                                 rounded-xl
                                 border border-red-200
                                 bg-red-50
-                                px-8 py-3
+                                w-full
+                                sm:w-auto
+
+                                px-6
+                                sm:px-8
+
+                                py-2.5
+                                sm:py-3
+
+                                text-sm
+                                sm:text-base
                                 font-semibold
                                 text-red-600
                                 transition-all
@@ -235,7 +272,17 @@ function Upload() {
                                 cursor-pointer
                                 rounded-xl
                                 bg-cyan-500
-                                px-8 py-3
+                                w-full
+                                sm:w-auto
+
+                                px-6
+                                sm:px-8
+
+                                py-2.5
+                                sm:py-3
+
+                                text-sm
+                                sm:text-base
                                 font-semibold
                                 text-slate-950
                                 shadow-lg
@@ -271,7 +318,8 @@ function Upload() {
 
                 {loading && (
 
-                    <div className="mt-12">
+                    <div className="mt-10
+                            sm:mt-12">
 
                         <Loader />
 

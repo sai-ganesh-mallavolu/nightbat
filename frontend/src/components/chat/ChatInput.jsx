@@ -19,7 +19,9 @@ function ChatInput({
                 border-t
                 border-slate-200
                 bg-white
-                p-5
+                p-3
+                sm:p-4
+                lg:p-5
                 transition-colors
                 duration-300
 
@@ -28,7 +30,12 @@ function ChatInput({
             "
         >
 
-            <div className="flex items-end gap-3">
+            <div className="
+                flex
+                items-end
+                gap-2
+                sm:gap-3
+            ">
 
 
                 {/* Message Input */}
@@ -56,15 +63,28 @@ function ChatInput({
                     }}
                     className="
                         max-h-40
-                        min-h-[60px]
+                        min-h-[52px]
+                        sm:min-h-[60px]
+
+                        rounded-xl
+                        sm:rounded-2xl
+
+                        px-3
+                        sm:px-4
+                        lg:px-5
+
+                        py-3
+                        sm:py-4
+
+                        text-sm
+                        sm:text-base
                         flex-1
                         resize-none
-                        rounded-2xl
+                        
                         border
                         border-slate-300
                         bg-slate-50
-                        px-5
-                        py-4
+                    
                         text-slate-900
                         outline-none
                         transition-all
@@ -98,16 +118,27 @@ function ChatInput({
                         !question.trim()
                     }
                     className="
+                        shrink-0
                         flex
-                        h-[60px]
-                        min-w-[64px]
+                        h-[52px]
+                        sm:h-[60px]
+
+                        min-w-[52px]
+                        sm:min-w-[64px]
+
+                        rounded-xl
+                        sm:rounded-2xl
+
+                        px-4
+                        sm:px-6
+
+                        text-lg
+                        sm:text-xl
                         cursor-pointer
                         items-center
                         justify-center
-                        rounded-2xl
                         bg-cyan-500
-                        px-6
-                        text-xl
+                       
                         font-semibold
                         text-slate-950
                         shadow-md

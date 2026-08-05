@@ -13,12 +13,19 @@ function Card({
         <div
             className="
                 rounded-2xl
+
                 border
                 border-slate-200
+
                 bg-slate-50
-                p-6
+
+                p-5
+                sm:p-6
+
                 text-center
+
                 shadow-sm
+
                 transition-all
                 duration-300
 
@@ -35,6 +42,11 @@ function Card({
 
             <h3
                 className="
+                    text-sm
+                    sm:text-base
+
+                    font-medium
+
                     text-slate-500
 
                     dark:text-zinc-400
@@ -45,14 +57,19 @@ function Card({
 
             </h3>
 
-
             {/* Value */}
 
             <p
                 className={`
-                    mt-2
-                    text-3xl
+                    mt-3
+
+                    break-words
+
+                    text-2xl
+                    sm:text-3xl
+
                     font-bold
+
                     ${color}
                 `}
             >
@@ -67,84 +84,101 @@ function Card({
 
 }
 
-
 function QuizStats({ result }) {
+
+    const safeResult = {
+
+        correct: result?.correct ?? 0,
+
+        wrong: result?.wrong ?? 0,
+
+        unanswered: result?.unanswered ?? 0,
+
+        percentage: Math.min(
+            100,
+            Math.max(0, Number(result?.percentage) || 0)
+        ),
+
+        timeTaken: Math.max(
+            0,
+            Number(result?.timeTaken) || 0
+        ),
+
+    };
 
     const minutes =
         Math.floor(
-            result.timeTaken / 60
+            safeResult.timeTaken / 60
         );
 
-
     const seconds =
-        result.timeTaken % 60;
-
+        safeResult.timeTaken % 60;
 
     return (
 
-        <div
+        <section
+            aria-label="Quiz Statistics"
             className="
                 mt-10
+
                 grid
+
                 gap-5
 
+                grid-cols-1
+
                 sm:grid-cols-2
+
                 lg:grid-cols-5
             "
         >
 
             <Card
                 title="Correct"
-                value={result.correct}
+                value={safeResult.correct}
                 color="
                     text-green-600
                     dark:text-green-400
                 "
             />
 
-
             <Card
                 title="Wrong"
-                value={result.wrong}
+                value={safeResult.wrong}
                 color="
                     text-red-600
                     dark:text-red-400
                 "
             />
 
-
             <Card
                 title="Skipped"
-                value={result.unanswered}
+                value={safeResult.unanswered}
                 color="
                     text-yellow-600
                     dark:text-yellow-400
                 "
             />
 
-
             <Card
                 title="Accuracy"
-                value={`${result.percentage}%`}
+                value={`${safeResult.percentage}%`}
                 color="
                     text-cyan-600
                     dark:text-cyan-400
                 "
             />
 
-
             <Card
                 title="Time"
-                value={
-                    `${minutes}:${String(seconds).padStart(2, "0")}`
-                }
+                value={`${minutes}:${String(seconds).padStart(2, "0")}`}
                 color="
                     text-violet-600
                     dark:text-violet-400
                 "
             />
 
-        </div>
+        </section>
 
     );
 

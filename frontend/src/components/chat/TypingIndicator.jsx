@@ -6,12 +6,17 @@ function TypingIndicator({ loadingText }) {
 
             <div
                 className="
-                    max-w-lg
+                    w-full
+                    max-w-[95%]
+                    sm:max-w-md
+                    lg:max-w-lg
                     rounded-2xl
                     border
                     border-slate-200
                     bg-white
-                    p-5
+                    p-3
+                    sm:p-4
+                    lg:p-5
                     shadow-md
                     shadow-slate-200/50
                     transition-colors
@@ -30,8 +35,10 @@ function TypingIndicator({ loadingText }) {
                     <div
                         className="
                             flex
-                            h-10
-                            w-10
+                            h-8
+                            w-8
+                            sm:h-10
+                            sm:w-10
                             items-center
                             justify-center
                             rounded-full
@@ -76,7 +83,14 @@ function TypingIndicator({ loadingText }) {
 
                 <p
                     className="
-                        mb-5
+                        mb-4
+                        sm:mb-5
+
+                        text-sm
+                        sm:text-base
+
+                        leading-6
+
                         text-slate-700
                         transition-all
                         duration-500
@@ -94,8 +108,10 @@ function TypingIndicator({ loadingText }) {
 
                     <span
                         className="
-                            h-3
-                            w-3
+                            h-2.5
+                            w-2.5
+                            sm:h-3
+                            sm:w-3
                             animate-bounce
                             rounded-full
                             bg-cyan-500
@@ -106,8 +122,10 @@ function TypingIndicator({ loadingText }) {
 
                     <span
                         className="
-                            h-3
-                            w-3
+                            h-2.5
+                            w-2.5
+                            sm:h-3
+                            sm:w-3
                             animate-bounce
                             rounded-full
                             bg-cyan-500
@@ -121,8 +139,10 @@ function TypingIndicator({ loadingText }) {
 
                     <span
                         className="
-                            h-3
-                            w-3
+                            h-2.5
+                            w-2.5
+                            sm:h-3
+                            sm:w-3
                             animate-bounce
                             rounded-full
                             bg-cyan-500

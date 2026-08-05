@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-
+import { useEffect, useMemo, useState } from "react";
 
 function QuizTimer({
 
@@ -14,7 +13,6 @@ function QuizTimer({
     const [secondsLeft, setSecondsLeft] =
         useState(totalSeconds);
 
-
     // ==========================
     // Reset Timer
     // ==========================
@@ -25,10 +23,8 @@ function QuizTimer({
 
     }, [totalSeconds]);
 
-
     // ==========================
     // Send Remaining Time
-    // To Parent
     // ==========================
 
     useEffect(() => {
@@ -36,7 +32,6 @@ function QuizTimer({
         onTick?.(secondsLeft);
 
     }, [secondsLeft, onTick]);
-
 
     // ==========================
     // Countdown
@@ -47,84 +42,179 @@ function QuizTimer({
         if (secondsLeft <= 0) {
 
             onTimeUp?.();
-
             return;
 
         }
 
-
         const timer = setTimeout(() => {
 
-            setSecondsLeft(
-                (prev) => prev - 1
-            );
+            setSecondsLeft((prev) => prev - 1);
 
         }, 1000);
 
-
-        return () =>
-            clearTimeout(timer);
+        return () => clearTimeout(timer);
 
     }, [secondsLeft, onTimeUp]);
 
+    // ==========================
+    // Time Formatting
+    // ==========================
+
+    const formattedTime = useMemo(() => {
+
+        const minutes =
+            Math.floor(secondsLeft / 60);
+
+        const seconds =
+            secondsLeft % 60;
+
+        return `${minutes}:${seconds
+            .toString()
+            .padStart(2, "0")}`;
+
+    }, [secondsLeft]);
 
     // ==========================
-    // Format Time
+    // Progress
     // ==========================
 
-    const minutes =
-        Math.floor(secondsLeft / 60);
+    const percentage =
+        (secondsLeft / totalSeconds) * 100;
 
+    const isWarning =
+        secondsLeft <= 120;
 
-    const seconds =
-        secondsLeft % 60;
+    const isDanger =
+        secondsLeft <= 60;
 
+    const barColor = isDanger
+        ? "bg-red-500"
+        : isWarning
+            ? "bg-yellow-500"
+            : "bg-cyan-500";
+
+    const textColor = isDanger
+        ? "text-red-600 dark:text-red-400"
+        : isWarning
+            ? "text-yellow-600 dark:text-yellow-400"
+            : "text-cyan-700 dark:text-cyan-300";
 
     return (
 
         <div
             className="
-                mb-8
+                mb-6
+                sm:mb-8
+
                 flex
-                items-center
                 justify-center
             "
         >
 
             <div
                 className="
-                    rounded-full
+                    w-full
+                    max-w-md
+
+                    rounded-2xl
+
                     border
-                    border-red-200
-                    bg-red-50
-                    px-6
-                    py-3
+                    border-slate-200
+
+                    bg-white
+
+                    p-4
+
                     shadow-sm
+
                     transition-colors
                     duration-300
 
-                    dark:border-red-500/20
-                    dark:bg-red-500/10
+                    dark:border-white/10
+                    dark:bg-zinc-900
                     dark:shadow-none
                 "
             >
 
-                <span
-                    className="
-                        text-lg
-                        font-semibold
-                        text-red-600
+                {/* Header */}
 
-                        dark:text-red-300
+                <div
+                    className="
+                        mb-3
+
+                        flex
+                        items-center
+                        justify-between
                     "
                 >
 
-                    ⏳ {minutes}:
-                    {seconds
-                        .toString()
-                        .padStart(2, "0")}
+                    <span
+                        className="
+                            text-sm
+                            font-medium
 
-                </span>
+                            text-slate-600
+
+                            dark:text-zinc-400
+                        "
+                    >
+                        Time Remaining
+                    </span>
+
+                    <span
+                        role="timer"
+                        aria-live="polite"
+                        className={`
+                            text-lg
+                            sm:text-xl
+
+                            font-bold
+
+                            transition-colors
+                            duration-300
+
+                            ${textColor}
+                        `}
+                    >
+                        ⏳ {formattedTime}
+                    </span>
+
+                </div>
+
+                {/* Progress Bar */}
+
+                <div
+                    className="
+                        h-2.5
+
+                        overflow-hidden
+
+                        rounded-full
+
+                        bg-slate-200
+
+                        dark:bg-zinc-700
+                    "
+                >
+
+                    <div
+                        className={`
+                            h-full
+
+                            rounded-full
+
+                            transition-all
+                            duration-1000
+                            ease-linear
+
+                            ${barColor}
+                        `}
+                        style={{
+                            width: `${percentage}%`,
+                        }}
+                    />
+
+                </div>
 
             </div>
 

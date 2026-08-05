@@ -18,10 +18,15 @@ function ChatMessages({
 
         <div
             className="
-                h-[500px]
+                h-[420px]
+                sm:h-[500px]
+                lg:h-[600px]
                 overflow-y-auto
+                overscroll-contain
                 bg-slate-50
-                p-6
+                p-3
+                sm:p-4
+                lg:p-6
                 transition-colors
                 duration-300
 

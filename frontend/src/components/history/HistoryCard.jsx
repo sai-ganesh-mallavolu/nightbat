@@ -91,10 +91,16 @@ function HistoryCard({ document, onDelete }) {
         <div
             className="
                 group
-                rounded-3xl
+
+                rounded-2xl
+                sm:rounded-3xl
+
                 border border-slate-200
                 bg-white
-                p-6
+
+                p-5
+                sm:p-6
+
                 shadow-md
                 shadow-slate-200/60
                 transition-all
@@ -128,27 +134,36 @@ function HistoryCard({ document, onDelete }) {
                 "
             >
 
-
                 {/* ==========================
                     Left Side
                 ========================== */}
 
-                <div className="flex items-start gap-5">
-
+                <div className="flex items-start gap-4 sm:gap-5">
 
                     {/* File Icon */}
 
                     <div
                         className="
                             flex
-                            h-16
-                            w-16
+
+                            h-14
+                            w-14
+
+                            sm:h-16
+                            sm:w-16
+
                             shrink-0
                             items-center
                             justify-center
-                            rounded-2xl
+
+                            rounded-xl
+                            sm:rounded-2xl
+
                             bg-cyan-50
-                            text-4xl
+
+                            text-3xl
+                            sm:text-4xl
+
                             transition-colors
                             duration-300
 
@@ -165,13 +180,15 @@ function HistoryCard({ document, onDelete }) {
 
                     <div className="min-w-0">
 
-
                         {/* File Name */}
 
                         <h2
                             className="
                                 break-all
-                                text-2xl
+
+                                text-xl
+                                sm:text-2xl
+
                                 font-bold
                                 text-slate-950
 
@@ -216,13 +233,22 @@ function HistoryCard({ document, onDelete }) {
                                     className="
                                         inline-flex
                                         items-center
+
                                         rounded-full
+
                                         border
                                         border-green-200
+
                                         bg-green-50
-                                        px-4
+
+                                        px-3
+                                        sm:px-4
+
                                         py-1
-                                        text-sm
+
+                                        text-xs
+                                        sm:text-sm
+
                                         font-semibold
                                         text-green-700
 
@@ -242,13 +268,22 @@ function HistoryCard({ document, onDelete }) {
                                     className="
                                         inline-flex
                                         items-center
+
                                         rounded-full
+
                                         border
                                         border-amber-200
+
                                         bg-amber-50
-                                        px-4
+
+                                        px-3
+                                        sm:px-4
+
                                         py-1
-                                        text-sm
+
+                                        text-xs
+                                        sm:text-sm
+
                                         font-semibold
                                         text-amber-700
 
@@ -278,25 +313,46 @@ function HistoryCard({ document, onDelete }) {
                 <div
                     className="
                         flex
-                        shrink-0
-                        items-center
+
+                        w-full
+                        flex-col
+
                         gap-3
+
+                        sm:w-auto
+                        sm:flex-row
+                        sm:items-center
+
+                        lg:shrink-0
                     "
                 >
-
 
                     {/* Open / Analyze Button */}
 
                     <Link
                         to={`/history/${document.id}`}
                         className="
+                            w-full
+                            sm:w-auto
+
                             rounded-xl
+
                             bg-cyan-500
-                            px-6
+
+                            px-5
+                            sm:px-6
+
                             py-3
+
+                            text-center
+                            text-sm
+                            sm:text-base
+
                             font-semibold
                             text-slate-950
+
                             shadow-sm
+
                             transition-all
                             duration-300
 
@@ -304,6 +360,14 @@ function HistoryCard({ document, onDelete }) {
                             hover:bg-cyan-400
                             hover:shadow-lg
                             hover:shadow-cyan-500/20
+
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-cyan-500
+                            focus:ring-offset-2
+
+                            dark:focus:ring-cyan-400
+                            dark:focus:ring-offset-[#09090b]
                         "
                     >
 
@@ -323,16 +387,26 @@ function HistoryCard({ document, onDelete }) {
                         }
                         className="
                             flex
-                            h-12
-                            w-12
+
+                            h-11
+                            w-full
+
+                            sm:h-12
+                            sm:w-12
+
                             cursor-pointer
                             items-center
                             justify-center
+
                             rounded-xl
+
                             border
                             border-red-200
+
                             bg-red-50
+
                             text-xl
+
                             transition-all
                             duration-300
 
@@ -341,9 +415,17 @@ function HistoryCard({ document, onDelete }) {
                             hover:bg-red-500
                             hover:text-white
 
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-red-500
+                            focus:ring-offset-2
+
                             dark:border-red-500/30
                             dark:bg-red-500/10
                             dark:hover:bg-red-500
+
+                            dark:focus:ring-red-400
+                            dark:focus:ring-offset-[#09090b]
                         "
                         aria-label={`Delete ${document.filename}`}
                     >

@@ -32,16 +32,22 @@ function QuizCard({
 
     ];
 
-
     return (
 
         <div
             className="
-                rounded-3xl
+                rounded-2xl
+                sm:rounded-3xl
+
                 border
                 border-slate-200
+
                 bg-slate-50
-                p-8
+
+                p-5
+                sm:p-6
+                lg:p-8
+
                 transition-colors
                 duration-300
 
@@ -54,11 +60,18 @@ function QuizCard({
 
             <h2
                 className="
-                    mb-8
+                    mb-6
+                    sm:mb-8
+
                     break-words
-                    text-2xl
+
+                    text-xl
+                    sm:text-2xl
+
                     font-bold
+
                     leading-relaxed
+
                     text-slate-950
 
                     dark:text-white
@@ -72,84 +85,115 @@ function QuizCard({
 
             {/* Options */}
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
 
                 {options.map((option) => (
 
                     <button
                         type="button"
                         key={option.key}
-                        onClick={() =>
-                            onSelect(option.key)
-                        }
+                        onClick={() => onSelect(option.key)}
+                        aria-pressed={selected === option.key}
                         className={`
                             w-full
+
                             cursor-pointer
+
                             rounded-xl
+
                             border
+
                             p-4
+                            sm:p-5
+
                             text-left
+
                             transition-all
                             duration-300
+
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-cyan-500/40
 
                             ${selected === option.key
 
                                 ? `
-                                        border-cyan-500
-                                        bg-cyan-50
-                                        text-slate-950
-                                        shadow-sm
-                                        shadow-cyan-500/10
-                                        ring-2
-                                        ring-cyan-500/10
+                                    border-cyan-500
+                                    bg-cyan-50
 
-                                        dark:border-cyan-400
-                                        dark:bg-cyan-500/15
-                                        dark:text-white
-                                        dark:ring-cyan-400/10
-                                    `
+                                    text-slate-950
+
+                                    shadow-sm
+                                    shadow-cyan-500/10
+
+                                    ring-2
+                                    ring-cyan-500/10
+
+                                    dark:border-cyan-400
+                                    dark:bg-cyan-500/15
+                                    dark:text-white
+                                    dark:ring-cyan-400/10
+                                `
 
                                 : `
-                                        border-slate-200
-                                        bg-white
-                                        text-slate-700
+                                    border-slate-200
 
-                                        hover:-translate-y-0.5
-                                        hover:border-cyan-400
-                                        hover:bg-cyan-50/50
+                                    bg-white
 
-                                        dark:border-white/10
-                                        dark:bg-[#18181b]
-                                        dark:text-zinc-300
+                                    text-slate-700
 
-                                        dark:hover:border-cyan-500/50
-                                        dark:hover:bg-cyan-500/5
-                                    `
+                                    hover:-translate-y-0.5
+                                    hover:border-cyan-400
+                                    hover:bg-cyan-50/50
+
+                                    dark:border-white/10
+                                    dark:bg-[#18181b]
+                                    dark:text-zinc-300
+
+                                    dark:hover:border-cyan-500/50
+                                    dark:hover:bg-cyan-500/5
+                                `
                             }
                         `}
                     >
 
-                        <span
-                            className={`
-                                mr-2
-                                font-bold
+                        <div className="flex items-start gap-3">
 
-                                ${selected === option.key
+                            <span
+                                className={`
+                                    shrink-0
 
-                                    ? "text-cyan-600 dark:text-cyan-400"
+                                    font-bold
 
-                                    : "text-slate-900 dark:text-white"
-                                }
-                            `}
-                        >
+                                    ${selected === option.key
 
-                            {option.key}.
+                                        ? "text-cyan-600 dark:text-cyan-400"
 
-                        </span>
+                                        : "text-slate-900 dark:text-white"
+                                    }
+                                `}
+                            >
 
-                        <span className="break-words">
-                            {option.text}
-                        </span>
+                                {option.key}.
+
+                            </span>
+
+                            <span
+                                className="
+                                    flex-1
+
+                                    break-words
+
+                                    text-sm
+                                    sm:text-base
+
+                                    leading-7
+                                "
+                            >
+                                {option.text}
+                            </span>
+
+                        </div>
 
                     </button>
 

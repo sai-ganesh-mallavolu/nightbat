@@ -14,7 +14,9 @@ function Hero() {
                 from-white
                 via-slate-50
                 to-slate-100
-                px-6
+                px-4
+                sm:px-6
+                lg:px-8
                 text-slate-900
                 transition-colors
                 duration-300
@@ -52,7 +54,9 @@ function Hero() {
                     mx-auto
                     flex max-w-7xl
                     flex-col items-center
-                    px-6
+                    px-4
+                    sm:px-6
+                    lg:px-8
                     text-center
                 "
             >
@@ -65,8 +69,14 @@ function Hero() {
                         rounded-full
                         border border-cyan-200
                         bg-white/80
-                        px-6 py-3
-                        text-base
+                        px-4
+                        sm:px-6
+
+                        py-2
+                        sm:py-3
+
+                        text-sm
+                        sm:text-base
                         font-medium
                         text-cyan-700
                         shadow-sm
@@ -89,13 +99,15 @@ function Hero() {
                 <h1
                     className="
                         max-w-5xl
-                        text-5xl
+                        text-4xl
+                        sm:text-5xl
+                        lg:text-7xl
                         font-extrabold
                         leading-tight
                         tracking-tight
                         text-slate-950
 
-                        md:text-7xl
+                        
 
                         dark:text-white
                     "
@@ -118,8 +130,13 @@ function Hero() {
                     className="
                         mt-8
                         max-w-2xl
-                        text-lg
-                        leading-8
+                        px-2
+
+                        text-base
+                        sm:text-lg
+
+                        leading-7
+                        sm:leading-8
                         text-slate-600
 
                         dark:text-zinc-400
@@ -132,7 +149,22 @@ function Hero() {
 
                 {/* Buttons */}
 
-                <div className="mt-10 flex flex-wrap justify-center gap-4">
+                <div className="
+                    mt-10
+
+                    flex
+                    w-full
+
+                    flex-col
+
+                    gap-3
+
+                    sm:w-auto
+                    sm:flex-row
+                    sm:flex-wrap
+                    sm:justify-center
+                    sm:gap-4
+                ">
 
                     {/* Primary Button */}
 
@@ -141,7 +173,19 @@ function Hero() {
                         className="
                             rounded-xl
                             bg-cyan-500
-                            px-8 py-4
+                            w-full
+                            sm:w-auto
+
+                            px-6
+                            sm:px-8
+
+                            py-3
+                            sm:py-4
+
+                            text-sm
+                            sm:text-base
+
+                            text-center
                             font-semibold
                             text-slate-950
                             shadow-lg
@@ -173,7 +217,19 @@ function Hero() {
                             rounded-xl
                             border border-slate-300
                             bg-white
-                            px-8 py-4
+                            w-full
+                            sm:w-auto
+
+                            px-6
+                            sm:px-8
+
+                            py-3
+                            sm:py-4
+
+                            text-sm
+                            sm:text-base
+
+                            text-center
                             font-semibold
                             text-slate-700
                             shadow-sm

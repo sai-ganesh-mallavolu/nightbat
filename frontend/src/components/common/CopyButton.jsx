@@ -34,6 +34,7 @@ function CopyButton({ text }) {
 
         <button
             type="button"
+            aria-label="Copy message"
             onClick={handleCopy}
             className="
                 shrink-0
@@ -41,8 +42,11 @@ function CopyButton({ text }) {
                 rounded-lg
                 bg-cyan-500
                 px-3
-                py-2
-                text-sm
+                sm:px-4
+
+                py-2.5
+                text-xs
+                sm:text-sm
                 font-semibold
                 text-slate-950
                 shadow-sm
