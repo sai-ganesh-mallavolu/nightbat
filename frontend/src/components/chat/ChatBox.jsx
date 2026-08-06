@@ -33,7 +33,7 @@ function ChatBox({ documentId }) {
         loadingMessages[0]
     );
 
-    const bottomRef = useRef(null);
+    const messagesRef = useRef(null);
 
 
     // ==========================
@@ -42,11 +42,12 @@ function ChatBox({ documentId }) {
 
     useEffect(() => {
 
-        bottomRef.current?.scrollIntoView({
+        if (messagesRef.current) {
 
-            behavior: "smooth",
+            messagesRef.current.scrollTop =
+                messagesRef.current.scrollHeight;
 
-        });
+        }
 
     }, [messages, loading]);
 
@@ -299,7 +300,7 @@ function ChatBox({ documentId }) {
                 messages={messages}
                 loading={loading}
                 loadingText={loadingText}
-                bottomRef={bottomRef}
+                messagesRef={messagesRef}
             />
 
 

@@ -10,18 +10,19 @@ function ChatMessages({
 
     loadingText,
 
-    bottomRef,
+    messagesRef,
 
 }) {
 
     return (
 
         <div
+            ref={messagesRef}
             className="
-                h-[420px]
-                sm:h-[500px]
-                lg:h-[600px]
-                overflow-y-auto
+            h-[420px]
+            sm:h-[500px]
+            lg:h-[600px]
+            overflow-y-auto
                 overscroll-contain
                 bg-slate-50
                 p-3
@@ -71,7 +72,7 @@ function ChatMessages({
 
                 {/* Auto Scroll Target */}
 
-                <div ref={bottomRef} />
+
 
             </div>
 

@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+
 
 import {
     getDocument,
@@ -47,6 +48,8 @@ function DocumentDetails() {
 
     const [quizHistoryRefreshKey, setQuizHistoryRefreshKey] = useState(0);
 
+    const analysisRef = useRef(null);
+
 
     // ==========================
     // Load Document
@@ -57,6 +60,14 @@ function DocumentDetails() {
         fetchDocument();
 
     }, [id]);
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "instant",
+        });
+    }, []);
 
 
     // ==========================
@@ -172,6 +183,8 @@ function DocumentDetails() {
 
             await fetchDocument();
 
+
+
             toast.success(
                 "Analysis completed successfully!"
             );
@@ -230,6 +243,41 @@ function DocumentDetails() {
             toast.error(
                 "Failed to generate PDF."
             );
+
+        }
+
+    };
+
+    const handleCopyAll = async () => {
+
+        try {
+
+            const content = `📄 SUMMARY
+
+            ${document.summary}
+
+            ━━━━━━━━━━━━━━━━━━━━
+
+            📌 KEY POINTS
+
+            ${document.key_points.map((point, i) => `${i + 1}. ${point}`).join("\n")}
+
+            ━━━━━━━━━━━━━━━━━━━━
+
+            ✅ ACTION ITEMS
+
+            ${document.action_items.map((item, i) => `${i + 1}. ${item}`).join("\n")}
+            `;
+
+            await navigator.clipboard.writeText(content);
+
+            toast.success("Copied all analysis! 📋");
+
+        }
+
+        catch {
+
+            toast.error("Failed to copy.");
 
         }
 
@@ -571,6 +619,7 @@ function DocumentDetails() {
 
                                 <button
                                     type="button"
+                                    onClick={handleCopyAll}
                                     className="
                                         rounded-xl
                                         border
@@ -746,7 +795,10 @@ function DocumentDetails() {
                             Analysis Results
                         ========================== */}
 
-                        <div className="mt-12 grid gap-8">
+                        <div
+                            // ref={analysisRef}
+                            className="mt-12 grid gap-8"
+                        >
 
                             <SummaryCard
                                 summary={document.summary}
@@ -1376,8 +1428,17 @@ function DocumentDetails() {
                                     <QuizSection
                                         documentId={document.id}
                                         onGenerated={async () => {
-                                            await refreshQuizStatus();
-                                            setOpeningQuiz(false);
+
+                                            try {
+
+                                                await refreshQuizStatus();
+
+                                            } finally {
+
+                                                setOpeningQuiz(false);
+
+                                            }
+
                                         }}
                                         onStatusChange={refreshQuizStatus}
                                         onAttemptSaved={() =>
