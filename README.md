@@ -286,8 +286,6 @@ This project helped strengthen practical experience with:
 
 **Mallavolu Sai Ganesh**
 
-     **Email:** mallavolusaiganesh@gmail.com
-
-     **GitHub:** https://github.com/sai-ganesh-mallavolu
+     Email: <mallavolusaiganesh@gmail.com>
 
 ---
