@@ -291,7 +291,3 @@ This project helped strengthen practical experience with:
      **GitHub:** https://github.com/sai-ganesh-mallavolu
 
 ---
-
-# 📄 License
-
-This project is intended for educational and portfolio purposes.
