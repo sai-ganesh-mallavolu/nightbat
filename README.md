@@ -286,6 +286,6 @@ This project helped strengthen practical experience with:
 
 **Mallavolu Sai Ganesh**
 
-     Email: <mailto:mallavolusaiganesh@gmail.com>
+- 📧 Email: <mallavolusaiganesh@gmail.com>
 
 ---
